@@ -1,0 +1,25 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Supply-Bold.otf",
+      "sha1": "dde07e3b0abd1701d9c8f1cdd4deaf1902418551"
+    },
+    {
+      "path": "src/assets/fonts/Supply-Light.otf",
+      "sha1": "c86c93e47346023896da30d8afa485eb223809a8"
+    },
+    {
+      "path": "src/assets/fonts/Supply-Medium.otf",
+      "sha1": "ef567cb65ee3a6f57eaff75dfc5b37bb5db25022"
+    },
+    {
+      "path": "src/assets/fonts/Supply-Regular.otf",
+      "sha1": "19e54f205739d403926392482e017b0ecd0abb83"
+    },
+    {
+      "path": "src/assets/fonts/Supply-UltraLight.otf",
+      "sha1": "0b2b2859838c13ce4f4b406af85e58339a59a0e4"
+    }
+  ]
+}
