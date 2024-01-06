@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import LoginComponent from '../components/Login';
 import SetaEsquerda from '../assets/SetaEsquerda.svg';
-import Menu from '../assets/Menu.svg';
+import AuthService from '../services/auth.service';
+import { NativeBaseProvider } from 'native-base';
+import MenuHamburguer from '../components/Menu';
 
 const LoginScreen = () => {
 
@@ -12,6 +14,34 @@ const LoginScreen = () => {
     const handleButtonLRegistoPress = () => {
         navigation.navigate('RegistoScreen');
     }
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleButtonEntrarPress = async () => {
+        try {
+            // Chame a função de login do AuthService
+            const user = await AuthService.login(email, password);
+    
+            // Verifique se a função de login retorna um objeto de usuário
+            if (user) {
+                // Faça algo com as informações do usuário, se necessário
+                console.log('Usuário logado:', user);
+    
+                // Navegue para a próxima tela
+                navigation.navigate('SurveyIntroScreen');
+    
+                // Exiba um alerta de login bem-sucedido
+                Alert.alert('Sucesso', 'Login efetuado com sucesso!');
+            } else {
+                // Se a função de login não retornar um usuário, exiba uma mensagem de erro
+                Alert.alert('Erro', 'Credenciais inválidas. Tente novamente.');
+            }
+        } catch (error) {
+            // Lidar com outros erros de login, por exemplo, exibir uma mensagem de erro
+            Alert.alert('Erro', 'Erro durante o login. Verifique suas credenciais.');
+        }
+    };
 
   return (
     <LinearGradient colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']} style={Styles.container}>
@@ -25,14 +55,10 @@ const LoginScreen = () => {
                         style={Styles.icon}
                     />
                 </TouchableOpacity>
-                {/* Hamburger menu */}
-                <TouchableOpacity onPress={() => { /* código para abrir o menu */ }}>
-                    <Menu
-                        width={30}
-                        height={30}
-                        style={Styles.icon}
-                    />
-                </TouchableOpacity>
+                {/* Menu Hamburguer */}
+                <NativeBaseProvider>
+                    <MenuHamburguer />
+                </NativeBaseProvider>
             </View>
             {/* Logo */}
             <View style={Styles.LogoLogin}>
@@ -49,10 +75,10 @@ const LoginScreen = () => {
                 <Text style={Styles.text3}>para fazer o login</Text>
 
                 {/* inputs - chamar LoginComponent */}
-                <LoginComponent />
+                <LoginComponent setEmail={setEmail} setPassword={setPassword} />
 
                 {/* botão de Login */}
-                <TouchableOpacity onPress={() => {}}>
+                <TouchableOpacity onPress={handleButtonEntrarPress}>
                     <View style={Styles.button1}>
                         <Text style={Styles.buttonText}>Entrar</Text>
                     </View>

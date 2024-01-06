@@ -6,6 +6,11 @@ const schema = new mongoose.Schema({
         userId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
         time: { type: Date, default: Date.now }, 
     }],
+    participants: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+        required: true,
+    }],
 
 }, { timestamps: false });
 
