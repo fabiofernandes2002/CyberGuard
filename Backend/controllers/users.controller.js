@@ -1,7 +1,5 @@
-const utilities = require('../utilities/utilities');
+const fs = require('fs');
 const users = require('../models/users.model');
-/* const courses = require('../models/courses.model'); */
-//const chats = require('../models/chats.model');
 const companies = require('../models/company.model');
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
@@ -346,6 +344,54 @@ exports.getAllUsersByCompanyId = async (req, res) => {
   }
 };
 
-// Falta fazer esta rota
-// depois do fazer o login pela primeira vez, o utilizador deve responder a um questionário para avaliar o seu nível de conhecimento
-// a cerca da segurança cibernética, para que o sistema possa recomendar cursos adequados ao seu nível de conhecimento
+// Submeter a resposta ao questionário (requer autenticação web token) id do survey e resposta
+exports.submitSurvey = async (req, res) => {
+  try {
+    if (!req.loggedUserId) {
+      return res.status(403).json({
+        success: false,
+        msg: 'Você deve estar autenticado para realizar esta solicitação!',
+      });
+    }
+
+    const user = await users.findById(req.loggedUserId);
+
+    // Verifique se o usuário já respondeu ao questionário
+    if (user.surveys.length === 0) {
+      const responseArray = req.body.answers;
+
+      // Leia o arquivo JSON com as perguntas
+      const surveyFile = fs.readFileSync('./Survey.json');
+      const surveyQuestions = JSON.parse(surveyFile).surveys;
+
+      // Verifique se todas as respostas foram fornecidas
+      if (responseArray.length !== surveyQuestions.length) {
+        return res.status(400).json({ message: 'Número incorreto de respostas fornecidas.' });
+      }
+
+      // Calcular a pontuação total com base nas respostas
+      let totalScore = 0;
+      for (let i = 0; i < surveyQuestions.length; i++) {
+        const question = surveyQuestions[i];
+        const userResponse = responseArray.find(response => response.questionIndex === i);
+
+        // Compare a resposta do usuário com a resposta correta
+        if (userResponse && userResponse.answer === question.surveyInfo.correctAnswer) {
+          // Atribua 1 ponto por cada resposta correta
+          totalScore += 1;
+        }
+      }
+
+      // Salve a pontuação no modelo do usuário
+      user.surveys.push({ surveyResult: totalScore });
+      await user.save();
+
+      res.json({ message: 'O questionário foi respondido com sucesso.', totalScore });
+    } else {
+      res.json({ message: 'O questionário já foi respondido.' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+};

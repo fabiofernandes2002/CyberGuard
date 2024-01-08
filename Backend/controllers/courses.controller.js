@@ -505,40 +505,24 @@ exports.startPaidCourseById = async (req, res) => {
   }
 }
 
-// Falta fazer estas duas ultimas rotas
-// Finalizar um curso específico por id (requer autenticação web token) - responder a um questionário de avaliação
-exports.finishCourseById = async (req, res) => {
+exports.getCourseQuestions = async (req, res) => {
   try {
-    // tem que estar autenticado para aceder a esta funcionalidade
-    if (!req.loggedUserId)
-      return res.status(403).json({
-        success: false,
-        msg: 'Você deve estar autenticado para realizar esta solicitação!',
-    });
+    const courseId = req.params.id;
+    const course = await courses.findById(courseId);
 
-    let course = await courses.findById(req.params.id);
-    if (!course)
+    if (!course) {
       return res.status(404).json({
         success: false,
         msg: 'Curso não encontrado',
-    });
+      });
+    }
 
-    const user = await users.findById(req.loggedUserId);
-    // verificar se o curso já foi finalizado
-    if (user.courses.finished)
-      return res.status(400).json({
-        success: false,
-        msg: 'Curso já finalizado!',
-    });
-
-    // finalizar o curso
-    user.courses.finished = true;
-    user.courses.finishedDate = Date.now();
-    await users.save();
+    // Suponha que há apenas um conjunto de perguntas de avaliação por curso
+    const courseQuestions = course.evaluations[0].questions;
 
     res.status(200).json({
       success: true,
-      msg: 'Curso finalizado com sucesso!',
+      questions: courseQuestions,
     });
   } catch (err) {
     res.status(500).json({
@@ -546,45 +530,143 @@ exports.finishCourseById = async (req, res) => {
       msg: err.message || 'Algo correu mal, tente novamente mais tarde.',
     });
   }
-}
+};
+
+// Finalizar um curso específico por id (requer autenticação web token) - responder a um questionário de avaliação
+exports.finishCourseById = async (req, res) => {
+  try {
+    const userId = req.loggedUserId; // Certifique-se de que o middleware de autenticação define req.loggedUserId corretamente
+
+    // Verifique se o usuário está autenticado
+    if (!userId) {
+      return res.status(403).json({
+        success: false,
+        msg: 'Você deve estar autenticado para realizar esta solicitação!',
+      });
+    }
+
+    // Encontre o curso pelo ID
+    let course = await courses.findById(req.params.id);
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        msg: 'Curso não encontrado',
+      });
+    }
+
+    // Encontre o usuário pelo ID
+    const user = await users.findById(userId);
+    
+    // Verifique se o curso já foi finalizado pelo usuário
+    if (user.courses.some(course => course.courseId.equals(req.params.id) && course.finished)) {
+      return res.status(400).json({
+        success: false,
+        msg: 'Curso já finalizado!',
+      });
+    }
+
+    // Realize o questionário de avaliação associado ao curso
+    const courseQuestions = course.evaluations[0].questions; // Supondo que há apenas um conjunto de perguntas de avaliação por curso
+    
+    // Suponha que as respostas do usuário sejam enviadas no corpo da solicitação
+    const userAnswers = req.body.userAnswers;
+
+    // Calcule a pontuação do usuário com base nas respostas corretas
+    let userScore = 0;
+    for (let i = 0; i < courseQuestions.length; i++) {
+      const correctAnswerIndex = courseQuestions[i].correctAnswerIndex;
+
+      // Verifique se o índice da resposta do usuário coincide com o índice da resposta correta
+      if (userAnswers[i] === correctAnswerIndex) {
+        userScore += 1;
+      }
+    }
+
+    // Atualize as propriedades do usuário
+    user.totalCoursesCompleted += 1;
+    user.pontuationMediaEvaluation = ((user.pontuationMediaEvaluation * (user.totalCoursesCompleted - 1)) + userScore) / user.totalCoursesCompleted;
+
+    // Finalize o curso para o usuário
+    user.courses.push({
+      courseId: req.params.id,
+      finished: true,
+      finishedDate: Date.now(),
+      evaluationScore: userScore,
+    });
+
+    // Salve as alterações no usuário
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      msg: 'Curso finalizado com sucesso!',
+      evaluationScore: userScore,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      msg: err.message || 'Algo correu mal, tente novamente mais tarde.',
+    });
+  }
+};
 
 // Avaliar um curso específico por id (requer autenticação web token) - avaliação de 1 a 5 estrelas
 exports.evaluateCourseById = async (req, res) => {
   try {
-    // tem que estar autenticado para aceder a esta funcionalidade
-    if (!req.loggedUserId)
+    // Verificar se o usuário está autenticado
+    if (!req.loggedUserId) {
       return res.status(403).json({
         success: false,
         msg: 'Você deve estar autenticado para realizar esta solicitação!',
-    });
+      });
+    }
 
+    // Encontrar o curso pelo ID
     let course = await courses.findById(req.params.id);
-    if (!course)
+    if (!course) {
       return res.status(404).json({
         success: false,
         msg: 'Curso não encontrado',
-    });
+      });
+    }
 
     const user = await users.findById(req.loggedUserId);
-    // verificar se o curso já foi avaliado
-    if (user.courses.evaluationResults)
+
+    // Verificar se o curso já foi avaliado pelo usuário
+    if (user.courses.evaluationResults.some(result => result.courseId.equals(req.params.id))) {
       return res.status(400).json({
         success: false,
         msg: 'Curso já avaliado!',
+      });
+    }
+
+    // Obter a avaliação do usuário a partir do corpo da solicitação
+    const { stars } = req.body;
+
+    // Adicionar feedback ao curso
+    course.feedbacks.push({
+      userId: req.loggedUserId,
+      stars: stars,
     });
 
-    // avaliar o curso
-    user.courses.evaluationResults = req.body.evaluationResults;
-    await users.save();
+    // Atualizar a classificação média do curso
+    const totalFeedbacks = course.feedbacks.length;
+    const totalStars = course.feedbacks.reduce((sum, feedback) => sum + feedback.stars, 0);
+    course.rating = totalStars / totalFeedbacks;
+
+    // Salvar alterações no curso
+    await course.save();
 
     res.status(200).json({
       success: true,
       msg: 'Curso avaliado com sucesso!',
     });
   } catch (err) {
+    console.error(err);
     res.status(500).json({
       success: false,
       msg: err.message || 'Algo correu mal, tente novamente mais tarde.',
     });
   }
-}
+};

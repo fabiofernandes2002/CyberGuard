@@ -3,10 +3,13 @@ import { Menu, Box, Text, Pressable, VStack, HStack, Spacer, Switch } from 'nati
 import MenuH from "../assets/Menu.svg";
 import ButtonFecharMenu from "../assets/Fechar.svg";
 import AuthService from "../services/auth.service";
+import { useNavigation } from '@react-navigation/native';
 
 function MenuHamburguer() {
     const [isOpen, setIsOpen] = useState(false);
     const [username, setUsername] = useState("");
+
+    const navigation = useNavigation();
 
     useEffect(() => {
       const getUser = async () => {
@@ -16,6 +19,13 @@ function MenuHamburguer() {
       getUser();
     }
     , []);
+
+    // Chamar a função de logout
+    const logout = () => {
+      AuthService.logout();
+      // redirecionar para a página de SplashScreen
+      navigation.navigate('SplashScreen');
+    }
   return (
     <Box style={styles.box}>
       <Menu
@@ -32,7 +42,7 @@ function MenuHamburguer() {
         <VStack space={2.5} w="350" style={styles.menu}>
             <HStack w="100%" justifyContent="space-between">
                 {/* Botão Logout no topo do menu */}
-                <Pressable m={3} onPress={() => console.log('Logout')} style={styles.logoutButton}>
+                <Pressable m={3} onPress={logout} style={styles.logoutButton}>
                     <Text style={styles.logoutText}>Logout</Text>
                 </Pressable>
                 {/* Botão para fechar o menu */}

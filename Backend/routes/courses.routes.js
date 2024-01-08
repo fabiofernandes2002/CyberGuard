@@ -44,6 +44,18 @@ router.route('/startFreeCourseById/:id')
 router.route('/startPaidCourseById/:id')
     .put(utilities.validateToken, Controller.startPaidCourseById)
 
+//course/questions/:id
+router.route('/getCourseQuestions/:id')
+    .get(utilities.validateToken, Controller.getCourseQuestions)
+
+// Rota para finalizar um curso, incluindo a avaliação do mesmo - finishCourseById
+router.route('/finishCourseById/:id')
+    .post(utilities.validateToken, Controller.finishCourseById)
+
+// Rota para avaliar um curso - evaluateCourseById
+router.route('/evaluateCourseById/:id')
+    .post(utilities.validateToken, Controller.evaluateCourseById)
+
 
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'COURSES: what???' })

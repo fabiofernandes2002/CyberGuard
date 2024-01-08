@@ -56,6 +56,10 @@ router.route('/deleteUserById/:id')
 router.route('/getAllUsersByCompanyId/:id')
     .get(utilities.validateToken, Controller.getAllUsersByCompanyId)
 
+// submitSurvey
+router.route('/submitSurvey')
+    .post(utilities.validateToken, Controller.submitSurvey)
+
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'Users: what???' })
 })
