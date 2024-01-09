@@ -4,6 +4,7 @@ import { TextInput } from 'react-native-paper';
 //import DropDown from "react-native-paper-dropdown";
 import DropDownPicker from 'react-native-dropdown-picker';
 //import { Provider, DefaultTheme } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import { registoStyles } from './RegistoStyles';
 import { loginStyles } from './LoginStyles';
 
@@ -21,8 +22,9 @@ const Registo = () => {
   const [password, setPassword] = React.useState('');
   const [confirmarPassword, setConfirmarPassword] = React.useState('');
 
+  const navigation = useNavigation();
   const handleRegistarPress = () => {
-    console.log('Registar pressionado');
+    navigation.navigate('MundosScreen');
   };
 
   return (

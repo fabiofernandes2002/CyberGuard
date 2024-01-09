@@ -1,12 +1,23 @@
 // LoginComponent.js
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import { loginStyles } from './LoginStyles'; // Importar os estilos do arquivo styles.js
+import { loginStyles } from './LoginStyles';
 
-const LoginComponent = () => {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+const LoginComponent = ({ setEmail, setPassword }) => {
+
+  const [email, setEmailLocal] = useState('');
+  const [password, setPasswordLocal] = useState('');
+
+  const handleEmailChange = (text) => {
+    setEmailLocal(text);
+    setEmail(text);
+  }
+
+  const handlePasswordChange = (text) => {
+    setPasswordLocal(text);
+    setPassword(text);
+  }
 
   return (
     <View>
@@ -14,7 +25,7 @@ const LoginComponent = () => {
         mode="outlined"
         label="Email"
         value={email}
-        onChangeText={(text) => setEmail(text)}
+        onChangeText={handleEmailChange}
         style={loginStyles.input} // Usar o estilo para o input
         theme={{
           colors: {
@@ -33,7 +44,7 @@ const LoginComponent = () => {
         mode="outlined"
         label="Password"
         value={password}
-        onChangeText={(text) => setPassword(text)}
+        onChangeText={handlePasswordChange}
         secureTextEntry
         style={loginStyles.input} // Usar o estilo para o input
         theme={{

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Escudo from '../assets/Escudo.svg';
@@ -10,9 +10,16 @@ const SplashScreen = () => {
 
   const navigation = useNavigation();
 
-  const handleStartPress = () => {
+  /* const handleStartPress = () => {
     navigation.navigate('OnboardingScreens');
-  };
+  }; */
+
+  // depois de 7 segundos vai para a pagina dos OnboardingScreens
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.navigate('OnboardingScreens');
+    }, 7000);
+  }, []);
 
   return (
       <ImageBackground
@@ -33,11 +40,11 @@ const SplashScreen = () => {
               />
 
               {/* Botão */}
-              <TouchableOpacity onPress={handleStartPress}>
+              {/* <TouchableOpacity onPress={handleStartPress}>
                 <View style={styles.button}>
                   <Text style={styles.buttonText}>Começar</Text>
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               {/* Icones */}
               <View style={styles.iconContainer}>
                 <Escudo width={50} height={50} style={styles.icon} />
