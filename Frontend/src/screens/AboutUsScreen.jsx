@@ -2,7 +2,8 @@ import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import Menu from '../assets/Menu.svg';
+import { NativeBaseProvider } from 'native-base';
+import MenuHamburguer from '../components/Menu';
 
 const AboutUsScreen = () => {
 
@@ -11,22 +12,21 @@ const AboutUsScreen = () => {
     return (
         <LinearGradient colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']} style={styles.container}>
             <View>
-                <View style={styles.Logo}>
-                    <TouchableOpacity>
+                <View style={styles.Menu}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Image
                             source={require('../assets/logo_semfundo.png')}
-                            style={styles.Logo}
+                            style={styles.logo}
                             resizeMode="contain"
                         />
+                        <View>
+                            <Text style={styles.textC}>Cyber</Text>
+                            <Text style={styles.textG}>Guard</Text>
+                        </View>
                     </TouchableOpacity>
-                    {/* Hamburger menu */}
-                    <TouchableOpacity onPress={() => { /* código para abrir o menu */ }}>
-                        <Menu
-                            width={30}
-                            height={30}
-                            style={styles.icon}
-                        />
-                    </TouchableOpacity>
+                    <NativeBaseProvider>
+                        <MenuHamburguer />
+                    </NativeBaseProvider>                
                 </View>
             </View>
             <View style={styles.content}>
@@ -72,14 +72,36 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
     },
-    Logo: {
+    logo: {
+        position: 'absolute',
+        width: 50,
+        height: 50,
+        marginBottom: 20,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        marginLeft: -10,
+        marginTop: 10,
+    },
+    textC: {
+        fontFamily: 'Supply-Bold',
+        fontSize: 20,
+        color: '#00428A',
+        marginLeft: 35,
+        justifyContent: 'center',
+    },
+    textG: {
+        fontFamily: 'Supply-Bold',
+        fontSize: 20,
+        color: '#00428A',
+        marginLeft: 35,
+        justifyContent: 'center',
+    },
+    Menu: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 30,
-        width: '10px',
-        height: '10px',
-    },
+        width: '100%',
+        marginTop: 20,
+      },    
     content: {
         marginTop: 30,
     },
