@@ -6,26 +6,45 @@ import AuthService from "../services/auth.service";
 import { useNavigation } from '@react-navigation/native';
 
 function MenuHamburguer() {
-    const [isOpen, setIsOpen] = useState(false);
-    const [username, setUsername] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [username, setUsername] = useState("");
 
-    const navigation = useNavigation();
+  const [selectedOption, setSelectedOption] = useState(null);
 
-    useEffect(() => {
-      const getUser = async () => {
-        const user = await AuthService.getUserLogged();
-        setUsername(user?.userInfo?.username || '');
-      }
-      getUser();
+  const navigation = useNavigation();
+
+  const handleMenuClick = (option) => {
+    setSelectedOption(option);
+    // Implemente a lógica de navegação ou outras ações com base na opção clicada
+    // Por exemplo, você pode navegar para diferentes telas com base na opção clicada.
+    switch (option) {
+      case 'Discover':
+        navigation.navigate('MundosScreen');
+        break;
+      // Adicione casos para outras opções conforme necessário
+      default:
+        break;
     }
-    , []);
+  }
 
-    // Chamar a função de logout
-    const logout = () => {
-      AuthService.logout();
-      // redirecionar para a página de SplashScreen
-      navigation.navigate('SplashScreen');
+  const menuOptions = ['Discover', 'Perfil', 'Chat', 'FAQ´s', 'About Us', 'Notificações'];
+
+  useEffect(() => {
+    const getUser = async () => {
+      const user = await AuthService.getUserLogged();
+      setUsername(user?.userInfo?.username || '');
     }
+    getUser();
+  }
+  , []);
+
+  // Chamar a função de logout
+  const logout = () => {
+    AuthService.logout();
+    // redirecionar para a página de SplashScreen
+    navigation.navigate('SplashScreen');
+  }
+
   return (
     <Box style={styles.box}>
       <Menu
@@ -51,30 +70,23 @@ function MenuHamburguer() {
                 </Pressable>
             </HStack>
             {/* Itens do menu */}
-            <Menu.Item>
+            <Menu.Item _pressed={{ backgroundColor: 'transparent' }}>
                 <HStack space={1}>
                     <Text style={styles.welcomeText}>Bem vindo,</Text>
                     <Text style={styles.nameText}>{username}</Text>
                 </HStack>
             </Menu.Item>
-            <Menu.Item>
-              <Text style={styles.menuText}>Discover</Text>
-            </Menu.Item>
-            <Menu.Item>
-              <Text style={styles.menuText}>Perfil</Text>
-            </Menu.Item>
-            <Menu.Item>
-              <Text style={styles.menuText}>Chat</Text>
-            </Menu.Item>
-            <Menu.Item>
-              <Text style={styles.menuText}>FAQ´s</Text>
-            </Menu.Item>
-            <Menu.Item>
-              <Text style={styles.menuText}>About Us</Text>
-            </Menu.Item>
-            <Menu.Item>
-              <Text style={styles.menuText}>Notificações</Text>
-            </Menu.Item>
+            {menuOptions.map(option => (
+              <Menu.Item
+                key={option}
+                style={option === selectedOption ? styles.selectedMenuOption : null}
+                _pressed={{ backgroundColor: 'transparent' }}
+              >
+                <Pressable onPress={() => handleMenuClick(option)}>
+                <Text style={option === selectedOption ? styles.selectedMenuText : styles.menuText}>{option}</Text>
+              </Pressable>
+              </Menu.Item>
+            ))}
             {/* Switch de Dark Mode */}
             <HStack alignItems="center" space={4} m={3}>
               <Switch size="md" offTrackColor="#6E0271" onTrackColor="#6E0271" offThumbColor="#FFFFFF" onThumbColor="#FFFFFF" />
@@ -96,9 +108,18 @@ const styles = {
   },
   menu2: {
     backgroundColor: 'transparent',
-    // tirar a sombra do menu
     shadowColor: 'transparent',
     borderRadius: 20,
+  },
+  selectedMenuOption: {
+    color: '#6E0271',
+    borderLeftColor: '#6E0271',
+    borderLeftWidth: 5,
+  },
+  selectedMenuText: {
+    color: '#6E0271',
+    fontSize: 18,
+    fontFamily: 'Supply-Bold',
   },
   logoutButton: {
     margin: 3,

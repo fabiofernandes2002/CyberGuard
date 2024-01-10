@@ -4,84 +4,83 @@ const companies = require('../models/company.model');
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 let secret = "%)$2sF55Idf(Rm&jyPnkqAL^+8m4dSw)"; 
+const { validationResult } = require('express-validator');
 
 // Registar um novo utilizador (username, email, password, confirmPassword, userType, isOwner, companyName, company)
 exports.register = async function (req, res) {
   try {
-
     const { username, email, password, confirmPassword, userType, isOwner, companyName, company } = req.body;
-    // Se o userType for 'empresarial' e isOwner for true, o usuário deve fornecer um companyName
+
     if (userType === 'empresarial' && isOwner && !companyName) {
-      return res.status(400).send('Por favor, forneça um nome de empresa.');
+      return res.status(400).json({ message: "Por favor, forneça um nome de empresa." });
     }
 
-    // Se o userType for 'empresarial' e isOwner for true, crie uma nova empresa
     let companyExists;
     if (userType === 'empresarial' && isOwner) {
-      const newCompany = new companies({ name: companyName, owner: null, users: [] });
-      await newCompany.save();
-      companyExists = newCompany;
+      companyExists = await companies.findOne({ name: companyName });
+      if (companyExists) {
+        return res.status(400).json({ message: "O nome da empresa já existe." });
+      }
+
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
     }
 
-    // Se o userType for 'empresarial' e isOwner for false, o usuário deve escolher uma empresa existente
     if (userType === 'empresarial' && !isOwner) {
       if (!company) {
-        return res.status(400).send('Por favor, escolha uma empresa.');
+        return res.status(400).json({ message: "Por favor, escolha uma empresa." });
       }
-    
-      // Verifique se a empresa escolhida existe
-      companyExists = await companies.findById(company );
+
+      companyExists = await companies.findOne({ name: company });
       if (!companyExists) {
-        return res.status(400).send('A empresa não existe.');
+        return res.status(400).json({ message: "A empresa escolhida não existe." });
       }
     }
-    // Se não houver empresas disponíveis, retorne uma mensagem de erro
+
     const companiesVerify = await companies.find();
     if (companiesVerify.length === 0) {
-      return res.status(400).send('Não há empresas disponíveis.');
+      return res.status(400).json({ message: "Não há empresas disponíveis." });
     }
 
-    // se o userType for 'normal ou professional', o usuário não deve fornecer um companyName ou company
     if (userType !== 'empresarial' && (companyName || company)) {
-      return res.status(400).send('O userType não pode ser normal ou professional.');
+      return res.status(400).json({ message: "O userType deve ser normal ou empresarial." });
     }
 
-    // Verificar se o username já existe
     const userExists = await users.findOne({ username });
     if (userExists) {
       return res.status(400).json({ message: "O username já existe." });
     }
 
-    // Verificar se o email já existe
     const emailExists = await users.findOne({ email });
     if (emailExists) {
-        return res.status(400).json({ message: "O email já existe." });
+      return res.status(400).json({ message: "O email já existe." });
     }
 
-    // Confirmar password e confirmPassword
     if (password !== confirmPassword) {
-        return res.status(400).json({ message: "As passwords não coincidem." });
+      return res.status(400).json({ message: "As passwords não coincidem." });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new users({ username, email, password: hashedPassword, userType, companyName, isOwner });
+    await user.save();
 
-    const user = new users({ username, email, password: hashedPassword, userType, companyName, isOwner, company: companyExists ? companyExists._id : null});
-    
-
-    // Se o userType for 'empresarial' e isOwner for true, atualize a empresa com o ID do novo usuário
     if (userType === 'empresarial' && isOwner) {
-      companyExists.owner = user._id;
-      await companyExists.save();
+      const newCompany = new companies({ name: companyName, owner: user._id, users: [] });
+      await newCompany.save();
+      user.company = newCompany._id;
+      await user.save();
     }
 
-    // Se o userType for 'empresarial' e isOwner for false, adicione o novo usuário à lista de usuários da empresa
     if (userType === 'empresarial' && !isOwner) {
       companyExists.users.push(user._id);
       await companyExists.save();
+      user.company = companyExists._id;
+      await user.save();
     }
 
-    await user.save();
-    res.status(201).json({ 
+    res.status(201).json({
       message: "Registo do utilizador efetuado com sucesso!",
       user: user
     });

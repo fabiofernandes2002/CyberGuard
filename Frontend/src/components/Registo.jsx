@@ -1,30 +1,58 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
-//import DropDown from "react-native-paper-dropdown";
 import DropDownPicker from 'react-native-dropdown-picker';
-//import { Provider, DefaultTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { registoStyles } from './RegistoStyles';
 import { loginStyles } from './LoginStyles';
+import ModalRegister from './ModalRegister';
+import AuthService from '../services/auth.service';
 
 const Registo = () => {
-
-  const [nome, setNome] = React.useState('');
-  const [email, setEmail] = React.useState('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: 'Normal', value: 'normal' },
-    { label: 'Empresarial', value: 'empresarial' },
-    { label: 'Profissional', value: 'profissional' }
-  ]);
-  const [password, setPassword] = React.useState('');
-  const [confirmarPassword, setConfirmarPassword] = React.useState('');
+  const [isOwner, setIsOwner] = useState(false);
+  const [companyName, setCompanyName] = useState('');
+  const [company, setCompany] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [showModal, setShowModal] = useState(false);
 
   const navigation = useNavigation();
-  const handleRegistarPress = () => {
-    navigation.navigate('MundosScreen');
+
+  const handleRegistarPress = async () => {
+    try {
+      const userData = {
+        username,
+        email,
+        password,
+        confirmPassword,
+        userType: value,
+        isOwner,
+        companyName: isOwner ? companyName : null,
+        company: !isOwner ? company : null,
+      };
+
+      //console.log('Dados do usuário:', userData);
+      await AuthService.register(userData);
+
+      navigation.navigate('LoginScreen');
+
+    } catch (error) {
+      console.error('Erro durante o registo:', error.message);
+    }
+  };
+
+  const handleUserTypeChange = (selectedValue) => {
+    if (selectedValue === 'empresarial') {
+      setShowModal(true);
+    } else {
+      setShowModal(false);
+      setIsOwner(false);
+    }
   };
 
   return (
@@ -34,8 +62,8 @@ const Registo = () => {
       <TextInput
         mode="outlined"
         label="Nome"
-        value={nome}
-        onChangeText={(text) => setNome(text)}
+        value={username}
+        onChangeText={(text) => setUsername(text)}
         style={{
           ...loginStyles.input,
           fontFamily: 'Raleway-Regular',
@@ -72,10 +100,15 @@ const Registo = () => {
       <DropDownPicker
         open={open}
         value={value}
-        items={items}
+        items={[
+          { label: 'Normal', value: 'normal' },
+          { label: 'Empresarial', value: 'empresarial' },
+          { label: 'Profissional', value: 'profissional' },
+        ]}
         setOpen={setOpen}
         setValue={setValue}
-        setItems={setItems}
+        setItems={() => {}} 
+        onChangeValue={handleUserTypeChange}
         placeholder="Tipo de Utilizador"
         style={{
           backgroundColor: '#D8DBE2',
@@ -101,6 +134,20 @@ const Registo = () => {
         }}
       />
 
+      {/* Renderizar o modal se showModal for true */}
+      {value === 'empresarial' && 
+        <ModalRegister 
+          isOwner={isOwner}
+          setIsOwner={setIsOwner}
+          companyName={companyName}
+          setCompanyName={setCompanyName}
+          company={company}
+          setCompany={setCompany}
+          showModal={showModal}
+          setShowModal={setShowModal}
+        />
+      }
+
       <TextInput
         mode="outlined"
         label="Palavra-passe"
@@ -124,8 +171,8 @@ const Registo = () => {
       <TextInput
         mode="outlined"
         label="Confirmar Palavra-passe"
-        value={confirmarPassword}
-        onChangeText={(text) => setConfirmarPassword(text)}
+        value={confirmPassword}
+        onChangeText={(text) => setConfirmPassword(text)}
         secureTextEntry
         style={{
           ...loginStyles.input,
@@ -150,12 +197,4 @@ const Registo = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  safeContainerStyle: {
-    flex: 1,
-    margin: 20,
-    justifyContent: "center",
-  },
-});
-
-export default Registo
+export default Registo;

@@ -15,7 +15,7 @@ const schema = new mongoose.Schema({
   },
   companyName: { type: String, required: function () { return this.userType === 'empresarial' && this.isOwner; } },
   isOwner: { type: Boolean, required: function () { return this.userType === 'empresarial'; } }, 
-  company: { type: mongoose.Schema.Types.ObjectId, ref: 'company', required: function () { return this.userType === 'empresarial' && !this.isOwner; } },
+  company: { type: String, required: function () { return this.userType === 'empresarial' && !this.isOwner; } },
   courses: [{
     courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'courses' },
     started: {type: Boolean, default: false},

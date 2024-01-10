@@ -17,9 +17,14 @@ router.post('/register', [
     }
     ),
     body('userType').isIn(['normal', 'empresarial', 'professional', 'admin']).withMessage('O userType deve ser normal, empresarial ou professional'),
-    body('companyName').optional().isLength({ min: 3 }).withMessage('O companyName deve ter pelo menos 3 caracteres'),
-    body('isOwner').optional().isBoolean().withMessage('O isOwner deve ser true ou false'),
-    body('company').optional().isMongoId().withMessage('O company deve ser um id de empresa válido'),
+    body('companyName')
+        .if((value, { req }) => req.body.userType === 'empresarial' && req.body.isOwner === true)
+        .isLength({ min: 3 })
+        .withMessage('O companyName deve ter pelo menos 3 caracteres'),
+    body('company')
+        .if((value, { req }) => req.body.userType === 'empresarial' && req.body.isOwner === false)
+        .isLength({ min: 3 })
+        .withMessage('O company deve ser um nome de empresa válido'),
 ], 
 (req, res) => {
     const errors = validationResult(req)

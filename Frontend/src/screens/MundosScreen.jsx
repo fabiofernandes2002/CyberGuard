@@ -29,14 +29,28 @@ const flashcards = [
     frontText: 'Front Text 4',
     backText: 'Back Text 4',
   },
+  {
+    id: '5',
+    frontText: 'Front Text 5',
+    backText: 'Back Text 5',
+  },
+  {
+    id: '6',
+    frontText: 'Front Text 6',
+    backText: 'Back Text 6',
+  },
 ];
 
 const FlashcardsScreen = () => {
   const navigation = useNavigation();
 
+  const handleCardBackPress = () => {
+    navigation.navigate('CoursesScreen');
+  }
+
   return (
     <LinearGradient colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']} style={Styles.container}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView>
           <View style={Styles.Menu}>
             {/* Back button */}
@@ -56,6 +70,7 @@ const FlashcardsScreen = () => {
             <NativeBaseProvider>
               <MenuHamburguer />
             </NativeBaseProvider>
+            
           </View>
 
           {/* Texto de apresentação */}
@@ -71,10 +86,31 @@ const FlashcardsScreen = () => {
             {flashcards.map((card, index) => (
               <View style={Styles.row} key={`card_${card.id}`}>
                 <View style={Styles.cardWithEllipse}>
-                  <View style={Styles.cardWrapper}>
-                    <Card frontText={card.frontText} backText={card.backText} />
-                  </View>
-                  {index % 2 === 0 ? <Ellipse position="right" /> : <Ellipse2 position="left" />}
+                  {index % 2 === 0 ? (
+                    <>
+                      <TouchableOpacity onPress={handleCardBackPress}>
+                        <View style={Styles.cardWrapper}>
+                          <Card frontText={card.frontText} backText={card.backText} handleCardBackPress={handleCardBackPress} />
+                        </View>
+                      </TouchableOpacity>
+                      {index === flashcards.length - 1 
+                        ? <Ellipse style={{ opacity: 0 }} /> 
+                        : <Ellipse position="right" style={Styles.ellipseRight} />
+                      }
+                    </>
+                  ) : (
+                    <>
+                      {index === flashcards.length - 1 
+                        ? <Ellipse2 style={{ opacity: 0 }} /> 
+                        : <Ellipse2 position="left" style={Styles.ellipseLeft} />
+                      }
+                      <TouchableOpacity onPress={handleCardBackPress}>
+                        <View style={Styles.cardWrapper}>
+                          <Card frontText={card.frontText} backText={card.backText} handleCardBackPress={handleCardBackPress} />
+                        </View>
+                      </TouchableOpacity>
+                    </>
+                  )}
                 </View>
               </View>
             ))}
@@ -125,11 +161,20 @@ const Styles = StyleSheet.create({
     width: 170,
     height: 150,
   },
-
   card: {
     width: 100,
     height: 100,
     backgroundColor: 'blue',
+  },
+  ellipseRight: {
+    marginRight: 70, // Ajustar conforme necessário
+    marginTop: 50,    // Ajustar conforme necessário
+    transform: [{ scale: 1.1 }] // Aumenta o tamanho da elipse
+  },
+  ellipseLeft: {
+    marginLeft: 70, // Ajustar conforme necessário
+    marginTop: 50,   // Ajustar conforme necessário
+    transform: [{ scale: 1.1 }] // Aumenta o tamanho da elipse
   },
   curvedLineRight: {
     width: 100,

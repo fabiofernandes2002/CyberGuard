@@ -4,7 +4,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import RegistoComponent from '../components/Registo';
 import SetaEsquerda from '../assets/SetaEsquerda.svg';
-import Menu from '../assets/Menu.svg';
 
 const RegistoScreen = () => {
 
@@ -17,14 +16,6 @@ const RegistoScreen = () => {
                     {/* Back button */}
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <SetaEsquerda
-                            width={30}
-                            height={30}
-                            style={Styles.icon}
-                        />
-                    </TouchableOpacity>
-                    {/* Hamburger menu */}
-                    <TouchableOpacity onPress={() => { /* código para abrir o menu */ }}>
-                        <Menu
                             width={30}
                             height={30}
                             style={Styles.icon}
@@ -65,9 +56,7 @@ const Styles = StyleSheet.create({
         fontSize: 24,
         fontFamily: 'Supply-Bold',
         textAlign: 'center',
-        // ficar mais proximo do logo
         marginBottom: 50,
-        // sem mover o logo para cima
         marginTop: -50,
     },
     Menu: {

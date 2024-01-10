@@ -6,7 +6,6 @@ import LoginComponent from '../components/Login';
 import SetaEsquerda from '../assets/SetaEsquerda.svg';
 import AuthService from '../services/auth.service';
 import { NativeBaseProvider } from 'native-base';
-import MenuHamburguer from '../components/Menu';
 
 const LoginScreen = () => {
 
@@ -20,25 +19,18 @@ const LoginScreen = () => {
 
     const handleButtonEntrarPress = async () => {
         try {
-            // Chame a função de login do AuthService
             const user = await AuthService.login(email, password);
-    
-            // Verifique se a função de login retorna um objeto de usuário
+
             if (user) {
-                // Faça algo com as informações do usuário, se necessário
                 console.log('Usuário logado:', user);
     
-                // Navegue para a próxima tela
                 navigation.navigate('SurveyIntroScreen');
     
-                // Exiba um alerta de login bem-sucedido
                 Alert.alert('Sucesso', 'Login efetuado com sucesso!');
             } else {
-                // Se a função de login não retornar um usuário, exiba uma mensagem de erro
                 Alert.alert('Erro', 'Credenciais inválidas. Tente novamente.');
             }
         } catch (error) {
-            // Lidar com outros erros de login, por exemplo, exibir uma mensagem de erro
             Alert.alert('Erro', 'Erro durante o login. Verifique suas credenciais.');
         }
     };
@@ -55,10 +47,6 @@ const LoginScreen = () => {
                         style={Styles.icon}
                     />
                 </TouchableOpacity>
-                {/* Menu Hamburguer */}
-                <NativeBaseProvider>
-                    <MenuHamburguer />
-                </NativeBaseProvider>
             </View>
             {/* Logo */}
             <View style={Styles.LogoLogin}>
@@ -113,7 +101,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 20,
-        marginTop: -100,
+        marginTop: -150,
     },
     logo: {
         width: 230,
@@ -126,9 +114,7 @@ const Styles = StyleSheet.create({
         fontSize: 24,
         fontFamily: 'Supply-Bold',
         textAlign: 'center',
-        // ficar mais proximo do logo
         marginBottom: 50,
-        // sem mover o logo para cima
         marginTop: -50,
     },
     text: {

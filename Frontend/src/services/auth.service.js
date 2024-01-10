@@ -37,35 +37,36 @@ const AuthService = {
     }
   },
 
-  register: async (username, email, password, confirmPassword, userType, isOwner, companyName, company) => {
+  register: async (userData) => {
     try {
       const response = await fetch(`${API_URL}/users/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password, confirmPassword, userType, isOwner, companyName, company }),
+        body: JSON.stringify(userData),
       });
   
+      const responseData = await response.json();
+      console.log('Resposta completa do servidor:', responseData);
+  
       if (!response.ok) {
-        const errorData = await response.json();
         let errorMessage = 'Erro durante o registo.';
   
         if (response.status === 400) {
-          errorMessage = errorData.message || 'Erro de solicitação inválida.';
+          errorMessage = responseData.message || 'Erro de solicitação inválida.';
         } else if (response.status === 401) {
-          errorMessage = errorData.message || 'Credenciais inválidas.';
+          errorMessage = responseData.message || 'Credenciais inválidas.';
         }
   
         throw new Error(errorMessage);
       }
   
-      const user = await response.json();
-      await AsyncStorage.setItem("user", JSON.stringify(user));
-      return user;
+      await AsyncStorage.setItem("user", JSON.stringify(responseData));
+  
     } catch (error) {
       console.error('Erro durante o registo:', error.message);
       throw error;
     }
-  },  
+  }, 
 
   async logout() {
     await AsyncStorage.removeItem("user");
