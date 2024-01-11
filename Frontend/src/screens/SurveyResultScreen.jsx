@@ -4,11 +4,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import CoolIcon from '../assets/coolIcon.svg';
 
-const SurveyResultScreen = () => {
-
+const SurveyResultScreen = ({route}) => {
+    const { score } = route.params;
     const navigation = useNavigation();
-    const handleButtonLRegistoPress = () => {
-        navigation.navigate('RegistoScreen');
+    const handleLinkTextClick = () => {
+        navigation.navigate('MundosScreen');
     }
 
 
@@ -22,13 +22,13 @@ const SurveyResultScreen = () => {
                     style={Styles.logo}
                     resizeMode="contain"
                 />
-                <Text style={Styles.pontuacaoText}>Pontuação</Text>
+                <Text style={Styles.pontuacaoText}>Pontuação: {score}</Text>
             </View>
             {/* coolIcon */}
             <View style={Styles.coolIcon}>
                 <CoolIcon
-                    width={200}
-                    height={200}
+                    width={100}
+                    height={100}
                     style={Styles.icon}
                 />
             </View>
@@ -37,8 +37,12 @@ const SurveyResultScreen = () => {
                 <Text style={Styles.text}>
                     Parabéns por completares este questionário!
                 </Text>
-                <Text style={Styles.text}>
-                    Clica e vê os vários cursos que temos para ti.
+                <Text style={[Styles.text, Styles.spacing]}>
+                    Clica {" "}
+                        <Text onPress={handleLinkTextClick} style={Styles.linkText}>
+                            Aqui
+                        </Text>
+                    {" "} e vê os vários cursos que temos para ti.
                 </Text>
             </View>
         </View>
@@ -59,6 +63,7 @@ const Styles = StyleSheet.create({
         height: 230,
         marginBottom: 20,
         alignSelf: 'center',
+        marginBottom: 50,
     },
     pontuacaoText: {
         color: '#6E0271',
@@ -74,5 +79,19 @@ const Styles = StyleSheet.create({
         fontFamily: 'Raleway-Medium',
         textAlign: 'center',
     },
+    linkText: {
+        color: '#6E0271',
+        fontSize: 17,
+        fontFamily: 'Supply-Bold',
+        textAlign: 'center',
+    },
+    icon: {
+        alignSelf: 'center',
+        marginBottom: 50,
+    },
+    spacing: {
+        marginTop: 20,
+    },
+
 });
 export default SurveyResultScreen;

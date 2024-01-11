@@ -12,6 +12,7 @@ const SurveyDetailsScreen = () => {
     
     const [selectedOption, setSelectedOption] = useState(null);
     const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
+    const [score, setScore] = useState(0);
 
     const totalQuestions = surveyData.surveys.length;
 
@@ -24,9 +25,17 @@ const SurveyDetailsScreen = () => {
         { id: `${survey.incorrectAnswers.length + 1}`, text: survey.correctAnswer },
     ];
 
+    // Quando o usuário selecionar uma resposta, verifique se a resposta está correta e atualize a pontuação
+    const handleOptionChange = (value) => {
+        setSelectedOption(value);
+        if (responses[value - 1].text === survey.correctAnswer) {
+            setScore(score + 1);
+        }
+    };
+
     const navigation = useNavigation();
     const handleButtonTerminarPress = () => {
-        navigation.navigate('SurveyResultScreen');
+        navigation.navigate('SurveyResultScreen', { score });
     }
     
 
@@ -52,13 +61,12 @@ const SurveyDetailsScreen = () => {
                 <View style={Styles.questionTitle} >
                     <Text style={Styles.questionTitle}>{survey.question}</Text>
                 </View>
-                <Radio.Group 
+                <Radio.Group
+                    key={currentQuestionNumber}
                     name="exampleGroup" 
                     colorScheme="success" 
                     accessibilityLabel="pick an option" 
-                    onChange={value => {
-                        setSelectedOption(value);
-                    }}
+                    onChange={handleOptionChange}
                 >
                     <FlatList
                         data={responses}
@@ -80,6 +88,7 @@ const SurveyDetailsScreen = () => {
                 <TouchableOpacity onPress={() => {
                     if (currentQuestionNumber < totalQuestions) {
                         setCurrentQuestionNumber(currentQuestionNumber + 1);
+                        setSelectedOption(null);
                     } else {
                         handleButtonTerminarPress();
                         }

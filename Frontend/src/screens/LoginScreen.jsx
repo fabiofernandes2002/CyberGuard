@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ToastAndroid } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import LoginComponent from '../components/Login';
 import SetaEsquerda from '../assets/SetaEsquerda.svg';
 import AuthService from '../services/auth.service';
-import { NativeBaseProvider } from 'native-base';
 
 const LoginScreen = () => {
 
@@ -20,18 +19,36 @@ const LoginScreen = () => {
     const handleButtonEntrarPress = async () => {
         try {
             const user = await AuthService.login(email, password);
-
+        
             if (user) {
                 console.log('Usuário logado:', user);
-    
+        
                 navigation.navigate('SurveyIntroScreen');
-    
-                Alert.alert('Sucesso', 'Login efetuado com sucesso!');
+        
+                ToastAndroid.showWithGravity(
+                    'Login efetuado com sucesso!',
+                    ToastAndroid.SHORT,
+                    ToastAndroid.TOP,
+                    0,
+                    100
+                );
             } else {
-                Alert.alert('Erro', 'Credenciais inválidas. Tente novamente.');
+                ToastAndroid.showWithGravity(
+                    'Credenciais inválidas. Tente novamente.',
+                    ToastAndroid.SHORT,
+                    ToastAndroid.TOP,
+                    0,
+                    100
+                );
             }
         } catch (error) {
-            Alert.alert('Erro', 'Erro durante o login. Verifique suas credenciais.');
+            ToastAndroid.showWithGravity(
+                'Erro durante o login. Verifique suas credenciais.',
+                ToastAndroid.SHORT,
+                ToastAndroid.TOP,
+                0,
+                100
+            );
         }
     };
 
