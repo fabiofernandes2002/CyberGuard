@@ -1,30 +1,50 @@
-import React, {useState, useEffect} from "react";
-import { Menu, Box, Text, Pressable, VStack, HStack, Spacer, Switch } from 'native-base';
-import MenuH from "../assets/Menu.svg";
-import ButtonFecharMenu from "../assets/Fechar.svg";
-import AuthService from "../services/auth.service";
-import { useNavigation, useRoute } from '@react-navigation/native';
+import React, {useState, useEffect} from 'react';
+import {
+  Menu,
+  Box,
+  Text,
+  Pressable,
+  VStack,
+  HStack,
+  Spacer,
+  Switch,
+} from 'native-base';
+import MenuH from '../assets/Menu.svg';
+import ButtonFecharMenu from '../assets/Fechar.svg';
+import AuthService from '../services/auth.service';
+import {useNavigation} from '@react-navigation/native';
 
 function MenuHamburguer() {
   const [isOpen, setIsOpen] = useState(false);
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState('');
 
   const navigation = useNavigation();
 
-  const handleMenuClick = (option) => {
+  const handleMenuClick = option => {
+    setSelectedOption(option);
+    // Implemente a lógica de navegação ou outras ações com base na opção clicada
+    // Por exemplo, você pode navegar para diferentes telas com base na opção clicada.
     switch (option) {
       case 'Discover':
         navigation.navigate('MundosScreen');
         break;
-      case 'About Us':
-        navigation.navigate('AboutUsScreen');
+      // Adicione casos para outras opções conforme necessário
+      case 'Perfil':
+        navigation.navigate('ProfileScreen');
         break;
       default:
         break;
     }
-  }
+  };
 
-  const menuOptions = ['Discover', 'Perfil', 'Chat', 'FAQ´s', 'About Us', 'Notificações'];
+  const menuOptions = [
+    'Discover',
+    'Perfil',
+    'Chat',
+    'FAQ´s',
+    'About Us',
+    'Notificações',
+  ];
 
   const routeToMenuOption = {
     MundosScreen: 'Discover',
@@ -38,41 +58,45 @@ function MenuHamburguer() {
     const getUser = async () => {
       const user = await AuthService.getUserLogged();
       setUsername(user?.userInfo?.username || '');
-    }
+    };
     getUser();
-  }
-  , []);
+  }, []);
 
   // Chamar a função de logout
   const logout = () => {
     AuthService.logout();
     // redirecionar para a página de SplashScreen
     navigation.navigate('SplashScreen');
-  }
+  };
 
   return (
     <Box style={styles.box}>
       <Menu
-      isOpen={isOpen}
-      onOpen={() => setIsOpen(true)}
-      onClose={() => setIsOpen(false)}
-      trigger={(triggerProps) => (
-        <Pressable {...triggerProps}>
-          <MenuH width={30} height={30} />
-        </Pressable>
-      )}
-      style={styles.menu2}
-      >
+        isOpen={isOpen}
+        onOpen={() => setIsOpen(true)}
+        onClose={() => setIsOpen(false)}
+        trigger={triggerProps => (
+          <Pressable {...triggerProps}>
+            <MenuH width={30} height={30} />
+          </Pressable>
+        )}
+        style={styles.menu2}>
         <VStack space={2.5} w="350" style={styles.menu}>
-            <HStack w="100%" justifyContent="space-between">
-                {/* Botão Logout no topo do menu */}
-                <Pressable m={3} onPress={logout} style={styles.logoutButton}>
-                    <Text style={styles.logoutText}>Logout</Text>
-                </Pressable>
-                {/* Botão para fechar o menu */}
-                <Pressable m={3} onPress={() => setIsOpen(false)}>
-                    <ButtonFecharMenu width={20} height={20} />
-                </Pressable>
+          <HStack w="100%" justifyContent="space-between">
+            {/* Botão Logout no topo do menu */}
+            <Pressable m={3} onPress={logout} style={styles.logoutButton}>
+              <Text style={styles.logoutText}>Logout</Text>
+            </Pressable>
+            {/* Botão para fechar o menu */}
+            <Pressable m={3} onPress={() => setIsOpen(false)}>
+              <ButtonFecharMenu width={20} height={20} />
+            </Pressable>
+          </HStack>
+          {/* Itens do menu */}
+          <Menu.Item _pressed={{backgroundColor: 'transparent'}}>
+            <HStack space={1}>
+              <Text style={styles.welcomeText}>Bem vindo,</Text>
+              <Text style={styles.nameText}>{username}</Text>
             </HStack>
             {/* Itens do menu */}
             <Menu.Item _pressed={{ backgroundColor: 'transparent' }}>
