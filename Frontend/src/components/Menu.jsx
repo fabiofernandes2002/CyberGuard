@@ -3,31 +3,36 @@ import { Menu, Box, Text, Pressable, VStack, HStack, Spacer, Switch } from 'nati
 import MenuH from "../assets/Menu.svg";
 import ButtonFecharMenu from "../assets/Fechar.svg";
 import AuthService from "../services/auth.service";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 function MenuHamburguer() {
   const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState("");
 
-  const [selectedOption, setSelectedOption] = useState(null);
-
   const navigation = useNavigation();
 
   const handleMenuClick = (option) => {
-    setSelectedOption(option);
-    // Implemente a lógica de navegação ou outras ações com base na opção clicada
-    // Por exemplo, você pode navegar para diferentes telas com base na opção clicada.
     switch (option) {
       case 'Discover':
         navigation.navigate('MundosScreen');
         break;
-      // Adicione casos para outras opções conforme necessário
+      case 'About Us':
+        navigation.navigate('AboutUsScreen');
+        break;
       default:
         break;
     }
   }
 
   const menuOptions = ['Discover', 'Perfil', 'Chat', 'FAQ´s', 'About Us', 'Notificações'];
+
+  const routeToMenuOption = {
+    MundosScreen: 'Discover',
+    AboutUsScreen: 'About Us',
+  };
+
+  const route = useRoute();
+  const selectedOption = routeToMenuOption[route.name];
 
   useEffect(() => {
     const getUser = async () => {
@@ -76,17 +81,20 @@ function MenuHamburguer() {
                     <Text style={styles.nameText}>{username}</Text>
                 </HStack>
             </Menu.Item>
-            {menuOptions.map(option => (
-              <Menu.Item
-                key={option}
-                style={option === selectedOption ? styles.selectedMenuOption : null}
-                _pressed={{ backgroundColor: 'transparent' }}
-              >
-                <Pressable onPress={() => handleMenuClick(option)}>
-                <Text style={option === selectedOption ? styles.selectedMenuText : styles.menuText}>{option}</Text>
-              </Pressable>
-              </Menu.Item>
-            ))}
+            {menuOptions.map(option => {
+              const isSelected = option === selectedOption;
+              return (
+                <Menu.Item
+                  key={option}
+                  style={isSelected ? styles.selectedMenuOption : null}
+                  _pressed={{ backgroundColor: 'transparent' }}
+                >
+                  <Pressable onPress={() => handleMenuClick(option)}>
+                    <Text style={isSelected ? styles.selectedMenuText : styles.menuText}>{option}</Text>
+                  </Pressable>
+                </Menu.Item>
+              );
+            })}
             {/* Switch de Dark Mode */}
             <HStack alignItems="center" space={4} m={3}>
               <Switch size="md" offTrackColor="#6E0271" onTrackColor="#6E0271" offThumbColor="#FFFFFF" onThumbColor="#FFFFFF" />

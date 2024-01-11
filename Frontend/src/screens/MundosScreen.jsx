@@ -79,8 +79,6 @@ const FlashcardsScreen = () => {
             <Text style={Styles.textDescricao}>
               Aqui temos os diferentes mundos que existem no ciberespaço para te proporcionar uma melhor aprendizagem deste universo.
             </Text>
-          
-
           </View>
           <View style={Styles.cardContainer}>
             {flashcards.map((card, index) => (
@@ -130,8 +128,8 @@ const Styles = StyleSheet.create({
   },
   logo: {
     position: 'absolute',
-    width: 50,
-    height: 50,
+    width: 70,
+    height: 70,
     marginBottom: 20,
     alignSelf: 'center',
     justifyContent: 'center',
@@ -167,14 +165,14 @@ const Styles = StyleSheet.create({
     backgroundColor: 'blue',
   },
   ellipseRight: {
-    marginRight: 70, // Ajustar conforme necessário
-    marginTop: 50,    // Ajustar conforme necessário
-    transform: [{ scale: 1.1 }] // Aumenta o tamanho da elipse
+    marginRight: 70,
+    marginTop: 50,
+    transform: [{ scale: 1.1 }]
   },
   ellipseLeft: {
-    marginLeft: 70, // Ajustar conforme necessário
-    marginTop: 50,   // Ajustar conforme necessário
-    transform: [{ scale: 1.1 }] // Aumenta o tamanho da elipse
+    marginLeft: 70,
+    marginTop: 50,
+    transform: [{ scale: 1.1 }]
   },
   curvedLineRight: {
     width: 100,
@@ -211,21 +209,23 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginTop: 20,
+    marginTop: 30,
   },
   textC: {
     fontFamily: 'Supply-Bold',
     fontSize: 20,
     color: '#00428A',
-    marginLeft: 35,
+    marginLeft: 55,
     justifyContent: 'center',
+    marginTop: -5,
   },
   textG: {
     fontFamily: 'Supply-Bold',
     fontSize: 20,
     color: '#00428A',
-    marginLeft: 35,
+    marginLeft: 55,
     justifyContent: 'center',
+    marginTop: -5,
   },
 });
 

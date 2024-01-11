@@ -7,7 +7,7 @@ const SurveyIntroScreen = () => {
     
         const navigation = useNavigation();
         const handleButtonComecarPress = () => {
-            navigation.navigate('MundosScreen');
+            navigation.navigate('SurveyDetailsScreen');
         }
     
     return (

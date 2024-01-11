@@ -30,26 +30,34 @@ const AboutUsScreen = () => {
                 </View>
             </View>
             <View style={styles.content}>
-                <Text style={styles.title}>Equipa</Text>
+                <View style={styles.titleEquipa}>
+                    <Text style={styles.titleEquipa}>Equipa</Text>
+                </View>
                 <View style={styles.team}>
-                    <Image
-                        source={require('../assets/FotoBernardo.svg')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Text style={styles.name}>Bernardo</Text>
-                    <Image
-                        source={require('../assets/FotoFabio.svg')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Text style={styles.name}>Fábio</Text>
-                    <Image
-                        source={require('../assets/FotoLucas.svg')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Text style={styles.name}>Lucas</Text>
+                    <View style={styles.member}>
+                        <Image
+                            source={require('../assets/Foto1.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <Text style={styles.name}>Bernardo</Text>
+                    </View>
+                    <View style={styles.member}>
+                        <Image
+                            source={require('../assets/Foto2.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <Text style={styles.name}>Fábio</Text>
+                    </View>
+                    <View style={styles.member}>
+                        <Image
+                            source={require('../assets/Foto3.png')}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                        <Text style={styles.name}>Lucas</Text>
+                    </View>
                 </View>
                 <Text style={styles.title}>About Us</Text>
                 <Text style={styles.aboutUsText}>
@@ -70,12 +78,14 @@ const AboutUsScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 20,
     },
     logo: {
         position: 'absolute',
-        width: 50,
-        height: 50,
+        width: 70,
+        height: 70,
         marginBottom: 20,
         alignSelf: 'center',
         justifyContent: 'center',
@@ -86,29 +96,42 @@ const styles = StyleSheet.create({
         fontFamily: 'Supply-Bold',
         fontSize: 20,
         color: '#00428A',
-        marginLeft: 35,
+        marginLeft: 55,
         justifyContent: 'center',
+        marginTop: -5,
     },
     textG: {
         fontFamily: 'Supply-Bold',
         fontSize: 20,
         color: '#00428A',
-        marginLeft: 35,
+        marginLeft: 55,
         justifyContent: 'center',
+        marginTop: -5,
     },
     Menu: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
-        marginTop: 20,
+        marginTop: -50,
       },    
     content: {
-        marginTop: 30,
+        marginBottom: 20,
+        marginTop: 20,
+    },
+    titleEquipa: {
+        fontFamily: 'Supply-Bold',
+        fontSize: 24,
+        color: '#6E0271',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20,
     },
     title: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        marginBottom: 10,
+        fontFamily: 'Supply-Bold',
+        fontSize: 24,
+        color: '#6E0271',
+        marginTop: 20,
+        marginBottom: 20,
     },
     team: {
         flexDirection: 'row',
@@ -116,13 +139,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 20,
     },
+    member: {
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
     name: {
-        fontSize: 20,
-        fontWeight: 'bold',
+        fontFamily: 'Supply-Bold',
+        fontSize: 24,
+        textAlign: 'center',
+        color: '#1B1B1E',
+        marginTop: 10,
     },
     aboutUsText: {
-        fontSize: 15,
-        textAlign: 'justify',
+        fontFamily: 'Raleway-Medium',
+        fontSize: 17,
+        color: '#1B1B1E',
     },
 });
 

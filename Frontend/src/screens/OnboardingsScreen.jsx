@@ -20,7 +20,7 @@ const OnboardingsScreen = () => {
 
   return (
     <LinearGradient colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']} style={styles.slide}>
-      <Swiper style={styles.wrapper} showsButtons={false} paginationStyle={{bottom: 300}} dotColor="#F7F7F7" activeDotColor="#00428A">
+      <Swiper style={styles.wrapper} showsButtons={false} paginationStyle={{bottom: 300}} dotColor="#F7F7F7" activeDotColor="#00428A" loop={false}>
         <View style={styles.slide}>
           <AuthenticationTwoColor style={styles.image} />
           <Text style={styles.text}>Aprende a guardar as tuas passwords em segurança.</Text>

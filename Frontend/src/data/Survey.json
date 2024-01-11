@@ -4,8 +4,7 @@
         "surveyInfo": {
           "question": "O que é um ataque de phishing?",
           "incorrectAnswers": ["Envio de vírus por e-mail"],
-          "correctAnswer": "Tentativa de enganar as pessoas para obter informações confidenciais",
-          "theme": "Privacidade de dados, Phising, Blockchain, Criptografia, Segurança em Nuvem, Técnicas de Deteção de Ameaças"
+          "correctAnswer": "Tentativa de enganar as pessoas para obter informações confidenciais"
         }
       },
       {
@@ -142,4 +141,4 @@
         }
       }
     ]
-  }  
+  }
