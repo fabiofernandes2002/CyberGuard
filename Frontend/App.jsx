@@ -13,6 +13,8 @@ import {NativeBaseProvider} from 'native-base';
 import CoursesScreen from './src/screens/CoursesScreen';
 import CoursesDetailsScreen from './src/screens/CoursesDetailsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import SurveyResultScreen from './src/screens/SurveyResultScreen';
+import SurveyDetailsScreen from './src/screens/SurveyDetailsScreen';
 
 const Stack = createStackNavigator();
 
@@ -69,6 +71,16 @@ const App = () => {
           <Stack.Screen
             name="ProfileScreen"
             component={ProfileScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="SurveyResultScreen"
+            component={SurveyResultScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="SurveyDetailsScreen"
+            component={SurveyDetailsScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

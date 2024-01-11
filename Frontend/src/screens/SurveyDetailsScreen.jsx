@@ -6,6 +6,7 @@ import { ProgressBar} from 'react-native-paper';
 import { Center, Box, Progress } from 'native-base';
 import surveyData from '../data/Survey.json';
 import Seta from '../assets/setaButton.svg';
+import { useNavigation } from '@react-navigation/native';
 
 const SurveyDetailsScreen = () => {
     
@@ -22,6 +23,12 @@ const SurveyDetailsScreen = () => {
         ...survey.incorrectAnswers.map((answer, index) => ({ id: `${index + 1}`, text: answer })),
         { id: `${survey.incorrectAnswers.length + 1}`, text: survey.correctAnswer },
     ];
+
+    const navigation = useNavigation();
+    const handleButtonTerminarPress = () => {
+        navigation.navigate('SurveyResultScreen');
+    }
+    
 
     return (
         <LinearGradient colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']} style={Styles.container}>
@@ -74,7 +81,7 @@ const SurveyDetailsScreen = () => {
                     if (currentQuestionNumber < totalQuestions) {
                         setCurrentQuestionNumber(currentQuestionNumber + 1);
                     } else {
-                            // Aqui você pode adicionar o código para terminar o questionário
+                        handleButtonTerminarPress();
                         }
                     }}>
                     <View style={[Styles.button, { backgroundColor: currentQuestionNumber < totalQuestions ? '#00428A' : '#6E0271' }]}>

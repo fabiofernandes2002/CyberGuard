@@ -12,25 +12,36 @@ import {
 import MenuH from '../assets/Menu.svg';
 import ButtonFecharMenu from '../assets/Fechar.svg';
 import AuthService from '../services/auth.service';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 function MenuHamburguer() {
   const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState('');
 
+  const [selectedOption, setSelectedOption] = useState(null);
+
   const navigation = useNavigation();
 
   const handleMenuClick = option => {
     setSelectedOption(option);
-    // Implemente a lógica de navegação ou outras ações com base na opção clicada
-    // Por exemplo, você pode navegar para diferentes telas com base na opção clicada.
     switch (option) {
       case 'Discover':
         navigation.navigate('MundosScreen');
         break;
-      // Adicione casos para outras opções conforme necessário
       case 'Perfil':
         navigation.navigate('ProfileScreen');
+        break;
+      case 'Chat':
+        navigation.navigate('ChatScreen');
+        break;
+      case 'FAQ´s':
+        navigation.navigate('FAQScreen');
+        break;
+      case 'About Us':
+        navigation.navigate('AboutUsScreen');
+        break;
+      case 'Notificações':
+        navigation.navigate('NotificationsScreen');
         break;
       default:
         break;
@@ -49,10 +60,11 @@ function MenuHamburguer() {
   const routeToMenuOption = {
     MundosScreen: 'Discover',
     AboutUsScreen: 'About Us',
+    ProfileScreen: 'Perfil',
   };
 
   const route = useRoute();
-  const selectedOption = routeToMenuOption[route.name];
+ // const selectedOption = routeToMenuOption[route.name];
 
   useEffect(() => {
     const getUser = async () => {
@@ -60,13 +72,16 @@ function MenuHamburguer() {
       setUsername(user?.userInfo?.username || '');
     };
     getUser();
-  }, []);
+  
+    setSelectedOption(routeToMenuOption[route.name]);
+    if (routeToMenuOption[route.name]) {
+      setSelectedOption(routeToMenuOption[route.name]);
+    }
+  }, [route.name]);
 
-  // Chamar a função de logout
   const logout = () => {
     AuthService.logout();
-    // redirecionar para a página de SplashScreen
-    navigation.navigate('SplashScreen');
+    navigation.navigate('LoginScreen');
   };
 
   return (
@@ -83,47 +98,37 @@ function MenuHamburguer() {
         style={styles.menu2}>
         <VStack space={2.5} w="350" style={styles.menu}>
           <HStack w="100%" justifyContent="space-between">
-            {/* Botão Logout no topo do menu */}
             <Pressable m={3} onPress={logout} style={styles.logoutButton}>
               <Text style={styles.logoutText}>Logout</Text>
             </Pressable>
-            {/* Botão para fechar o menu */}
             <Pressable m={3} onPress={() => setIsOpen(false)}>
               <ButtonFecharMenu width={20} height={20} />
             </Pressable>
           </HStack>
-          {/* Itens do menu */}
           <Menu.Item _pressed={{backgroundColor: 'transparent'}}>
             <HStack space={1}>
               <Text style={styles.welcomeText}>Bem vindo,</Text>
               <Text style={styles.nameText}>{username}</Text>
             </HStack>
-            {/* Itens do menu */}
-            <Menu.Item _pressed={{ backgroundColor: 'transparent' }}>
-                <HStack space={1}>
-                    <Text style={styles.welcomeText}>Bem vindo,</Text>
-                    <Text style={styles.nameText}>{username}</Text>
-                </HStack>
-            </Menu.Item>
-            {menuOptions.map(option => {
-              const isSelected = option === selectedOption;
-              return (
-                <Menu.Item
-                  key={option}
-                  style={isSelected ? styles.selectedMenuOption : null}
-                  _pressed={{ backgroundColor: 'transparent' }}
-                >
-                  <Pressable onPress={() => handleMenuClick(option)}>
-                    <Text style={isSelected ? styles.selectedMenuText : styles.menuText}>{option}</Text>
-                  </Pressable>
-                </Menu.Item>
-              );
-            })}
-            {/* Switch de Dark Mode */}
-            <HStack alignItems="center" space={4} m={3}>
-              <Switch size="md" offTrackColor="#6E0271" onTrackColor="#6E0271" offThumbColor="#FFFFFF" onThumbColor="#FFFFFF" />
-              <Text style={styles.menuText}>Dark Mode</Text>
-            </HStack>
+          </Menu.Item>
+          {menuOptions.map(option => {
+            const isSelected = option === selectedOption;
+            return (
+              <Menu.Item
+                key={option}
+                style={isSelected ? styles.selectedMenuOption : null}
+                _pressed={{ backgroundColor: 'transparent' }}
+              >
+                <Pressable onPress={() => handleMenuClick(option)}>
+                  <Text style={isSelected ? styles.selectedMenuText : styles.menuText}>{option}</Text>
+                </Pressable>
+              </Menu.Item>
+            );
+          })}
+          <HStack alignItems="center" space={4} m={3}>
+            <Switch size="md" offTrackColor="#6E0271" onTrackColor="#6E0271" offThumbColor="#FFFFFF" onThumbColor="#FFFFFF" />
+            <Text style={styles.menuText}>Dark Mode</Text>
+          </HStack>
         </VStack>
       </Menu>
     </Box>
