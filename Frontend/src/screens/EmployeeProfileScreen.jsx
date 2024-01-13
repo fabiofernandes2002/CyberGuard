@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -12,9 +12,8 @@ import {useNavigation} from '@react-navigation/native';
 import {Avatar, VStack, NativeBaseProvider} from 'native-base';
 import MenuHamburguer from '../components/Menu';
 
-const ProfileScreen = () => {
+const EmployeeProfileScreen = () => {
   const navigation = useNavigation();
-  const [isEditable, setIsEditable] = useState(true);
 
   return (
     <LinearGradient
@@ -66,13 +65,8 @@ const ProfileScreen = () => {
             style={[Styles.input, {textAlign: 'left'}]}
             placeholder="John Doe"
             underlineColorAndroid="transparent"
-            editable={isEditable}
+            editable={false}
           />
-          <TouchableOpacity
-            style={Styles.editButton}
-            onPress={() => setIsEditable(!isEditable)}>
-            <Text>{isEditable ? '' : 'Editar'}</Text>
-          </TouchableOpacity>
         </View>
         <View style={Styles.underline}></View>
       </View>
@@ -97,47 +91,10 @@ const ProfileScreen = () => {
             style={[Styles.input, {textAlign: 'left'}]}
             placeholder="john@doe.com"
             underlineColorAndroid="transparent"
-            editable={isEditable}
+            editable={false}
           />
-          <TouchableOpacity
-            style={Styles.editButton}
-            onPress={() => setIsEditable(!isEditable)}>
-            <Text>{isEditable ? '' : 'Editar'}</Text>
-          </TouchableOpacity>
         </View>
         <View style={Styles.underline}></View>
-      </View>
-
-      <View style={Styles.inputContainer}>
-        <Text>Password</Text>
-        <View style={Styles.inputWrapper}>
-          <TextInput
-            style={[Styles.input, {textAlign: 'left'}]}
-            placeholder="* * * * * * * *"
-            underlineColorAndroid="transparent"
-            secureTextEntry={true}
-            editable={isEditable}
-          />
-          <TouchableOpacity
-            style={Styles.editButton}
-            onPress={() => setIsEditable(!isEditable)}>
-            <Text>{isEditable ? '' : 'Editar'}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={Styles.underline}></View>
-      </View>
-      <View>
-        <TouchableOpacity
-          style={[
-            Styles.button,
-            {
-              backgroundColor: isEditable ? '#6E0271' : '#D9D9D9',
-            },
-          ]}
-          onPress={() => setIsEditable(!isEditable)}
-          disabled={!isEditable}>
-          <Text style={Styles.buttonText}>Salvar</Text>
-        </TouchableOpacity>
       </View>
     </LinearGradient>
   );
@@ -208,32 +165,11 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  editButton: {
-    position: 'absolute',
-    right: 0,
-    padding: 5,
-    borderRadius: 5,
-  },
+
   underline: {
     height: 2,
     backgroundColor: '#6E0271',
   },
-  button: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 7.5,
-    marginTop: 20,
-    width: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-  },
-  buttonText: {
-    color: '#F7F7F7',
-    fontSize: 17,
-    fontFamily: 'Supply-Bold',
-    textAlign: 'center',
-  },
 });
 
-export default ProfileScreen;
+export default EmployeeProfileScreen;

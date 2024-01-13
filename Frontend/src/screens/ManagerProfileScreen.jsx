@@ -12,7 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Avatar, VStack, NativeBaseProvider} from 'native-base';
 import MenuHamburguer from '../components/Menu';
 
-const ProfileScreen = () => {
+const ManagerProfileScreen = () => {
   const navigation = useNavigation();
   const [isEditable, setIsEditable] = useState(true);
 
@@ -236,4 +236,4 @@ const Styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default ManagerProfileScreen;
