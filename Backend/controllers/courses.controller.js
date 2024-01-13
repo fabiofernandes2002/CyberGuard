@@ -1,51 +1,79 @@
+require('dotenv').config();
+const fs = require('fs');
 const courses = require('../models/courses.model');
 const discoverCourses = require('../models/discoverCourses.model');
 const users = require('../models/users.model');
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({ 
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true
+});
 
 // criar discoverCourse onde vai ter todos os cursos associados a aquele discover - admin funcionalidade (requer autenticação web token)
 exports.createDiscoverCourse = async function (req, res) {
   try {
-   
-   if (req.loggedUserType !== 'admin')
-     return res.status(403).json({
-       success: false,
-       msg: 'Apenas o administrador pode aceder a esta funcionalidade!',
-   });
+      if (req.loggedUserType !== 'admin') {
+          return res.status(403).json({
+              success: false,
+              msg: 'Apenas o administrador pode aceder a esta funcionalidade!',
+          });
+      }
 
-   const { imgURL, description} = req.body;
+      const { description } = req.body;
 
-   // todos os campos são obrigatórios
-   if (!imgURL || !description)
-     return res.status(400).json({
-       success: false,
-       msg: 'Preencha todos os campos!',
-   });
+      if (!description || !req.file) {
+          return res.status(400).json({
+              success: false,
+              msg: 'Preencha todos os campos e inclua uma imagem!',
+          });
+      }
 
-   // verificar se o discoverCourse já existe
-   let discoverCourse = await discoverCourses.findOne({ description });
-   if (discoverCourse)
-     return res.status(400).json({
-       success: false,
-       msg: 'DiscoverCourse já existe!',
-   });
+      // Fazer upload da imagem para o Cloudinary na pasta "Discovers"
+      const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: "Discovers"
+      });
 
-   // criar novo discoverCourse
-   discoverCourse = new discoverCourses({ imgURL, description});
-   await discoverCourse.save();
-   res.status(201).json({
-     success: true,
-     msg: 'DiscoverCourse criado com sucesso!',
-     discoverCourse: discoverCourse,
-   });
+      // Usar a URL da imagem do Cloudinary
+      const imgURL = result.url;
+
+      // Excluir o arquivo temporário
+      fs.unlink(req.file.path, (err) => {
+          if (err) {
+              console.error("Erro ao excluir o arquivo temporário", err);
+          } else {
+              console.log("Arquivo temporário excluído com sucesso");
+          }
+      });
+
+      // Verificar se o discoverCourse já existe
+      let discoverCourse = await discoverCourses.findOne({ description });
+      if (discoverCourse) {
+          return res.status(400).json({
+              success: false,
+              msg: 'DiscoverCourse já existe!',
+          });
+      }
+
+      // Criar novo discoverCourse
+      discoverCourse = new discoverCourses({ imgURL, description });
+      await discoverCourse.save();
+      res.status(201).json({
+          success: true,
+          msg: 'DiscoverCourse criado com sucesso!',
+          discoverCourse: discoverCourse,
+      });
 
   } catch (error) {
-       res.status(500).json({
-           success: false,
-           msg: err.message || 'Algo correu mal, tente novamente mais tarde.',
-       });
-  } 
-
-}
+      console.error(error);
+      res.status(500).json({
+          success: false,
+          msg: error.message || 'Algo correu mal, tente novamente mais tarde.',
+      });
+  }
+};
 
 // getAllDiscoverCourses - listar todos os discoverCourses com autenticação do web token
 exports.getAllDiscoverCourses = async (req, res) => {
@@ -141,7 +169,11 @@ exports.deleteDiscoverCourseById = async (req, res) => {
 
 // criar novo curso - admin funcionalidade
 exports.createCourse = async function (req, res) {
-   try {
+  try {
+
+    let imgURL = '';
+    let evaluations = [];
+    let videos = [];
     
     if (req.loggedUserType !== 'admin')
       return res.status(403).json({
@@ -149,7 +181,7 @@ exports.createCourse = async function (req, res) {
         msg: 'Apenas o administrador pode aceder a esta funcionalidade!',
     });
 
-    const { idDiscover, name, paid, price, videos, description, evaluations} = req.body;
+    const { idDiscover, name, paid, price, description} = req.body;
 
     // fazer validações dos campos recebidos um a um
     if (!idDiscover)
@@ -167,11 +199,12 @@ exports.createCourse = async function (req, res) {
         success: false,
         msg: 'Preencha o campo paid!',
     });
-    if (paid && !price)
+    if (paid === true && (price === undefined || price === null || price === 0)) {
       return res.status(400).json({
         success: false,
         msg: 'Preencha o campo price!',
-    });
+      });
+    }
     if (!videos)
       return res.status(400).json({
         success: false,
@@ -188,12 +221,70 @@ exports.createCourse = async function (req, res) {
         msg: 'Preencha o campo evaluations!',
     });
 
-    // todos os campos são obrigatórios
-    /* if (!idDiscover || !name || !paid || !price || !videos || !description || !evaluations)
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "course_image"
+    });
+
+    // Fazer upload da imagem para o Cloudinary
+    /* if (req.files && req.files['image']) {
+      const result = await cloudinary.uploader.upload(req.files['image'][0].path, {
+          //resource_type: 'image',
+          folder: 'course_image'
+      });
+      //imgURL = result.url;
+    } */
+
+    imgURL = result.url;
+
+    if (!imgURL)
       return res.status(400).json({
         success: false,
-        msg: 'Preencha todos os campos!',
-    }); */
+        msg: 'Preencha o campo imgURL!',
+    });
+
+    // Processar informações das avaliações
+    const maxQuestions = 20;
+    for (let i = 1; i <= maxQuestions; i++) {
+        if (req.body[`question${i}`]) {
+            const question = req.body[`question${i}`];
+            const answers = req.body[`answers${i}`] ? req.body[`answers${i}`].split(',') : [];
+            const correctAnswerIndex = parseInt(req.body[`correctAnswerIndex${i}`]);
+
+            evaluations.push({
+                questions: [{ question, answers, correctAnswerIndex }]
+            });
+        }
+    }
+
+    // Fazer upload dos vídeos para o Cloudinary
+    //if (req.files['video']) {
+      /* for (let i = 0; i < req.files['video'].length; i++) {
+          const file = req.files['video'][i];
+          const videoResult = await cloudinary.uploader.upload(file.path, {
+              resource_type: 'video',
+              folder: 'course_videos'
+          });
+  
+          const titleKey = `title${i + 1}`;
+          const durationKey = `duration${i + 1}`;
+          const title = req.body[titleKey];
+          const duration = req.body[durationKey];
+  
+          videos.push({ videoURL: videoResult.url, title, duration });
+      } */
+    //}
+
+    // Processar informações de vídeos do YouTube
+    const maxVideos = 5; // por exemplo
+    for (let i = 1; i <= maxVideos; i++) {
+        if (req.body[`videoURL${i}`]) {
+            videos.push({
+                videoURL: req.body[`videoURL${i}`],
+                title: req.body[`title${i}`],
+                duration: req.body[`duration${i}`]
+            });
+        }
+    }
 
     // verificar se o curso já existe
     let course = await courses.findOne({ name });
@@ -204,7 +295,7 @@ exports.createCourse = async function (req, res) {
     });
 
     // criar novo curso
-    course = new courses({ idDiscover, name, paid, price, videos, description, evaluations });
+    course = new courses({ idDiscover, name, paid, price, videos, description, evaluations, imgURL });
     await course.save();
 
     // associar o course ao courseIds do discoverCourse correspondente no discoverCourses model

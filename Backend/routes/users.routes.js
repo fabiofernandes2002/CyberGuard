@@ -4,6 +4,9 @@ const Controller = require('../controllers/users.controller.js')
 const utilities = require('../utilities/utilities.js')
 const { validationResult, body } = require('express-validator')
 
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
 // register
 router.post('/register', [
     body('username').isLength({ min: 3 }).withMessage('O username deve ter pelo menos 3 caracteres'),
@@ -51,7 +54,7 @@ router.route('/getUserById/:id')
 
 // editUserById
 router.route('/editUserById/:id')
-    .put(utilities.validateToken, Controller.editUserById)
+    .put(utilities.validateToken, upload.single('image'), Controller.editUserById)
 
 // deleteUserById
 router.route('/deleteUserById/:id')

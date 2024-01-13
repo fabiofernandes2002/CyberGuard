@@ -4,9 +4,12 @@ const Controller = require('../controllers/courses.controller.js')
 const utilities = require('../utilities/utilities.js')
 const { validationResult, body } = require('express-validator')
 
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
 // createDiscoverCourse
 router.route('/createDiscoverCourse')
-    .post(utilities.validateToken, Controller.createDiscoverCourse)
+    .post(utilities.validateToken, upload.single('image'), Controller.createDiscoverCourse);
 
 // getAllDiscoverCourses
 router.route('/getAllDiscoverCourses')
@@ -21,8 +24,21 @@ router.route('/deleteDiscoverCourseById/:id')
     .delete(utilities.validateToken, Controller.deleteDiscoverCourseById)
 
 // createCourse
+/* router.route('/createCourse')
+    .post(
+        utilities.validateToken, 
+        multerMultiple.fields([
+            { name: 'image', maxCount: 1 },
+            { name: 'video', maxCount: 5 }
+        ]), 
+        Controller.createCourse
+    ); */
 router.route('/createCourse')
-    .post(utilities.validateToken, Controller.createCourse)
+.post(
+    utilities.validateToken, 
+    upload.single('image'),
+    Controller.createCourse
+);
 
 // getAllCourses
 router.route('/getAllCourses')

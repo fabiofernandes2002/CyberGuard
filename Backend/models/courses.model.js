@@ -6,7 +6,7 @@ const schema = new mongoose.Schema({
   // paid = true -> Curso pago | paid = false -> Curso gratuito
   paid: { type: Boolean, default: false }, 
   price: { type: Number, required: function () { return this.paid; } },
-  imgURL: { type: String, default: 'http://avatars.adorable.io/', },
+  imgURL: { type: String, require: true, },
   videos: [{
     videoURL: String,
     title: String,
