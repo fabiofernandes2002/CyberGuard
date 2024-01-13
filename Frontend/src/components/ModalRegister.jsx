@@ -1,7 +1,24 @@
-import React, { useState, useRef } from 'react';
-import { Modal, HStack, Button, Input, Select, VStack, Switch, Text, Checkbox } from 'native-base';
+import React, {useState, useRef} from 'react';
+import {
+  Modal,
+  HStack,
+  Button,
+  Input,
+  Select,
+  VStack,
+  Switch,
+  Text,
+  Checkbox,
+} from 'native-base';
 
-function ModalRegister({ isOwner, setIsOwner, companyName, setCompanyName, company, setCompany}) {
+function ModalRegister({
+  isOwner,
+  setIsOwner,
+  companyName,
+  setCompanyName,
+  company,
+  setCompany,
+}) {
   const [showModal, setShowModal] = useState(true);
   const initialRef = useRef(null);
   const finalRef = useRef(null);
@@ -14,42 +31,46 @@ function ModalRegister({ isOwner, setIsOwner, companyName, setCompanyName, compa
 
   return (
     <>
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} initialFocusRef={initialRef} finalFocusRef={finalRef}>
+      <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        initialFocusRef={initialRef}
+        finalFocusRef={finalRef}>
         <Modal.Content maxWidth="350">
           <Modal.CloseButton />
           <Modal.Header>Tipo de Utilizador - Empresarial</Modal.Header>
           <Modal.Body>
             <VStack space={4}>
-            <Checkbox
-              value="isOwner"
-              isChecked={isOwner}
-              onChange={(isChecked) => setIsOwner(isChecked)}
-            >
-              És Propetário?
-            </Checkbox>
+              <Checkbox
+                value="isOwner"
+                isChecked={isOwner}
+                onChange={isChecked => setIsOwner(isChecked)}>
+                És Propetário?
+              </Checkbox>
               {isOwner ? (
                 <Input
                   ref={initialRef}
                   placeholder="Dá o nome da sua empresa"
-                  onChangeText={(text) => setCompanyName(text)}
+                  onChangeText={text => setCompanyName(text)}
                 />
-                ) : (
-                  <Input
+              ) : (
+                <Input
                   ref={initialRef}
                   placeholder="Insira o nome da empresa que trabalha"
-                  onChangeText={(text) => setCompany(text)}
+                  onChangeText={text => setCompany(text)}
                 />
               )}
             </VStack>
           </Modal.Body>
           <Modal.Footer>
             <Button.Group space={2}>
-              <Button variant="ghost" colorScheme="blueGray" onPress={() => setShowModal(false)}>
+              <Button
+                variant="ghost"
+                colorScheme="blueGray"
+                onPress={() => setShowModal(false)}>
                 Cancelar
               </Button>
-              <Button onPress={handleSave}>
-                Guardar
-              </Button>
+              <Button onPress={handleSave}>Guardar</Button>
             </Button.Group>
           </Modal.Footer>
         </Modal.Content>

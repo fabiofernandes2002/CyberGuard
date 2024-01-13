@@ -1,13 +1,19 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import Escudo from '../assets/Escudo.svg';
 import Chave from '../assets/Chave.svg';
 import Livro from '../assets/Livro.svg';
 import Olho from '../assets/Olho.svg';
 
 const SplashScreen = () => {
-
   const navigation = useNavigation();
 
   /* const handleStartPress = () => {
@@ -22,38 +28,37 @@ const SplashScreen = () => {
   }, []);
 
   return (
-      <ImageBackground
-        source={require('../assets/fundo_splashScreen.png')}
-        style={styles.backgroundImage}
-      >
-          <View style={styles.container}>
-            <View style={styles.textContainer}>
-                <Text style={styles.text}>Mantém te seguro.</Text>
-                <Text style={styles.text}>Escolha a CyberGuard.</Text>
-            </View>
-            
-              {/* Logo */}
-              <Image
-                  source={require('../assets/logo_semfundo.png')}
-                  style={styles.logo}
-                  resizeMode="contain"
-              />
+    <ImageBackground
+      source={require('../assets/fundo_splashScreen.png')}
+      style={styles.backgroundImage}>
+      <View style={styles.container}>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>Mantém te seguro.</Text>
+          <Text style={styles.text}>Escolha a CyberGuard.</Text>
+        </View>
 
-              {/* Botão */}
-              {/* <TouchableOpacity onPress={handleStartPress}>
+        {/* Logo */}
+        <Image
+          source={require('../assets/logo_semfundo.png')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+
+        {/* Botão */}
+        {/* <TouchableOpacity onPress={handleStartPress}>
                 <View style={styles.button}>
                   <Text style={styles.buttonText}>Começar</Text>
                 </View>
               </TouchableOpacity> */}
-              {/* Icones */}
-              <View style={styles.iconContainer}>
-                <Escudo width={50} height={50} style={styles.icon} />
-                <Chave width={50} height={50} style={styles.icon} />
-                <Livro width={50} height={50} style={styles.icon} />
-                <Olho width={50} height={50} style={styles.icon} />
-              </View>
-            </View>
-      </ImageBackground>
+        {/* Icones */}
+        <View style={styles.iconContainer}>
+          <Escudo width={50} height={50} style={styles.icon} />
+          <Chave width={50} height={50} style={styles.icon} />
+          <Livro width={50} height={50} style={styles.icon} />
+          <Olho width={50} height={50} style={styles.icon} />
+        </View>
+      </View>
+    </ImageBackground>
   );
 };
 

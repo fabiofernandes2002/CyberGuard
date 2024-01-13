@@ -1,5 +1,5 @@
 require('dotenv').config();
-const express = require('express')
+const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
@@ -17,16 +17,19 @@ app.use('/courses', courses);
 app.use('/chats', chats);
 
 // Conexão com o Banco de Dados MongoDB
-mongoose.connect('mongodb+srv://CyberGuardDB:cyberguard2324@cluster0.7xyeeqp.mongodb.net/CyberGuardDB?retryWrites=true&w=majority', {
-    useNewUrlParser: true, useUnifiedTopology: true
-});
+mongoose.connect(
+  'mongodb+srv://CyberGuardDB:cyberguard2324@cluster0.7xyeeqp.mongodb.net/CyberGuardDB?retryWrites=true&w=majority',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-    console.log("Connected to the Database MongoDB")
+db.once('open', function () {
+  console.log('Connected to the Database MongoDB');
 });
 
-
-app.listen(port, function() {
-    console.log(`http://localhost:${port}`)
-})  
+app.listen(port, function () {
+  console.log(`http://localhost:${port}`);
+});

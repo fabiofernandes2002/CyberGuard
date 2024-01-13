@@ -9,12 +9,27 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
-import {Avatar, VStack, NativeBaseProvider} from 'native-base';
+import {
+  Avatar,
+  VStack,
+  NativeBaseProvider,
+  Center,
+  Box,
+  Progress,
+} from 'native-base';
 import MenuHamburguer from '../components/Menu';
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
-  const [isEditable, setIsEditable] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
+
+  const currentLevel = 1;
+  const nextLevel = currentLevel + 1;
+
+  const currentXP = 170;
+  const nextLevelXP = 300;
+
+  const progress = (currentXP / nextLevelXP) * 100;
 
   return (
     <LinearGradient
@@ -40,7 +55,7 @@ const ProfileScreen = () => {
       </View>
 
       <View style={Styles.container2}>
-        <Text style={Styles.title}>Perfil</Text>
+        <Text style={[Styles.title, {marginBottom: 30}]}>Perfil</Text>
         <View style={Styles.profileDetails}>
           <VStack
             space={2}
@@ -139,6 +154,27 @@ const ProfileScreen = () => {
           <Text style={Styles.buttonText}>Salvar</Text>
         </TouchableOpacity>
       </View>
+      <Text style={[Styles.title, {marginTop: 40}]}>Evolução</Text>
+      <View style={Styles.levels}>
+        <Text style={Styles.levelsText}>Nível {currentLevel}</Text>
+        <Text style={Styles.currentXP}>
+          {currentXP}/{nextLevelXP} XP
+        </Text>
+        <Text style={Styles.levelsText}>Nível {nextLevel}</Text>
+      </View>
+      <View style={Styles.progressBar}>
+        <Center w="100%">
+          <Box w="120%" maxW="400">
+            <Progress
+              value={progress}
+              size="lg"
+              mx="4"
+              colorScheme="cyan"
+              bg="#D8DBE2"
+            />
+          </Box>
+        </Center>
+      </View>
     </LinearGradient>
   );
 };
@@ -233,6 +269,28 @@ const Styles = StyleSheet.create({
     fontSize: 17,
     fontFamily: 'Supply-Bold',
     textAlign: 'center',
+  },
+  progressBar: {
+    width: '100%',
+    height: 20,
+    marginBottom: 20,
+    borderRadius: 10,
+    padding: 5,
+  },
+  levels: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  levelsText: {
+    fontFamily: 'Supply-Medium',
+    fontSize: 13,
+    color: '#1B1B1E',
+  },
+  currentXP: {
+    fontFamily: 'Supply-Regular',
+    fontSize: 10,
+    color: '#1B1B1E',
   },
 });
 

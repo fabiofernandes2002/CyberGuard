@@ -1,145 +1,145 @@
 {
-    "surveys": [
-      {
-        "surveyInfo": {
-          "question": "O que é um ataque de phishing?",
-          "incorrectAnswers": ["Envio de vírus por e-mail"],
-          "correctAnswer": "Tentativa de enganar as pessoas para obter informações confidenciais",
-          "theme": "Privacidade de dados, Phising, Blockchain, Criptografia, Segurança em Nuvem, Técnicas de Deteção de Ameaças"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "Qual é a principal função de um firewall?",
-          "incorrectAnswers": ["Detectar vírus"],
-          "correctAnswer": "Controlar o tráfego de rede com base em regras de segurança"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é um ataque de negação de serviço (DDoS)?",
-          "incorrectAnswers": ["Roubo de dados"],
-          "correctAnswer": "Sobrecarregar um sistema ou serviço, tornando-o inacessível"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é criptografia?",
-          "incorrectAnswers": ["Compressão de dados"],
-          "correctAnswer": "Processo de tornar informações ilegíveis sem a chave correspondente"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é um vírus de computador?",
-          "incorrectAnswers": ["Software de segurança"],
-          "correctAnswer": "Programa malicioso que se replica e causa danos ao sistema"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que significa VPN?",
-          "incorrectAnswers": ["Variable Public Network"],
-          "correctAnswer": "Virtual Private Network"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é engenharia social?",
-          "incorrectAnswers": ["Desenvolvimento de software"],
-          "correctAnswer": "Manipulação psicológica para obter informações"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é um keylogger?",
-          "incorrectAnswers": ["Dispositivo de armazenamento"],
-          "correctAnswer": "Software que registra pressionamentos de tecla"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é um ransomware?",
-          "incorrectAnswers": ["Antivírus"],
-          "correctAnswer": "Software malicioso que criptografa dados e exige pagamento para descriptografar"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é um ataque man-in-the-middle?",
-          "incorrectAnswers": ["Ataque frontal"],
-          "correctAnswer": "Ataque em que um atacante intercepta e altera comunicações"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é um firewall de hardware?",
-          "incorrectAnswers": ["Firewall de software"],
-          "correctAnswer": "Dispositivo físico projetado para filtrar tráfego de rede"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é uma política de segurança da informação?",
-          "incorrectAnswers": ["Regra de senha"],
-          "correctAnswer": "Conjunto de diretrizes para proteger informações"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é um token de segurança?",
-          "incorrectAnswers": ["Senha temporária"],
-          "correctAnswer": "Dispositivo de autenticação"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é um protocolo HTTPS?",
-          "incorrectAnswers": ["Protocolo de transferência de arquivos"],
-          "correctAnswer": "Protocolo seguro de transferência de hipertexto"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é uma auditoria de segurança?",
-          "incorrectAnswers": ["Auditoria financeira"],
-          "correctAnswer": "Avaliação de práticas de segurança"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é um honeypot?",
-          "incorrectAnswers": ["Método de backup"],
-          "correctAnswer": "Dispositivo de rede destinado a atrair hackers"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é um ataque de força bruta?",
-          "incorrectAnswers": ["Vírus de computador"],
-          "correctAnswer": "Tentativa sistemática de adivinhar uma senha ou chave"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é uma vulnerabilidade de segurança?",
-          "incorrectAnswers": ["Backup de dados"],
-          "correctAnswer": "Fraqueza ou falha que pode ser explorada por ameaças"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é um backup de dados?",
-          "incorrectAnswers": ["Ataque de phishing"],
-          "correctAnswer": "Cópia de segurança de informações para recuperação em caso de perda"
-        }
-      },
-      {
-        "surveyInfo": {
-          "question": "O que é um malware?",
-          "incorrectAnswers": ["Protocolo HTTPS"],
-          "correctAnswer": "Software destinado a causar danos ou explorar sistemas"
-        }
+  "surveys": [
+    {
+      "surveyInfo": {
+        "question": "O que é um ataque de phishing?",
+        "incorrectAnswers": ["Envio de vírus por e-mail"],
+        "correctAnswer": "Tentativa de enganar as pessoas para obter informações confidenciais",
+        "theme": "Privacidade de dados, Phising, Blockchain, Criptografia, Segurança em Nuvem, Técnicas de Deteção de Ameaças"
       }
-    ]
-  }  
+    },
+    {
+      "surveyInfo": {
+        "question": "Qual é a principal função de um firewall?",
+        "incorrectAnswers": ["Detectar vírus"],
+        "correctAnswer": "Controlar o tráfego de rede com base em regras de segurança"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é um ataque de negação de serviço (DDoS)?",
+        "incorrectAnswers": ["Roubo de dados"],
+        "correctAnswer": "Sobrecarregar um sistema ou serviço, tornando-o inacessível"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é criptografia?",
+        "incorrectAnswers": ["Compressão de dados"],
+        "correctAnswer": "Processo de tornar informações ilegíveis sem a chave correspondente"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é um vírus de computador?",
+        "incorrectAnswers": ["Software de segurança"],
+        "correctAnswer": "Programa malicioso que se replica e causa danos ao sistema"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que significa VPN?",
+        "incorrectAnswers": ["Variable Public Network"],
+        "correctAnswer": "Virtual Private Network"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é engenharia social?",
+        "incorrectAnswers": ["Desenvolvimento de software"],
+        "correctAnswer": "Manipulação psicológica para obter informações"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é um keylogger?",
+        "incorrectAnswers": ["Dispositivo de armazenamento"],
+        "correctAnswer": "Software que registra pressionamentos de tecla"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é um ransomware?",
+        "incorrectAnswers": ["Antivírus"],
+        "correctAnswer": "Software malicioso que criptografa dados e exige pagamento para descriptografar"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é um ataque man-in-the-middle?",
+        "incorrectAnswers": ["Ataque frontal"],
+        "correctAnswer": "Ataque em que um atacante intercepta e altera comunicações"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é um firewall de hardware?",
+        "incorrectAnswers": ["Firewall de software"],
+        "correctAnswer": "Dispositivo físico projetado para filtrar tráfego de rede"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é uma política de segurança da informação?",
+        "incorrectAnswers": ["Regra de senha"],
+        "correctAnswer": "Conjunto de diretrizes para proteger informações"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é um token de segurança?",
+        "incorrectAnswers": ["Senha temporária"],
+        "correctAnswer": "Dispositivo de autenticação"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é um protocolo HTTPS?",
+        "incorrectAnswers": ["Protocolo de transferência de arquivos"],
+        "correctAnswer": "Protocolo seguro de transferência de hipertexto"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é uma auditoria de segurança?",
+        "incorrectAnswers": ["Auditoria financeira"],
+        "correctAnswer": "Avaliação de práticas de segurança"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é um honeypot?",
+        "incorrectAnswers": ["Método de backup"],
+        "correctAnswer": "Dispositivo de rede destinado a atrair hackers"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é um ataque de força bruta?",
+        "incorrectAnswers": ["Vírus de computador"],
+        "correctAnswer": "Tentativa sistemática de adivinhar uma senha ou chave"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é uma vulnerabilidade de segurança?",
+        "incorrectAnswers": ["Backup de dados"],
+        "correctAnswer": "Fraqueza ou falha que pode ser explorada por ameaças"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é um backup de dados?",
+        "incorrectAnswers": ["Ataque de phishing"],
+        "correctAnswer": "Cópia de segurança de informações para recuperação em caso de perda"
+      }
+    },
+    {
+      "surveyInfo": {
+        "question": "O que é um malware?",
+        "incorrectAnswers": ["Protocolo HTTPS"],
+        "correctAnswer": "Software destinado a causar danos ou explorar sistemas"
+      }
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 export const registoStyles = StyleSheet.create({
   texto: {
@@ -7,7 +7,7 @@ export const registoStyles = StyleSheet.create({
     fontFamily: 'Raleway-Medium',
     textAlign: 'center',
     marginBottom: 20,
-  },  
+  },
   button: {
     backgroundColor: '#6E0271', // Cor do botão
     borderRadius: 7.5,
