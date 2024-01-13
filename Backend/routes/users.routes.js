@@ -65,12 +65,8 @@ router.route('/getAllUsers').get(utilities.validateToken, Controller.getAllUsers
 router.route('/getUserById/:id').get(utilities.validateToken, Controller.getUserById);
 
 // editUserById
-<<<<<<< HEAD
 router.route('/editUserById/:id')
     .put(utilities.validateToken, upload.single('image'), Controller.editUserById)
-=======
-router.route('/editUserById/:id').put(utilities.validateToken, Controller.editUserById);
->>>>>>> bcbbb38a0b6d9fba08f350540f278c3bc9b600d9
 
 // deleteUserById
 router.route('/deleteUserById/:id').delete(utilities.validateToken, Controller.deleteUserById);

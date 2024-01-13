@@ -8,14 +8,8 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
 // createDiscoverCourse
-<<<<<<< HEAD
 router.route('/createDiscoverCourse')
     .post(utilities.validateToken, upload.single('image'), Controller.createDiscoverCourse);
-=======
-router
-  .route('/createDiscoverCourse')
-  .post(utilities.validateToken, Controller.createDiscoverCourse);
->>>>>>> bcbbb38a0b6d9fba08f350540f278c3bc9b600d9
 
 // getAllDiscoverCourses
 router
@@ -33,7 +27,6 @@ router
   .delete(utilities.validateToken, Controller.deleteDiscoverCourseById);
 
 // createCourse
-<<<<<<< HEAD
 /* router.route('/createCourse')
     .post(
         utilities.validateToken, 
@@ -49,9 +42,6 @@ router.route('/createCourse')
     upload.single('image'),
     Controller.createCourse
 );
-=======
-router.route('/createCourse').post(utilities.validateToken, Controller.createCourse);
->>>>>>> bcbbb38a0b6d9fba08f350540f278c3bc9b600d9
 
 // getAllCourses
 router.route('/getAllCourses').get(utilities.validateToken, Controller.getAllCourses);
