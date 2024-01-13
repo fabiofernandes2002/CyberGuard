@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import React, {useState} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {TextInput} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { useNavigation } from '@react-navigation/native';
-import { registoStyles } from './RegistoStyles';
-import { loginStyles } from './LoginStyles';
+import {useNavigation} from '@react-navigation/native';
+import {registoStyles} from './RegistoStyles';
+import {loginStyles} from './LoginStyles';
 import ModalRegister from './ModalRegister';
 import AuthService from '../services/auth.service';
 
@@ -40,13 +40,12 @@ const Registo = () => {
       await AuthService.register(userData);
 
       navigation.navigate('LoginScreen');
-
     } catch (error) {
       console.error('Erro durante o registo:', error.message);
     }
   };
 
-  const handleUserTypeChange = (selectedValue) => {
+  const handleUserTypeChange = selectedValue => {
     if (selectedValue === 'empresarial') {
       setShowModal(true);
     } else {
@@ -57,13 +56,15 @@ const Registo = () => {
 
   return (
     <View style={registoStyles.container}>
-      <Text style={registoStyles.texto}>Digita os teus dados para te registares na aplicação</Text>
+      <Text style={registoStyles.texto}>
+        Digita os teus dados para te registares na aplicação
+      </Text>
 
       <TextInput
         mode="outlined"
         label="Nome"
         value={username}
-        onChangeText={(text) => setUsername(text)}
+        onChangeText={text => setUsername(text)}
         style={{
           ...loginStyles.input,
           fontFamily: 'Raleway-Regular',
@@ -82,7 +83,7 @@ const Registo = () => {
         mode="outlined"
         label="Email"
         value={email}
-        onChangeText={(text) => setEmail(text)}
+        onChangeText={text => setEmail(text)}
         style={{
           ...loginStyles.input,
           fontFamily: 'Raleway-Regular',
@@ -101,13 +102,13 @@ const Registo = () => {
         open={open}
         value={value}
         items={[
-          { label: 'Normal', value: 'normal' },
-          { label: 'Empresarial', value: 'empresarial' },
-          { label: 'Profissional', value: 'profissional' },
+          {label: 'Normal', value: 'normal'},
+          {label: 'Empresarial', value: 'empresarial'},
+          {label: 'Profissional', value: 'profissional'},
         ]}
         setOpen={setOpen}
         setValue={setValue}
-        setItems={() => {}} 
+        setItems={() => {}}
         onChangeValue={handleUserTypeChange}
         placeholder="Tipo de Utilizador"
         style={{
@@ -135,8 +136,8 @@ const Registo = () => {
       />
 
       {/* Renderizar o modal se showModal for true */}
-      {value === 'empresarial' && 
-        <ModalRegister 
+      {value === 'empresarial' && (
+        <ModalRegister
           isOwner={isOwner}
           setIsOwner={setIsOwner}
           companyName={companyName}
@@ -146,13 +147,13 @@ const Registo = () => {
           showModal={showModal}
           setShowModal={setShowModal}
         />
-      }
+      )}
 
       <TextInput
         mode="outlined"
         label="Palavra-passe"
         value={password}
-        onChangeText={(text) => setPassword(text)}
+        onChangeText={text => setPassword(text)}
         secureTextEntry
         style={{
           ...loginStyles.input,
@@ -172,7 +173,7 @@ const Registo = () => {
         mode="outlined"
         label="Confirmar Palavra-passe"
         value={confirmPassword}
-        onChangeText={(text) => setConfirmPassword(text)}
+        onChangeText={text => setConfirmPassword(text)}
         secureTextEntry
         style={{
           ...loginStyles.input,

@@ -1,11 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import Card from '../components/CardFlip';
 import Ellipse from '../assets/Ellipse.svg'; // Ellipse com curva para esquerda
 import Ellipse2 from '../assets/Ellipse2.svg'; // Ellipse com curva para direita
-import { NativeBaseProvider } from 'native-base';
+import {NativeBaseProvider} from 'native-base';
 import MenuHamburguer from '../components/Menu';
 
 const flashcards = [
@@ -46,15 +54,19 @@ const FlashcardsScreen = () => {
 
   const handleCardBackPress = () => {
     navigation.navigate('CoursesScreen');
-  }
+  };
 
   return (
-    <LinearGradient colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']} style={Styles.container}>
+    <LinearGradient
+      colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']}
+      style={Styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView>
           <View style={Styles.Menu}>
             {/* Back button */}
-            <TouchableOpacity onPress={() => navigation.goBack()} style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{flexDirection: 'row', alignItems: 'center'}}>
               {/* Logo pequeno e Cyber e Guard todo separado em baixo do outro */}
               <Image
                 source={require('../assets/logo_semfundo.png')}
@@ -70,17 +82,15 @@ const FlashcardsScreen = () => {
             <NativeBaseProvider>
               <MenuHamburguer />
             </NativeBaseProvider>
-            
           </View>
 
           {/* Texto de apresentação */}
           <View style={Styles.text}>
             <Text style={Styles.textTitulo}>Mundos</Text>
             <Text style={Styles.textDescricao}>
-              Aqui temos os diferentes mundos que existem no ciberespaço para te proporcionar uma melhor aprendizagem deste universo.
+              Aqui temos os diferentes mundos que existem no ciberespaço para te
+              proporcionar uma melhor aprendizagem deste universo.
             </Text>
-          
-
           </View>
           <View style={Styles.cardContainer}>
             {flashcards.map((card, index) => (
@@ -90,23 +100,33 @@ const FlashcardsScreen = () => {
                     <>
                       <TouchableOpacity onPress={handleCardBackPress}>
                         <View style={Styles.cardWrapper}>
-                          <Card frontText={card.frontText} backText={card.backText} handleCardBackPress={handleCardBackPress} />
+                          <Card
+                            frontText={card.frontText}
+                            backText={card.backText}
+                            handleCardBackPress={handleCardBackPress}
+                          />
                         </View>
                       </TouchableOpacity>
-                      {index === flashcards.length - 1 
-                        ? <Ellipse style={{ opacity: 0 }} /> 
-                        : <Ellipse position="right" style={Styles.ellipseRight} />
-                      }
+                      {index === flashcards.length - 1 ? (
+                        <Ellipse style={{opacity: 0}} />
+                      ) : (
+                        <Ellipse position="right" style={Styles.ellipseRight} />
+                      )}
                     </>
                   ) : (
                     <>
-                      {index === flashcards.length - 1 
-                        ? <Ellipse2 style={{ opacity: 0 }} /> 
-                        : <Ellipse2 position="left" style={Styles.ellipseLeft} />
-                      }
+                      {index === flashcards.length - 1 ? (
+                        <Ellipse2 style={{opacity: 0}} />
+                      ) : (
+                        <Ellipse2 position="left" style={Styles.ellipseLeft} />
+                      )}
                       <TouchableOpacity onPress={handleCardBackPress}>
                         <View style={Styles.cardWrapper}>
-                          <Card frontText={card.frontText} backText={card.backText} handleCardBackPress={handleCardBackPress} />
+                          <Card
+                            frontText={card.frontText}
+                            backText={card.backText}
+                            handleCardBackPress={handleCardBackPress}
+                          />
                         </View>
                       </TouchableOpacity>
                     </>
@@ -130,8 +150,8 @@ const Styles = StyleSheet.create({
   },
   logo: {
     position: 'absolute',
-    width: 50,
-    height: 50,
+    width: 70,
+    height: 70,
     marginBottom: 20,
     alignSelf: 'center',
     justifyContent: 'center',
@@ -167,14 +187,14 @@ const Styles = StyleSheet.create({
     backgroundColor: 'blue',
   },
   ellipseRight: {
-    marginRight: 70, // Ajustar conforme necessário
-    marginTop: 50,    // Ajustar conforme necessário
-    transform: [{ scale: 1.1 }] // Aumenta o tamanho da elipse
+    marginRight: 70,
+    marginTop: 50,
+    transform: [{scale: 1.1}],
   },
   ellipseLeft: {
-    marginLeft: 70, // Ajustar conforme necessário
-    marginTop: 50,   // Ajustar conforme necessário
-    transform: [{ scale: 1.1 }] // Aumenta o tamanho da elipse
+    marginLeft: 70,
+    marginTop: 50,
+    transform: [{scale: 1.1}],
   },
   curvedLineRight: {
     width: 100,
@@ -211,21 +231,23 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginTop: 20,
+    marginTop: 30,
   },
   textC: {
     fontFamily: 'Supply-Bold',
     fontSize: 20,
     color: '#00428A',
-    marginLeft: 35,
+    marginLeft: 55,
     justifyContent: 'center',
+    marginTop: -5,
   },
   textG: {
     fontFamily: 'Supply-Bold',
     fontSize: 20,
     color: '#00428A',
-    marginLeft: 35,
+    marginLeft: 55,
     justifyContent: 'center',
+    marginTop: -5,
   },
 });
 

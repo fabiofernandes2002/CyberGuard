@@ -1,70 +1,84 @@
-import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import React from 'react';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
-import { NativeBaseProvider } from 'native-base';
+import {useNavigation} from '@react-navigation/native';
+import {NativeBaseProvider} from 'native-base';
 import MenuHamburguer from '../components/Menu';
 
 const AboutUsScreen = () => {
+  const navigation = useNavigation();
 
-    const navigation = useNavigation();
-
-    return (
-        <LinearGradient colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']} style={styles.container}>
+  return (
+    <LinearGradient
+      colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']}
+      style={styles.container}>
+      <View>
+        <View style={styles.Menu}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image
+              source={require('../assets/logo_semfundo.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
             <View>
-                <View style={styles.Menu}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Image
-                            source={require('../assets/logo_semfundo.png')}
-                            style={styles.logo}
-                            resizeMode="contain"
-                        />
-                        <View>
-                            <Text style={styles.textC}>Cyber</Text>
-                            <Text style={styles.textG}>Guard</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <NativeBaseProvider>
-                        <MenuHamburguer />
-                    </NativeBaseProvider>
-                </View>
+              <Text style={styles.textC}>Cyber</Text>
+              <Text style={styles.textG}>Guard</Text>
             </View>
-            <View style={styles.content}>
-                <Text style={styles.title}>Equipa</Text>
-                <View style={styles.team}>
-                    <Image
-                        source={require('../assets/FotoBernardo.svg')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Text style={styles.name}>Bernardo</Text>
-                    <Image
-                        source={require('../assets/FotoFabio.svg')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Text style={styles.name}>Fábio</Text>
-                    <Image
-                        source={require('../assets/FotoLucas.svg')}
-                        style={styles.image}
-                        resizeMode="contain"
-                    />
-                    <Text style={styles.name}>Lucas</Text>
-                </View>
-                <Text style={styles.title}>About Us</Text>
-                <Text style={styles.aboutUsText}>
-                    Como alunos do terceiro ano do curso de Tecnologias Web e Sistemas de Informação,
-                    mergulhámos a fundo no desenvolvimento Web, adquirindo competências sólidas em linguagens
-                    como HTML, CSS e JavaScript, bem como em estruturas modernas, incluindo React e Vue.
-                    Com experiência prática em projetos, exploramos áreas avançadas como bases de dados,
-                    segurança da informação e integração de API. Valorizando a colaboração, partilhamos
-                    ideias para enriquecer o nosso conhecimento coletivo. A nossa paixão pela aprendizagem
-                    constante e o compromisso com a excelência levam-nos a enfrentar os desafios dinâmicos
-                    da tecnologia, ansiosos por dar um contributo significativo para a área do desenvolvimento web.
-                </Text>
-            </View>
-        </LinearGradient>
-    );
+          </TouchableOpacity>
+          <NativeBaseProvider>
+            <MenuHamburguer />
+          </NativeBaseProvider>
+        </View>
+      </View>
+      <View style={styles.content}>
+        <View style={styles.titleEquipa}>
+          <Text style={styles.titleEquipa}>Equipa</Text>
+        </View>
+        <View style={styles.team}>
+          <View style={styles.member}>
+            <Image
+              source={require('../assets/Foto1.png')}
+              style={styles.image}
+              resizeMode="contain"
+            />
+            <Text style={styles.name}>Bernardo</Text>
+          </View>
+          <View style={styles.member}>
+            <Image
+              source={require('../assets/Foto2.png')}
+              style={styles.image}
+              resizeMode="contain"
+            />
+            <Text style={styles.name}>Fábio</Text>
+          </View>
+          <View style={styles.member}>
+            <Image
+              source={require('../assets/Foto3.png')}
+              style={styles.image}
+              resizeMode="contain"
+            />
+            <Text style={styles.name}>Lucas</Text>
+          </View>
+        </View>
+        <Text style={styles.title}>About Us</Text>
+        <Text style={styles.aboutUsText}>
+          Como alunos do terceiro ano do curso de Tecnologias Web e Sistemas de
+          Informação, mergulhámos a fundo no desenvolvimento Web, adquirindo
+          competências sólidas em linguagens como HTML, CSS e JavaScript, bem
+          como em estruturas modernas, incluindo React e Vue. Com experiência
+          prática em projetos, exploramos áreas avançadas como bases de dados,
+          segurança da informação e integração de API. Valorizando a
+          colaboração, partilhamos ideias para enriquecer o nosso conhecimento
+          coletivo. A nossa paixão pela aprendizagem constante e o compromisso
+          com a excelência levam-nos a enfrentar os desafios dinâmicos da
+          tecnologia, ansiosos por dar um contributo significativo para a área
+          do desenvolvimento web.
+        </Text>
+      </View>
+    </LinearGradient>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -101,7 +115,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
         marginTop: 20,
-    },
+      },    
     content: {
         marginTop: 30,
     },

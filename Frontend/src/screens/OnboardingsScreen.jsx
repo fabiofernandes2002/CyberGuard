@@ -1,51 +1,65 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import Swiper from 'react-native-swiper';
 import LinearGradient from 'react-native-linear-gradient';
 import AuthenticationFlatline from '../assets/authenticationFlatline.svg';
 import AuthenticationMonochromatic from '../assets/authenticationMonochromatic.svg';
 import AuthenticationTwoColor from '../assets/authenticationTwoColor.svg';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const OnboardingsScreen = () => {
-
   const navigation = useNavigation();
   const handleButtonLoginPress = () => {
     navigation.navigate('LoginScreen');
-  }
+  };
 
   const handleButtonRegistoPress = () => {
     navigation.navigate('RegistoScreen');
-  }
+  };
 
   return (
-    <LinearGradient colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']} style={styles.slide}>
-      <Swiper style={styles.wrapper} showsButtons={false} paginationStyle={{bottom: 300}} dotColor="#F7F7F7" activeDotColor="#00428A">
+    <LinearGradient
+      colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']}
+      style={styles.slide}>
+      <Swiper
+        style={styles.wrapper}
+        showsButtons={false}
+        paginationStyle={{bottom: 300}}
+        dotColor="#F7F7F7"
+        activeDotColor="#00428A"
+        loop={false}>
         <View style={styles.slide}>
           <AuthenticationTwoColor style={styles.image} />
-          <Text style={styles.text}>Aprende a guardar as tuas passwords em segurança.</Text>
+          <Text style={styles.text}>
+            Aprende a guardar as tuas passwords em segurança.
+          </Text>
         </View>
         <View style={styles.slide}>
           <AuthenticationMonochromatic style={styles.image} />
-          <Text style={styles.text}>Todos os teus dados ficarão mais seguros com os conhecimentos que temos para ti.</Text>
+          <Text style={styles.text}>
+            Todos os teus dados ficarão mais seguros com os conhecimentos que
+            temos para ti.
+          </Text>
         </View>
         <View style={styles.slide}>
           <AuthenticationFlatline style={styles.image} />
-          <Text style={styles.text}>Não percas mais tempo e começa já a tua jornada no mundo da cibersegurança com a CyberGuard</Text>
+          <Text style={styles.text}>
+            Não percas mais tempo e começa já a tua jornada no mundo da
+            cibersegurança com a CyberGuard
+          </Text>
           <View style={styles.buttons}>
-              <View style={styles.ButtonLoginRegisto}>
-                <TouchableOpacity onPress={handleButtonLoginPress}>
-                    <Text style={styles.buttonText1}>Login</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleButtonRegistoPress}>
-                    <Text style={styles.buttonText1}>Registo</Text>
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity onPress={() => {}}>
-                  <Text style={styles.buttonText2}>FAQ´s</Text>
+            <View style={styles.ButtonLoginRegisto}>
+              <TouchableOpacity onPress={handleButtonLoginPress}>
+                <Text style={styles.buttonText1}>Login</Text>
               </TouchableOpacity>
+              <TouchableOpacity onPress={handleButtonRegistoPress}>
+                <Text style={styles.buttonText1}>Registo</Text>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity onPress={() => {}}>
+              <Text style={styles.buttonText2}>FAQ´s</Text>
+            </TouchableOpacity>
           </View>
-
         </View>
       </Swiper>
     </LinearGradient>
@@ -55,7 +69,7 @@ const OnboardingsScreen = () => {
 const styles = StyleSheet.create({
   wrapper: {
     marginTop: -80,
-    paddingBottom: 80
+    paddingBottom: 80,
   },
   slide: {
     flex: 1,
@@ -108,8 +122,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },  
-  
+  },
 });
 
 export default OnboardingsScreen;
