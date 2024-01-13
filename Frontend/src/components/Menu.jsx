@@ -64,7 +64,7 @@ function MenuHamburguer() {
   };
 
   const route = useRoute();
- // const selectedOption = routeToMenuOption[route.name];
+  // const selectedOption = routeToMenuOption[route.name];
 
   useEffect(() => {
     const getUser = async () => {
@@ -72,7 +72,7 @@ function MenuHamburguer() {
       setUsername(user?.userInfo?.username || '');
     };
     getUser();
-  
+
     setSelectedOption(routeToMenuOption[route.name]);
     if (routeToMenuOption[route.name]) {
       setSelectedOption(routeToMenuOption[route.name]);
@@ -117,16 +117,26 @@ function MenuHamburguer() {
               <Menu.Item
                 key={option}
                 style={isSelected ? styles.selectedMenuOption : null}
-                _pressed={{ backgroundColor: 'transparent' }}
-              >
+                _pressed={{backgroundColor: 'transparent'}}>
                 <Pressable onPress={() => handleMenuClick(option)}>
-                  <Text style={isSelected ? styles.selectedMenuText : styles.menuText}>{option}</Text>
+                  <Text
+                    style={
+                      isSelected ? styles.selectedMenuText : styles.menuText
+                    }>
+                    {option}
+                  </Text>
                 </Pressable>
               </Menu.Item>
             );
           })}
           <HStack alignItems="center" space={4} m={3}>
-            <Switch size="md" offTrackColor="#6E0271" onTrackColor="#6E0271" offThumbColor="#FFFFFF" onThumbColor="#FFFFFF" />
+            <Switch
+              size="md"
+              offTrackColor="#6E0271"
+              onTrackColor="#6E0271"
+              offThumbColor="#FFFFFF"
+              onThumbColor="#FFFFFF"
+            />
             <Text style={styles.menuText}>Dark Mode</Text>
           </HStack>
         </VStack>

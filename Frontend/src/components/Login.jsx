@@ -1,25 +1,23 @@
 // LoginComponent.js
-import React, { useState } from 'react';
-import { View } from 'react-native';
-import { TextInput } from 'react-native-paper';
-import { loginStyles } from './LoginStyles';
+import React, {useState} from 'react';
+import {View} from 'react-native';
+import {TextInput} from 'react-native-paper';
+import {loginStyles} from './LoginStyles';
 
-const LoginComponent = ({ setEmail, setPassword }) => {
-
+const LoginComponent = ({setEmail, setPassword}) => {
   const [email, setEmailLocal] = useState('');
   const [password, setPasswordLocal] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleEmailChange = (text) => {
+  const handleEmailChange = text => {
     setEmailLocal(text);
     setEmail(text);
-  }
+  };
 
-  const handlePasswordChange = (text) => {
+  const handlePasswordChange = text => {
     setPasswordLocal(text);
     setPassword(text);
-  }
-
+  };
 
   return (
     <View>
@@ -47,7 +45,7 @@ const LoginComponent = ({ setEmail, setPassword }) => {
         label="Password"
         value={password}
         onChangeText={handlePasswordChange}
-        secureTextEntry = {!showPassword}
+        secureTextEntry={!showPassword}
         style={loginStyles.input}
         theme={{
           colors: {
@@ -59,7 +57,13 @@ const LoginComponent = ({ setEmail, setPassword }) => {
           },
           roundness: 7.5,
         }}
-        right={<TextInput.Icon style={{ marginTop: 20 }}  onPress={() => setShowPassword(!showPassword)} icon="eye" />}
+        right={
+          <TextInput.Icon
+            style={{marginTop: 20}}
+            onPress={() => setShowPassword(!showPassword)}
+            icon="eye"
+          />
+        }
       />
     </View>
   );

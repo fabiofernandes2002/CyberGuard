@@ -13,6 +13,8 @@ import {NativeBaseProvider} from 'native-base';
 import CoursesScreen from './src/screens/CoursesScreen';
 import CoursesDetailsScreen from './src/screens/CoursesDetailsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import ManagerProfileScreen from './src/screens/ManagerProfileScreen';
+import EmployeeProfileScreen from './src/screens/EmployeeProfileScreen';
 import SurveyResultScreen from './src/screens/SurveyResultScreen';
 import SurveyDetailsScreen from './src/screens/SurveyDetailsScreen';
 
@@ -71,6 +73,16 @@ const App = () => {
           <Stack.Screen
             name="ProfileScreen"
             component={ProfileScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ManagerProfileScreen"
+            component={ManagerProfileScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="EmployeeProfileScreen"
+            component={EmployeeProfileScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
