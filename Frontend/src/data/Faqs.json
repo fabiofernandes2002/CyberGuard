@@ -1,0 +1,64 @@
+{
+    "faqs": [
+        {
+            "faq1": {
+                "question": "Como posso increver-me num curso?",
+                "answer": "Para se poder inscrever num curso, tem de apenas selecionar o curso que pretende inscrever-se dentro do mundo que selecionou. Se o curso for gratuito basta selecionar para começar e automaticamente será direcionado para os vídeos explicativos. Por outro lado, caso o curso seja pago, terá de subscrever o mesmo o que o levará para o formulário de pagamento onde pode escolher o método de pagamento que desejar e colocar os dados do seu pagamento. Quando tiver concluído será então levado para a página do curso que se inscreveu."
+            }
+        },
+        {
+            "faq2": {
+                "question": "Não consigo aceder à minha conta!",
+                "answer": "Se você estiver com dificuldades para aceder à sua conta, siga as seguintes etapas: 1. Verifique as suas credenciais: Certifique-se de que insere o seu nome de utilizador e passwords corretos. 2. Redefinir password: Se você se esqueceu da sua password, utilize a opção de redefinição de password na página de login. Geralmente, isso envolve receber um link de redefinição por e-mail. 3. Verifique a sua conexão: Certifique-se de que está conectado à Internet para aceder à CyberGuard 4. Contacte o suporte: Se as etapas acima não resolverem o problema, entre em contacto com o nosso suporte técnico."
+            }
+        },
+        {
+            "faq3": {
+                "question": "Como posso alterar os meus dados?",
+                "answer": "Para poder alterar os seus dados, apenas necessita de ir ao seu perfil e clicar para o editar e salvar as suas alterações quando tiver terminado."
+            }
+        },
+        {
+            "faq4": {
+                "question": "Esqueci-me da minha password.",
+                "answer": "Pode recuperar a sua password no formulário de login clicando no devido select."
+            }
+        },
+        {
+            "faq5": {
+                "question": "Quantas contas posso ter?",
+                "answer": "Na CyberGuard apenas é permitida uma conta por utilizador, de modo a assegurar várias questões como o facto de segurança de identidade e de cada utilizador poder ter a sua experiência personalizada na aplicação com cursos e sugestões adequadas aos seus dados."
+            }
+        },
+        {
+            "faq6": {
+                "question": "Que métodos de pagamento existem na aplicação?",
+                "answer": "Para poder inscrever-se num curso e poder proceder ao seu pagamento temos disponíveis alguns métodos de pagamento, entre eles Cartão de Crédito/Débito, MBWay ou PayPal"
+            }
+        },
+        {
+            "faq7": {
+                "question": "Posso ter dinheiro em crédito?",
+                "answer": "Visto existem diferentes tipos de pagamento eletrónicos na CyberGuard, não existe a opção de manter dinheiro em crédito na aplicação."
+            }
+        },
+        {
+            "faq8": {
+                "question": "Quantos níveis de evolução tenho?",
+                "answer": "Existem 2 níveis de evolução."
+            }
+        },
+        {
+            "faq9": {
+                "question": "Posso fazer vários cursos ao mesmo tempo?",
+                "answer": "Tendo em conta que para poder realizar um curso tem de realizar uma inscrição no mesmo e realizá-lo até ao fim (ver vídeos e realizar avaliação) para que possa avançar, não é possível realizar vários cursos ao mesmo tempo."
+            }
+        },
+        {
+            "faq10": {
+                "question": "Como posso avaliar um curso?",
+                "answer": "Depois de ver todos os vídeos do respetivo curso, surgirá um botão para poder avançar para o respetivo teste e um formulário de avaliação onde poderá então proceder à mesma."
+            }
+        }
+    ]
+}

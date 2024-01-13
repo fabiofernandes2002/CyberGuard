@@ -21,13 +21,18 @@ function MenuHamburguer() {
       case 'Discover':
         navigation.navigate('MundosScreen');
         break;
-      // Adicione casos para outras opções conforme necessário
+      case "FAQ's":
+        navigation.navigate('FaqsScreen');
+        break;
+      case 'About Us':
+        navigation.navigate('AboutUsScreen');
+        break;
       default:
         break;
     }
   }
 
-  const menuOptions = ['Discover', 'Perfil', 'Chat', 'FAQ´s', 'About Us', 'Notificações'];
+  const menuOptions = ['Discover', 'Perfil', 'Chat', "FAQ's", 'About Us', 'Notificações'];
 
   useEffect(() => {
     const getUser = async () => {

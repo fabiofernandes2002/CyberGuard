@@ -12,6 +12,7 @@ import MundosScreen from './src/screens/MundosScreen';
 import { NativeBaseProvider } from 'native-base';
 import CoursesScreen from './src/screens/CoursesScreen';
 import CoursesDetailsScreen from './src/screens/CoursesDetailsScreen';
+import FaqsScreen from './src/screens/FaqsScreen';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,7 @@ const App = () => {
           <Stack.Screen name="MundosScreen" component={MundosScreen} options={{ headerShown: false }} />
           <Stack.Screen name="CoursesScreen" component={CoursesScreen} options={{ headerShown: false }} />
           <Stack.Screen name="CoursesDetailsScreen" component={CoursesDetailsScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="FaqsScreen" component={FaqsScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>

@@ -26,7 +26,7 @@ const AboutUsScreen = () => {
                     </TouchableOpacity>
                     <NativeBaseProvider>
                         <MenuHamburguer />
-                    </NativeBaseProvider>                
+                    </NativeBaseProvider>
                 </View>
             </View>
             <View style={styles.content}>
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
         marginTop: 20,
-      },    
+    },
     content: {
         marginTop: 30,
     },
