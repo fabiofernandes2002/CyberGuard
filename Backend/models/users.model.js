@@ -44,12 +44,8 @@ const schema = new mongoose.Schema(
     chatId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'chats' }],
     surveys: [
       {
-        surveyInfo: {
-          question: String,
-          incorrectAnswers: [String],
-          correctAnswer: String,
-        },
-        surveyResult: Number,
+        surveyResult: { type: Number, default: 0 },
+        surveyStatus: {type: Boolean, default: false}
       },
     ],
     evaluationResults: [

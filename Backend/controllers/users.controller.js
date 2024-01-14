@@ -402,11 +402,6 @@ exports.submitSurvey = async (req, res) => {
       const surveyFile = fs.readFileSync('./Survey.json');
       const surveyQuestions = JSON.parse(surveyFile).surveys;
 
-      // Verifique se todas as respostas foram fornecidas
-      if (responseArray.length !== surveyQuestions.length) {
-        return res.status(400).json({ message: 'Número incorreto de respostas fornecidas.' });
-      }
-
       // Calcular a pontuação total com base nas respostas
       let totalScore = 0;
       for (let i = 0; i < surveyQuestions.length; i++) {
@@ -414,14 +409,14 @@ exports.submitSurvey = async (req, res) => {
         const userResponse = responseArray.find((response) => response.questionIndex === i);
 
         // Compare a resposta do usuário com a resposta correta
-        if (userResponse && userResponse.answer === question.surveyInfo.correctAnswer) {
+        if (userResponse && question.surveyInfo.correctAnswer === userResponse.answer) {
           // Atribua 1 ponto por cada resposta correta
           totalScore += 1;
         }
       }
 
-      // Salve a pontuação no modelo do usuário
-      user.surveys.push({ surveyResult: totalScore });
+      // Salve a pontuação e o status no modelo do usuário
+      user.surveys.push({ surveyResult: totalScore, surveyStatus: true });
       await user.save();
 
       res.json({ message: 'O questionário foi respondido com sucesso.', totalScore });

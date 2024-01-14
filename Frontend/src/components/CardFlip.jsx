@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 import FlipCard from 'react-native-flip-card';
 
-const Flashcard = ({frontText, backText, handleCardBackPress}) => {
+const Flashcard = ({imgURL, backText, handleCardBackPress}) => {
   return (
     <FlipCard style={{width: 170, height: 150}}>
       {/* Frente do Cartão */}
@@ -13,10 +13,10 @@ const Flashcard = ({frontText, backText, handleCardBackPress}) => {
           justifyContent: 'center',
           backgroundColor: '#fff',
           borderRadius: 10,
-          borderColor: '#333',
+          borderColor: '#A9BCD0',
           borderWidth: 1,
         }}>
-        <Text style={{fontSize: 16}}>{frontText}</Text>
+        <Image source={{uri: imgURL}} style={{width: 170, height: 150}} />
       </View>
 
       {/* Verso do Cartão */}
@@ -26,13 +26,19 @@ const Flashcard = ({frontText, backText, handleCardBackPress}) => {
           flex: 1,
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#fff',
+          backgroundColor: '#D8DBE2',
           borderRadius: 10,
-          borderColor: '#333',
+          borderColor: '#A9BCD0',
           borderWidth: 1,
         }}>
         <TouchableOpacity onPress={handleCardBackPress}>
-          <Text style={{fontSize: 16}}>{backText}</Text>
+          <Text style={{
+            fontSize: 13,
+            fontFamily: 'Supply-Medium',
+            textAlign: 'center',
+            padding: 2,
+            margin: 2,
+            }}>{backText}</Text>
         </TouchableOpacity>
       </View>
     </FlipCard>

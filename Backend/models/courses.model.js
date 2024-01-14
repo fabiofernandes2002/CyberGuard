@@ -4,6 +4,7 @@ const schema = new mongoose.Schema({
   idDiscover: { type: mongoose.Schema.Types.ObjectId, ref: 'discoverCourses' },
   name: { type: String, required: true },
   // paid = true -> Curso pago | paid = false -> Curso gratuito
+  nameCourse: { type: String, required: true },
   paid: { type: Boolean, default: false }, 
   price: { type: Number, required: function () { return this.paid; } },
   imgURL: { type: String, require: true, },

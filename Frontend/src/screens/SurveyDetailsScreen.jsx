@@ -9,16 +9,17 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {Radio} from 'native-base';
-import {ProgressBar} from 'react-native-paper';
 import {Center, Box, Progress} from 'native-base';
 import surveyData from '../data/Survey.json';
 import Seta from '../assets/setaButton.svg';
 import {useNavigation} from '@react-navigation/native';
+import UsersService from '../services/users.services';
 
 const SurveyDetailsScreen = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
   const [score, setScore] = useState(0);
+  const [answers, setAnswers] = useState([]);
 
   const totalQuestions = surveyData.surveys.length;
 
@@ -40,10 +41,14 @@ const SurveyDetailsScreen = () => {
     if (responses[value - 1].text === survey.correctAnswer) {
       setScore(score + 1);
     }
+    setAnswers([...answers, { questionIndex: currentQuestionNumber - 1, answer: value }]);
   };
 
   const navigation = useNavigation();
-  const handleButtonTerminarPress = () => {
+  const handleButtonTerminarPress = async () => {
+    if (currentQuestionNumber === totalQuestions) {
+      await UsersService.submitSurvey({ answers, score });
+    }
     navigation.navigate('SurveyResultScreen', {score});
   };
 
