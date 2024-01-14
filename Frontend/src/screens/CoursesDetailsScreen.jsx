@@ -37,9 +37,6 @@ const CoursesDetailsScreen = ({route}) => {
   if (!course) {
     return null;
   }
-const CoursesDetailsScreen = ({ route }) => {
-  const { courseId } = route.params;
-  const course = courses.find(course => course.id === courseId);
 
   const navigation = useNavigation();
   const handleButtonStartPress = () => {
