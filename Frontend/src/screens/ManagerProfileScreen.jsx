@@ -12,10 +12,13 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
 import {Avatar, VStack, NativeBaseProvider} from 'native-base';
 import MenuHamburguer from '../components/Menu';
+import AuthService from '../services/auth.service';
+
+const user = AuthService.getUserLogged();
 
 const ManagerProfileScreen = () => {
   const navigation = useNavigation();
-  const [isEditable, setIsEditable] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
 
   const data = [
     {id: 1, name: 'Sofia', difficulty: 'Criptografia'},
@@ -98,7 +101,7 @@ const ManagerProfileScreen = () => {
           <View style={Styles.inputWrapper}>
             <TextInput
               style={[Styles.input, {textAlign: 'left'}]}
-              placeholder="John Doe"
+              placeholder={user._j.userInfo.username}
               underlineColorAndroid="transparent"
               editable={isEditable}
             />
@@ -115,7 +118,7 @@ const ManagerProfileScreen = () => {
           <View style={Styles.inputWrapper}>
             <TextInput
               style={[Styles.input, {textAlign: 'left'}]}
-              placeholder="Normal"
+              placeholder={user._j.userInfo.userType}
               underlineColorAndroid="transparent"
               editable={false}
             />
@@ -127,7 +130,7 @@ const ManagerProfileScreen = () => {
           <View style={Styles.inputWrapper}>
             <TextInput
               style={[Styles.input, {textAlign: 'left'}]}
-              placeholder="john@doe.com"
+              placeholder={user._j.userInfo.email}
               underlineColorAndroid="transparent"
               editable={isEditable}
             />

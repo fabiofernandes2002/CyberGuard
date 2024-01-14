@@ -21,7 +21,10 @@ import {
 } from 'native-base';
 import {Card} from 'react-native-paper';
 import Star from '../assets/star.svg';
+import AuthService from '../services/auth.service';
 import MenuHamburguer from '../components/Menu';
+
+const user = AuthService.getUserLogged();
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
@@ -132,7 +135,7 @@ const ProfileScreen = () => {
             <View style={Styles.inputWrapper}>
               <TextInput
                 style={[Styles.input, {textAlign: 'left'}]}
-                placeholder="John Doe"
+                placeholder={user._j.userInfo.username}
                 underlineColorAndroid="transparent"
                 editable={isEditable}
               />
@@ -150,7 +153,7 @@ const ProfileScreen = () => {
             <View style={Styles.inputWrapper}>
               <TextInput
                 style={[Styles.input, {textAlign: 'left'}]}
-                placeholder="Normal"
+                placeholder={user._j.userInfo.userType}
                 underlineColorAndroid="transparent"
                 editable={false}
               />
@@ -163,7 +166,7 @@ const ProfileScreen = () => {
             <View style={Styles.inputWrapper}>
               <TextInput
                 style={[Styles.input, {textAlign: 'left'}]}
-                placeholder="john@doe.com"
+                placeholder={user._j.userInfo.email}
                 underlineColorAndroid="transparent"
                 editable={isEditable}
               />
