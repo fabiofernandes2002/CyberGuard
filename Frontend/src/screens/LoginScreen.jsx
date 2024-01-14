@@ -28,8 +28,16 @@ const LoginScreen = () => {
 
       if (user) {
         console.log('Usuário logado:', user);
-
-        navigation.navigate('SurveyIntroScreen');
+        
+        const hasUnansweredSurveys = user.surveys && user.surveys.some(survey => !survey.surveyStatus);
+        // Verifique se o usuário já respondeu ao questionário
+        if (!hasUnansweredSurveys) {
+          // Se o usuário já respondeu ao questionário, navegue para MundosScreen
+          navigation.navigate('MundosScreen');
+        } else {
+          // Se o usuário ainda não respondeu ao questionário, navegue para SurveyIntroScreen
+          navigation.navigate('SurveyIntroScreen');
+      }
 
         ToastAndroid.showWithGravity(
           'Login efetuado com sucesso!',
@@ -48,6 +56,7 @@ const LoginScreen = () => {
         );
       }
     } catch (error) {
+      console.log(error);
       ToastAndroid.showWithGravity(
         'Erro durante o login. Verifique suas credenciais.',
         ToastAndroid.SHORT,

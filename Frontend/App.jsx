@@ -20,6 +20,7 @@ import SurveyResultScreen from './src/screens/SurveyResultScreen';
 import SurveyDetailsScreen from './src/screens/SurveyDetailsScreen';
 import ChatScreen from './src/screens/ChatScreen';
 import PaymentScreen from './src/screens/PaymentScreen';
+import StartCourseScreen from './src/screens/StartCourseScreen';
 
 const Stack = createStackNavigator();
 
@@ -96,6 +97,11 @@ const App = () => {
           <Stack.Screen
             name="SurveyDetailsScreen"
             component={SurveyDetailsScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="StartCourseScreen"
+            component={StartCourseScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen 

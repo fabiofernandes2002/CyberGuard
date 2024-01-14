@@ -186,7 +186,7 @@ exports.createCourse = async function (req, res) {
         msg: 'Apenas o administrador pode aceder a esta funcionalidade!',
       });
 
-    const { idDiscover, name, paid, price, description} = req.body;
+    const { idDiscover, name, nameCourse, paid, price, description} = req.body;
 
     // fazer validações dos campos recebidos um a um
     if (!idDiscover)
@@ -210,6 +210,9 @@ exports.createCourse = async function (req, res) {
         msg: 'Preencha o campo price!',
       });
     }
+    if (typeof req.body.price === 'string') {
+      req.body.price = req.body.price.replace(/[^0-9.,]/g, '').replace(',', '.');
+    }
     if (!videos)
       return res.status(400).json({
         success: false,
@@ -230,15 +233,6 @@ exports.createCourse = async function (req, res) {
       folder: "course_image"
     });
 
-    // Fazer upload da imagem para o Cloudinary
-    /* if (req.files && req.files['image']) {
-      const result = await cloudinary.uploader.upload(req.files['image'][0].path, {
-          //resource_type: 'image',
-          folder: 'course_image'
-      });
-      //imgURL = result.url;
-    } */
-
     imgURL = result.url;
 
     if (!imgURL)
@@ -248,36 +242,23 @@ exports.createCourse = async function (req, res) {
     });
 
     // Processar informações das avaliações
-    const maxQuestions = 20;
+    const maxQuestions = 25;
     for (let i = 1; i <= maxQuestions; i++) {
         if (req.body[`question${i}`]) {
             const question = req.body[`question${i}`];
             const answers = req.body[`answers${i}`] ? req.body[`answers${i}`].split(',') : [];
-            const correctAnswerIndex = parseInt(req.body[`correctAnswerIndex${i}`]);
+
+            let correctAnswerIndex = parseInt(req.body[`correctAnswerIndex${i}`]);
+
+            if (isNaN(correctAnswerIndex)) {
+                correctAnswerIndex = 0;
+            }
 
             evaluations.push({
                 questions: [{ question, answers, correctAnswerIndex }]
             });
         }
     }
-
-    // Fazer upload dos vídeos para o Cloudinary
-    //if (req.files['video']) {
-      /* for (let i = 0; i < req.files['video'].length; i++) {
-          const file = req.files['video'][i];
-          const videoResult = await cloudinary.uploader.upload(file.path, {
-              resource_type: 'video',
-              folder: 'course_videos'
-          });
-  
-          const titleKey = `title${i + 1}`;
-          const durationKey = `duration${i + 1}`;
-          const title = req.body[titleKey];
-          const duration = req.body[durationKey];
-  
-          videos.push({ videoURL: videoResult.url, title, duration });
-      } */
-    //}
 
     // Processar informações de vídeos do YouTube
     const maxVideos = 5; // por exemplo
@@ -292,15 +273,23 @@ exports.createCourse = async function (req, res) {
     }
 
     // verificar se o curso já existe
-    let course = await courses.findOne({ name });
+    let course = await courses.findOne({ nameCourse });
     if (course)
       return res.status(400).json({
         success: false,
         msg: 'Curso já existe!',
       });
 
+
     // criar novo curso
-    course = new courses({ idDiscover, name, paid, price, videos, description, evaluations, imgURL });
+    course = new courses({ idDiscover, name,nameCourse, paid, price, videos, description, evaluations, imgURL });
+
+    
+    if (course.price === 0 || course.paid === false) {
+      course.price = 'FREE';
+      course.paid = true; //
+    }
+
     await course.save();
 
     // associar o course ao courseIds do discoverCourse correspondente no discoverCourses model
