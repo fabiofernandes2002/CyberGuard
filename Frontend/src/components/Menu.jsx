@@ -22,6 +22,8 @@ function MenuHamburguer() {
 
   const navigation = useNavigation();
 
+  const user = AuthService.getUserLogged();
+
   const handleMenuClick = option => {
     setSelectedOption(option);
     switch (option) {
@@ -29,7 +31,21 @@ function MenuHamburguer() {
         navigation.navigate('MundosScreen');
         break;
       case 'Perfil':
-        navigation.navigate('ProfileScreen');
+        console.log(user._j.userInfo.userType);
+        try {
+          if (user._j.userInfo.userType === 'empresarial') {
+            if (user._j.userInfo.isOwner == true) {
+              navigation.navigate('ManagerProfileScreen');
+            } else {
+              navigation.navigate('EmployeeProfileScreen');
+            }
+          } else {
+            navigation.navigate('ProfileScreen');
+          }
+        } catch (error) {
+          console.error('Error retrieving user information:', error.message);
+          throw error;
+        }
         break;
       case 'Chat':
         navigation.navigate('ChatScreen');
