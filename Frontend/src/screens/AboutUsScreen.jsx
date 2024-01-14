@@ -82,85 +82,62 @@ const AboutUsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  logo: {
-    position: 'absolute',
-    width: 70,
-    height: 70,
-    marginBottom: 20,
-    alignSelf: 'center',
-    justifyContent: 'center',
-    marginLeft: -10,
-    marginTop: 10,
-  },
-  textC: {
-    fontFamily: 'Supply-Bold',
-    fontSize: 20,
-    color: '#00428A',
-    marginLeft: 55,
-    justifyContent: 'center',
-    marginTop: -5,
-  },
-  textG: {
-    fontFamily: 'Supply-Bold',
-    fontSize: 20,
-    color: '#00428A',
-    marginLeft: 55,
-    justifyContent: 'center',
-    marginTop: -5,
-  },
-  Menu: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginTop: -50,
-  },
-  content: {
-    marginBottom: 20,
-    marginTop: 20,
-  },
-  titleEquipa: {
-    fontFamily: 'Supply-Bold',
-    fontSize: 24,
-    color: '#6E0271',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  title: {
-    fontFamily: 'Supply-Bold',
-    fontSize: 24,
-    color: '#6E0271',
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  team: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  member: {
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  name: {
-    fontFamily: 'Supply-Bold',
-    fontSize: 24,
-    textAlign: 'center',
-    color: '#1B1B1E',
-    marginTop: 10,
-  },
-  aboutUsText: {
-    fontFamily: 'Raleway-Medium',
-    fontSize: 17,
-    color: '#1B1B1E',
-  },
+    container: {
+        flex: 1,
+        padding: 20,
+    },
+    logo: {
+        position: 'absolute',
+        width: 50,
+        height: 50,
+        marginBottom: 20,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        marginLeft: -10,
+        marginTop: 10,
+    },
+    textC: {
+        fontFamily: 'Supply-Bold',
+        fontSize: 20,
+        color: '#00428A',
+        marginLeft: 35,
+        justifyContent: 'center',
+    },
+    textG: {
+        fontFamily: 'Supply-Bold',
+        fontSize: 20,
+        color: '#00428A',
+        marginLeft: 35,
+        justifyContent: 'center',
+    },
+    Menu: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginTop: 20,
+      },    
+    content: {
+        marginTop: 30,
+    },
+    title: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    team: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    name: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    aboutUsText: {
+        fontSize: 15,
+        textAlign: 'justify',
+    },
 });
 
 export default AboutUsScreen;

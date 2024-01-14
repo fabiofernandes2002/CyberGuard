@@ -12,6 +12,7 @@ import MundosScreen from './src/screens/MundosScreen';
 import {NativeBaseProvider} from 'native-base';
 import CoursesScreen from './src/screens/CoursesScreen';
 import CoursesDetailsScreen from './src/screens/CoursesDetailsScreen';
+import FaqsScreen from './src/screens/FaqsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import ManagerProfileScreen from './src/screens/ManagerProfileScreen';
 import EmployeeProfileScreen from './src/screens/EmployeeProfileScreen';
@@ -101,6 +102,7 @@ const App = () => {
             component={StartCourseScreen}
             options={{headerShown: false}}
           />
+          <Stack.Screen name="FaqsScreen" component={FaqsScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>

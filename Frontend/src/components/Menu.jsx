@@ -43,6 +43,12 @@ function MenuHamburguer() {
       case 'Notificações':
         navigation.navigate('NotificationsScreen');
         break;
+      case "FAQ's":
+        navigation.navigate('FaqsScreen');
+        break;
+      case 'About Us':
+        navigation.navigate('AboutUsScreen');
+        break;
       default:
         break;
     }
@@ -52,7 +58,7 @@ function MenuHamburguer() {
     'Discover',
     'Perfil',
     'Chat',
-    'FAQ´s',
+    "FAQ's",
     'About Us',
     'Notificações',
   ];
