@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import SetaEsquerda from '../assets/SetaEsquerda.svg';
 import MenuHamburguer from '../components/Menu';
 import Star from '../assets/star.svg';
@@ -53,8 +53,8 @@ const courses = [
   },
 ];
 
-const CoursesDetailsScreen = ({route}) => {
-  const {courseId} = route.params;
+const CoursesDetailsScreen = ({ route }) => {
+  const { courseId } = route.params;
   const course = courses.find(course => course.id === courseId);
 
   const navigation = useNavigation();
@@ -82,8 +82,8 @@ const CoursesDetailsScreen = ({route}) => {
                   <Text style={Styles.courseTitle}>
                     {course.name.replace(' ', '\n')}
                   </Text>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Star width={25} height={25} style={{marginRight: 10}} />
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Star width={25} height={25} style={{ marginRight: 10 }} />
                     <Text style={Styles.courseRating}>({course.rating})</Text>
                   </View>
                 </View>
@@ -96,14 +96,23 @@ const CoursesDetailsScreen = ({route}) => {
                   </Text>
                 </View>
               </View>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  if (course.price && course.price !== 'FREE') {
+                    navigation.navigate('PaymentScreen');
+                  } else {
+                    navigation.navigate('StartCourseScreen', { courseId: course._id });
+                  }
+                }}
+              >
                 <View
                   style={[
                     Styles.button,
-                    {backgroundColor: course.price ? '#00428A' : '#6E0271'},
-                  ]}>
+                    { backgroundColor: course.price && course.price !== 'FREE' ? '#00428A' : '#6E0271' },
+                  ]}
+                >
                   <Text style={Styles.buttonText}>
-                    {course.price ? 'Comprar curso' : 'Começar curso'}
+                    {course.price && course.price !== 'FREE' ? 'Comprar curso' : 'Começar curso'}
                   </Text>
                 </View>
               </TouchableOpacity>

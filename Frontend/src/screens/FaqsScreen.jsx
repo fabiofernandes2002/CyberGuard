@@ -10,10 +10,12 @@ const FaqsScreen = () => {
     const navigation = useNavigation();
     const faqs = faqsData.faqs
 
-    const [expandedIndex, setExpandedIndex] = useState(-1);
+    const [showAnswers, setShowAnswers] = useState(Array(faqs.length).fill(false));
 
     const toggleAnswer = (index) => {
-        setExpandedIndex((prevIndex) => (prevIndex === index ? -1 : index));
+        const newShowAnswers = [...showAnswers];
+        newShowAnswers[index] = !newShowAnswers[index];
+        setShowAnswers(newShowAnswers);
     };
 
     return (
@@ -42,10 +44,10 @@ const FaqsScreen = () => {
                     {faqs.map((faq, index) => (
                         <View key={index} style={styles.faqContainer}>
                             <TouchableOpacity onPress={() => toggleAnswer(index)} style={styles.questionContainer}>
-                                <Text style={styles.plusMinus}>{expandedIndex === index ? '-' : '+'}</Text>
+                                <Text style={styles.plusMinus}>{showAnswers[index] ? '-' : '+'}</Text>
                                 <Text style={styles.faqQuestion}>{faq[`faq${index + 1}`].question}</Text>
                             </TouchableOpacity>
-                            {expandedIndex === index && <Text style={styles.faqAnswer}>{faq[`faq${index + 1}`].answer}</Text>}
+                            {showAnswers[index] && <Text style={styles.faqAnswer}>{faq[`faq${index + 1}`].answer}</Text>}
                         </View>
                     ))}
                 </ScrollView>

@@ -34,9 +34,6 @@ function MenuHamburguer() {
       case 'Chat':
         navigation.navigate('ChatScreen');
         break;
-      case 'FAQ´s':
-        navigation.navigate('FAQScreen');
-        break;
       case 'About Us':
         navigation.navigate('AboutUsScreen');
         break;
