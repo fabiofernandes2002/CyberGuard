@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  FlatList
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
@@ -14,6 +15,9 @@ import SetaEsquerda from '../assets/SetaEsquerda.svg';
 import MenuHamburguer from '../components/Menu';
 import Star from '../assets/star.svg';
 import CoursesService from '../services/courses.services';
+import Video from 'react-native-video';
+import VideoPlayer from 'react-native-video-controls';
+import YouTube from 'react-native-youtube';
 
 const CoursesDetailsScreen = ({route}) => {
   const {courseId} = route.params;
@@ -39,8 +43,13 @@ const CoursesDetailsScreen = ({route}) => {
   }
 
   const navigation = useNavigation();
-  const handleButtonStartPress = () => {
-    navigation.navigate('StartCourseScreen', {courseId: course._id});
+
+  // Função para extrair o ID do vídeo do YouTube a partir da URL
+  const extractYouTubeId = url => {
+    console.log('url:', url);
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
   };
 
   return (
@@ -58,48 +67,49 @@ const CoursesDetailsScreen = ({route}) => {
             <MenuHamburguer />
           </View>
           <View style={Styles.container2}>
-            <Text style={Styles.title}>{course.name}</Text>
+            <Text style={Styles.title}>{course.nameCourse}</Text>
             <View>
               <View style={Styles.card}>
-                <Image style={Styles.imageCourse} source={{uri: course.imgURL}} />
+                <View style={Styles.cardImage}>
+                  <View style={Styles.imageCourse}>
+                    <Image style={Styles.imageCourse} source={{uri: course.imgURL}} />
+                  </View>
+                </View>
                 <View style={Styles.titleRating}>
-                  <Text style={Styles.courseTitle}>
-                    {course.nameCourse.replace(' ', '\n')}
-                  </Text>
+                  <Text style={Styles.courseTitle}>Categorias de Malware</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Star width={25} height={25} style={{marginRight: 10}} />
-                    <Text style={Styles.courseRating}>({course.rating})</Text>
+                    {/* <Text style={Styles.courseRating}>({course.rating})</Text> */}
                   </View>
                 </View>
                 <View>
-                  <Text style={Styles.cardPrice}>
-                    {course.price ? course.price : 'FREE'}
-                  </Text>
-                  <Text style={Styles.textDescription}>
-                    {course.description}
-                  </Text>
+                  {/* View para flatlist para renderizar os videos do curso */}
+                  <View style={Styles.containerVideos}>
+                  <YouTube
+                  videoId="LSUwfF9lvgw" // ID do vídeo do YouTube
+                  play // controla a reprodução do vídeo
+                  fullscreen // controla se o vídeo preenche a tela
+                  loop // controla se o vídeo deve fazer loop
+                  style={Styles.video}
+                  onError={e => console.log(e)} // Callback para erros
+                />
+                <YouTube
+  videoId="LSUwfF9lvgw" // The YouTube video ID
+  play // control playback of video with true/false
+  fullscreen // control whether the video should play in fullscreen or inline
+  loop // control whether the video should loop when ended
+  onReady={e => this.setState({ isReady: true })}
+  onChangeState={e => this.setState({ status: e.state })}
+  onChangeQuality={e => this.setState({ quality: e.quality })}
+  onError={e => this.setState({ error: e.error })}
+  style={{ alignSelf: 'stretch', height: 300 }}
+/>
+
+                  </View>
+                  <View style={Styles.button}>
+                    <Text style={Styles.buttonText}>Começar curso</Text>
+                  </View>
                 </View>
               </View>
-              <TouchableOpacity
-                onPress={() => {
-                  if (course.price && course.price !== 'FREE') {
-                    navigation.navigate('PaymentScreen');
-                  } else {
-                    navigation.navigate('StartCourseScreen', {courseId: course._id});
-                  }
-                }}
-                >
-                <View
-                  style={[
-                    Styles.button,
-                    {backgroundColor: course.price && course.price !== 'FREE' ? '#00428A' : '#6E0271'},
-                  ]}
-                  >
-                  <Text style={Styles.buttonText}>
-                    {course.price && course.price !== 'FREE' ? 'Comprar curso' : 'Começar curso'}
-                  </Text>
-                </View>
-              </TouchableOpacity>
             </View>
           </View>
         </SafeAreaView>
@@ -159,10 +169,11 @@ const Styles = StyleSheet.create({
   },
   imageCourse: {
     alignSelf: 'center',
-    width: 315,
-    height: 288,
+    width: 260,
+    height: 236,
     borderRadius: 10,
-    marginBottom: 10,
+    marginBottom: 30,
+    padding: 20,
   },
   titleRating: {
     flexDirection: 'row',
@@ -220,6 +231,18 @@ const Styles = StyleSheet.create({
     fontSize: 17,
     fontFamily: 'Supply-Bold',
     textAlign: 'center',
+  },
+  cardImage: {
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#1B1B1E',
+    width: 315,
+    height: 288
+  },
+  video: {
+    alignSelf: 'stretch',
+    height: 300,
+    marginTop: 20
   },
 });
 

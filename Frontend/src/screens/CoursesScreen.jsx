@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -13,8 +13,9 @@ import {useNavigation} from '@react-navigation/native';
 import MenuHamburguer from '../components/Menu';
 import {Card} from 'react-native-paper';
 import Star from '../assets/star.svg';
+import CoursesService from '../services/courses.services';
 
-const courses = [
+/* const courses = [
   {
     id: '1',
     name: 'Direitos Individuais',
@@ -51,13 +52,28 @@ const courses = [
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae eros quis nisl aliquam aliquet. Sed vitae eros quis nisl aliquam aliquet.',
   },
-];
+]; */
 
 const CoursesScreen = () => {
   const navigation = useNavigation();
 
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const coursesData = await CoursesService.getAllCourses();
+        setCourses(coursesData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
   const handleCourseDetailsScreen = item => {
-    navigation.navigate('CoursesDetailsScreen', {courseId: item.id});
+    navigation.navigate('CoursesDetailsScreen', {courseId: item._id});
   };
 
   return (
@@ -97,11 +113,11 @@ const CoursesScreen = () => {
                   key={index}
                   style={Styles.card}
                   onPress={() => handleCourseDetailsScreen(course)}>
-                  <Card.Cover style={{height: 150}} source={course.image} />
+                  <Card.Cover style={{height: 150}} source={{uri: course.imgURL}} />
                   <Card.Content>
-                    <Text style={Styles.cardTitle}>{course.name}</Text>
+                    <Text style={Styles.cardTitle}>{course.nameCourse}</Text>
                     <Text style={Styles.cardPrice}>
-                      {course.price === false ? 'FREE' : course.price}
+                      {course.price ? course.price : 'FREE'}
                     </Text>
                     {/* adicionar a imagem svg star */}
                     <View
@@ -181,6 +197,7 @@ const Styles = StyleSheet.create({
     fontSize: 24,
     color: '#6E0271',
     marginBottom: 20,
+    marginTop: 50,
   },
   textDescription: {
     fontFamily: 'Raleway-Medium',

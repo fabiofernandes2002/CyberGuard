@@ -7,6 +7,11 @@ import CoolIcon from '../assets/coolIcon.svg';
 const SurveyResultScreen = ({route}) => {
   const {score} = route.params;
   const navigation = useNavigation();
+
+  setTimeout(() => {
+    navigation.navigate('MundosScreen');
+  }, 5000);
+
   const handleLinkTextClick = () => {
     navigation.navigate('MundosScreen');
   };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -15,42 +15,32 @@ import Ellipse from '../assets/Ellipse.svg'; // Ellipse com curva para esquerda
 import Ellipse2 from '../assets/Ellipse2.svg'; // Ellipse com curva para direita
 import {NativeBaseProvider} from 'native-base';
 import MenuHamburguer from '../components/Menu';
-
-const flashcards = [
-  {
-    id: '1',
-    frontText: 'Front Text 1',
-    backText: 'Back Text 1',
-  },
-  {
-    id: '2',
-    frontText: 'Front Text 2',
-    backText: 'Back Text 2',
-  },
-  {
-    id: '3',
-    frontText: 'Front Text 3',
-    backText: 'Back Text 3',
-  },
-  {
-    id: '4',
-    frontText: 'Front Text 4',
-    backText: 'Back Text 4',
-  },
-  {
-    id: '5',
-    frontText: 'Front Text 5',
-    backText: 'Back Text 5',
-  },
-  {
-    id: '6',
-    frontText: 'Front Text 6',
-    backText: 'Back Text 6',
-  },
-];
+import CoursesService from '../services/courses.services';
 
 const FlashcardsScreen = () => {
   const navigation = useNavigation();
+
+  const [flashcards, setFlashcards] = useState([]); // Crie um estado para os flashcards
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const courses = await CoursesService.getAllDiscoverCourses();
+        setFlashcards(courses.map(course => ({
+          id: course._id,
+          frontText: course.imgURL,
+          backText: course.description,
+        })));
+      } catch (error) {
+        console.error('Error fetching courses:', error.message);
+        if (error.response) {
+          console.error('Response body:', error.response.body);
+        }
+      }
+    };
+  
+    fetchCourses();
+  }, []);
 
   const handleCardBackPress = () => {
     navigation.navigate('CoursesScreen');
@@ -101,7 +91,7 @@ const FlashcardsScreen = () => {
                       <TouchableOpacity onPress={handleCardBackPress}>
                         <View style={Styles.cardWrapper}>
                           <Card
-                            frontText={card.frontText}
+                            imgURL={card.frontText}
                             backText={card.backText}
                             handleCardBackPress={handleCardBackPress}
                           />
@@ -123,7 +113,7 @@ const FlashcardsScreen = () => {
                       <TouchableOpacity onPress={handleCardBackPress}>
                         <View style={Styles.cardWrapper}>
                           <Card
-                            frontText={card.frontText}
+                            imgURL={card.frontText}
                             backText={card.backText}
                             handleCardBackPress={handleCardBackPress}
                           />

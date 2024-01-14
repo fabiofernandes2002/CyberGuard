@@ -17,6 +17,7 @@ import ManagerProfileScreen from './src/screens/ManagerProfileScreen';
 import EmployeeProfileScreen from './src/screens/EmployeeProfileScreen';
 import SurveyResultScreen from './src/screens/SurveyResultScreen';
 import SurveyDetailsScreen from './src/screens/SurveyDetailsScreen';
+import StartCourseScreen from './src/screens/StartCourseScreen';
 
 const Stack = createStackNavigator();
 
@@ -93,6 +94,11 @@ const App = () => {
           <Stack.Screen
             name="SurveyDetailsScreen"
             component={SurveyDetailsScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="StartCourseScreen"
+            component={StartCourseScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
