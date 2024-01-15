@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -24,7 +24,7 @@ import Star from '../assets/star.svg';
 import AuthService from '../services/auth.service';
 import MenuHamburguer from '../components/Menu';
 
-const user = AuthService.getUserLogged();
+const user = await AuthService.getUserLogged();
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
@@ -42,6 +42,26 @@ const ProfileScreen = () => {
   const nextLevelXP = 300;
 
   const progress = (currentXP / nextLevelXP) * 100;
+
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [userType, setUserType] = useState('');
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        setUsername(user._j.userInfo.username);
+        setEmail(user._j.userInfo.email);
+        setPassword(user._j.userInfo.password);
+        setUserType(user._j.userInfo.userType);
+      } catch (error) {
+        console.error('Error retrieving user information:', error.message);
+        throw error;
+      }
+    };
+    getUserInfo();
+  }, []);
 
   const courses = [
     {
@@ -135,7 +155,7 @@ const ProfileScreen = () => {
             <View style={Styles.inputWrapper}>
               <TextInput
                 style={[Styles.input, {textAlign: 'left'}]}
-                placeholder={user._j.userInfo.username}
+                placeholder={username}
                 underlineColorAndroid="transparent"
                 editable={isEditable}
               />
@@ -153,7 +173,7 @@ const ProfileScreen = () => {
             <View style={Styles.inputWrapper}>
               <TextInput
                 style={[Styles.input, {textAlign: 'left'}]}
-                placeholder={user._j.userInfo.userType}
+                placeholder={userType}
                 underlineColorAndroid="transparent"
                 editable={false}
               />
@@ -166,7 +186,7 @@ const ProfileScreen = () => {
             <View style={Styles.inputWrapper}>
               <TextInput
                 style={[Styles.input, {textAlign: 'left'}]}
-                placeholder={user._j.userInfo.email}
+                placeholder={email}
                 underlineColorAndroid="transparent"
                 editable={isEditable}
               />
