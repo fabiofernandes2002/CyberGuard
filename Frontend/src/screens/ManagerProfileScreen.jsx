@@ -29,8 +29,8 @@ const ManagerProfileScreen = () => {
   ];
 
   const handleRemove = id => {
-    // Implement your remove logic here
-    console.log(`Remove button clicked for ID: ${id}`);
+    const newData = data.filter(item => item.id !== id);
+    setData(newData);
   };
 
   const [username, setUsername] = useState('');
