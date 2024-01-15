@@ -24,7 +24,7 @@ import Star from '../assets/star.svg';
 import AuthService from '../services/auth.service';
 import MenuHamburguer from '../components/Menu';
 
-const user = await AuthService.getUserLogged();
+const user = AuthService.getUserLogged();
 
 const ProfileScreen = () => {
   const navigation = useNavigation();

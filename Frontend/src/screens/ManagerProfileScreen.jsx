@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,7 @@ import {Avatar, VStack, NativeBaseProvider} from 'native-base';
 import MenuHamburguer from '../components/Menu';
 import AuthService from '../services/auth.service';
 
-const user = await AuthService.getUserLogged();
+const user = AuthService.getUserLogged();
 
 const ManagerProfileScreen = () => {
   const navigation = useNavigation();

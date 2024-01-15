@@ -17,7 +17,7 @@ import Star from '../assets/star.svg';
 import MenuHamburguer from '../components/Menu';
 import AuthService from '../services/auth.service';
 
-const user = await AuthService.getUserLogged();
+const user = AuthService.getUserLogged();
 
 const EmployeeProfileScreen = () => {
   const navigation = useNavigation();
