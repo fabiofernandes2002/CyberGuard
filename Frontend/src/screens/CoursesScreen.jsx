@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -113,7 +113,10 @@ const CoursesScreen = () => {
                   key={index}
                   style={Styles.card}
                   onPress={() => handleCourseDetailsScreen(course)}>
-                  <Card.Cover style={{height: 150}} source={{uri: course.imgURL}} />
+                  <Card.Cover
+                    style={{height: 150}}
+                    source={{uri: course.imgURL}}
+                  />
                   <Card.Content>
                     <Text style={Styles.cardTitle}>{course.nameCourse}</Text>
                     <Text style={Styles.cardPrice}>
