@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Alert,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
@@ -30,6 +31,7 @@ const FlashcardsScreen = () => {
           id: course._id,
           frontText: course.imgURL,
           backText: course.description,
+          coursesIds: course.coursesIds,
         })));
       } catch (error) {
         console.error('Error fetching courses:', error.message);
@@ -42,8 +44,28 @@ const FlashcardsScreen = () => {
     fetchCourses();
   }, []);
 
-  const handleCardBackPress = () => {
-    navigation.navigate('CoursesScreen');
+  // quando o utilizador carrega no BackText do Card, ele vai para a página de cursos se courses.coursesIds.length > 0 senão aparece um alerta a dizer que não existem cursos
+  /* if (flashcards.length === 0) {
+    return (
+      <View style={Styles.container}>
+        <Text style={Styles.textTitulo}>Mundos</Text>
+        <Text style={Styles.textDescricao}>
+          Aqui temos os diferentes mundos que existem no ciberespaço para te
+          proporcionar uma melhor aprendizagem deste universo.
+        </Text>
+        <Text style={Styles.textDescricao}>
+          Não existem cursos disponíveis de momento.
+        </Text>
+      </View>
+    );
+  } */
+
+  const handleCardBackPress = (course) => {
+    if (course.coursesIds.length > 0) {
+      navigation.navigate('CoursesScreen');
+    } else {
+      Alert.alert('Não existem cursos disponíveis de momento.');
+    }
   };
 
   return (
@@ -88,12 +110,12 @@ const FlashcardsScreen = () => {
                 <View style={Styles.cardWithEllipse}>
                   {index % 2 === 0 ? (
                     <>
-                      <TouchableOpacity onPress={handleCardBackPress}>
+                      <TouchableOpacity onPress={() => handleCardBackPress(card)}>
                         <View style={Styles.cardWrapper}>
                           <Card
                             imgURL={card.frontText}
                             backText={card.backText}
-                            handleCardBackPress={handleCardBackPress}
+                            handleCardBackPress={() => handleCardBackPress(card)}
                           />
                         </View>
                       </TouchableOpacity>
@@ -110,12 +132,12 @@ const FlashcardsScreen = () => {
                       ) : (
                         <Ellipse2 position="left" style={Styles.ellipseLeft} />
                       )}
-                      <TouchableOpacity onPress={handleCardBackPress}>
+                      <TouchableOpacity onPress={() => handleCardBackPress(card)}>
                         <View style={Styles.cardWrapper}>
                           <Card
                             imgURL={card.frontText}
                             backText={card.backText}
-                            handleCardBackPress={handleCardBackPress}
+                            handleCardBackPress={() => handleCardBackPress(card)}
                           />
                         </View>
                       </TouchableOpacity>

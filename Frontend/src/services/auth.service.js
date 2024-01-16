@@ -19,6 +19,7 @@ const AuthService = {
 
       // Armazenar informações do utilizador logado no AsyncStorage
       const userInfo = {
+        id: user.userInfo._id,
         username: user.userInfo.username,
         email: user.userInfo.email,
         userType: user.userInfo.userType,
