@@ -7,9 +7,9 @@ const port = 8000;
 const users = require('./routes/users.routes.js');
 const courses = require('./routes/courses.routes.js');
 const chats = require('./routes/chats.routes.js');
-//const {swaggerUi, specs} = require("./swagger.js")
+const {swaggerUi, specs} = require("./swagger.js")
 
-//app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use(express.json());
 app.use(cors());
 app.use('/users', users);
