@@ -104,20 +104,20 @@ const App = () => {
             component={StartCourseScreen}
             options={{headerShown: false}}
           />
-          <Stack.Screen 
-            name="FaqsScreen" 
-            component={FaqsScreen} 
-            options={{ headerShown: false }} 
+          <Stack.Screen
+            name="FaqsScreen"
+            component={FaqsScreen}
+            options={{headerShown: false}}
           />
-          <Stack.Screen 
-            name="ChatScreen" 
-            component={ChatScreen} 
-            options={{ headerShown: false }}
+          <Stack.Screen
+            name="ChatScreen"
+            component={ChatScreen}
+            options={{headerShown: false}}
           />
-          <Stack.Screen 
-            name="PaymentScreen" 
-            component={PaymentScreen} 
-            options={{ headerShown: false }}
+          <Stack.Screen
+            name="PaymentScreen"
+            component={PaymentScreen}
+            options={{headerShown: false}}
           />
         </Stack.Navigator>
       </NavigationContainer>
