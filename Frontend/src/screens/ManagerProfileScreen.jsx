@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -29,9 +29,24 @@ const ManagerProfileScreen = () => {
   ];
 
   const handleRemove = id => {
-    // Implement your remove logic here
-    console.log(`Remove button clicked for ID: ${id}`);
+    const newData = data.filter(item => item.id !== id);
+    setData(newData);
   };
+
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [userType, setUserType] = useState('');
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      setUsername(user?._j?.userInfo?.username);
+      setEmail(user?._j?.userInfo?.email);
+      setPassword(user?._j?.userInfo?.password);
+      setUserType(user?._j.userInfo?.userType);
+    };
+    getUserInfo();
+  }, []);
 
   const renderTable = () => (
     <View style={Styles.table}>
@@ -101,7 +116,7 @@ const ManagerProfileScreen = () => {
           <View style={Styles.inputWrapper}>
             <TextInput
               style={[Styles.input, {textAlign: 'left'}]}
-              placeholder={user._j.userInfo.username}
+              placeholder={username}
               underlineColorAndroid="transparent"
               editable={isEditable}
             />
@@ -118,7 +133,7 @@ const ManagerProfileScreen = () => {
           <View style={Styles.inputWrapper}>
             <TextInput
               style={[Styles.input, {textAlign: 'left'}]}
-              placeholder={user._j.userInfo.userType}
+              placeholder={userType}
               underlineColorAndroid="transparent"
               editable={false}
             />
@@ -130,7 +145,7 @@ const ManagerProfileScreen = () => {
           <View style={Styles.inputWrapper}>
             <TextInput
               style={[Styles.input, {textAlign: 'left'}]}
-              placeholder={user._j.userInfo.email}
+              placeholder={email}
               underlineColorAndroid="transparent"
               editable={isEditable}
             />

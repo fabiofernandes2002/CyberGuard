@@ -61,10 +61,6 @@ const SurveyDetailsScreen = () => {
         <Text style={Styles.questionNumber}>
           {currentQuestionNumber}/{totalQuestions}
         </Text>
-        {/* Barra do progresso das perguntas */}
-        {/* <View style={Styles.progressBar}>
-                    <ProgressBar progress={progress} color="#00428A" style={Styles.progressBar} />
-                </View> */}
         <View style={Styles.progressBar}>
           <Center w="100%">
             <Box w="90%" maxW="400">

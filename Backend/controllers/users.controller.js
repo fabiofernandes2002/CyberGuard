@@ -4,72 +4,111 @@ const companies = require('../models/company.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 let secret = '%)$2sF55Idf(Rm&jyPnkqAL^+8m4dSw)';
-const { validationResult } = require('express-validator');
+const {
+  validationResult
+} = require('express-validator');
 
 const cloudinary = require('cloudinary').v2;
 
-cloudinary.config({ 
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
-  secure: true
+  secure: true,
 });
 
 // Registar um novo utilizador (username, email, password, confirmPassword, userType, isOwner, companyName, company)
 exports.register = async function (req, res) {
   try {
-    const { username, email, password, confirmPassword, userType, isOwner, companyName, company } =
-      req.body;
+    const {
+      username,
+      email,
+      password,
+      confirmPassword,
+      userType,
+      isOwner,
+      companyName,
+      company
+    } =
+    req.body;
 
     if (userType === 'empresarial' && isOwner && !companyName) {
-      return res.status(400).json({ message: 'Por favor, forneça um nome de empresa.' });
+      return res.status(400).json({
+        message: 'Por favor, forneça um nome de empresa.'
+      });
     }
 
     let companyExists;
     if (userType === 'empresarial' && isOwner) {
-      companyExists = await companies.findOne({ name: companyName });
+      companyExists = await companies.findOne({
+        name: companyName
+      });
       if (companyExists) {
-        return res.status(400).json({ message: 'O nome da empresa já existe.' });
+        return res.status(400).json({
+          message: 'O nome da empresa já existe.'
+        });
       }
 
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({
+          errors: errors.array()
+        });
       }
     }
 
     if (userType === 'empresarial' && !isOwner) {
       if (!company) {
-        return res.status(400).json({ message: 'Por favor, escolha uma empresa.' });
+        return res.status(400).json({
+          message: 'Por favor, escolha uma empresa.'
+        });
       }
 
-      companyExists = await companies.findOne({ name: company });
+      companyExists = await companies.findOne({
+        name: company
+      });
       if (!companyExists) {
-        return res.status(400).json({ message: 'A empresa escolhida não existe.' });
+        return res.status(400).json({
+          message: 'A empresa escolhida não existe.'
+        });
       }
     }
 
     const companiesVerify = await companies.find();
     if (companiesVerify.length === 0) {
-      return res.status(400).json({ message: 'Não há empresas disponíveis.' });
+      return res.status(400).json({
+        message: 'Não há empresas disponíveis.'
+      });
     }
 
     if (userType !== 'empresarial' && (companyName || company)) {
-      return res.status(400).json({ message: 'O userType deve ser normal ou empresarial.' });
+      return res.status(400).json({
+        message: 'O userType deve ser normal ou empresarial.'
+      });
     }
 
-    const userExists = await users.findOne({ username });
+    const userExists = await users.findOne({
+      username
+    });
     if (userExists) {
-      return res.status(400).json({ message: 'O username já existe.' });
+      return res.status(400).json({
+        message: 'O username já existe.'
+      });
     }
 
-    const emailExists = await users.findOne({ email });
+    const emailExists = await users.findOne({
+      email
+    });
     if (emailExists) {
-      return res.status(400).json({ message: 'O email já existe.' });
+      return res.status(400).json({
+        message: 'O email já existe.'
+      });
     }
 
     if (password !== confirmPassword) {
-      return res.status(400).json({ message: 'As passwords não coincidem.' });
+      return res.status(400).json({
+        message: 'As passwords não coincidem.'
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -84,7 +123,11 @@ exports.register = async function (req, res) {
     await user.save();
 
     if (userType === 'empresarial' && isOwner) {
-      const newCompany = new companies({ name: companyName, owner: user._id, users: [] });
+      const newCompany = new companies({
+        name: companyName,
+        owner: user._id,
+        users: []
+      });
       await newCompany.save();
       user.company = newCompany._id;
       await user.save();
@@ -102,7 +145,9 @@ exports.register = async function (req, res) {
       user: user,
     });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({
+      message: error.message
+    });
   }
 };
 
@@ -114,7 +159,9 @@ exports.login = (req, res) => {
     })
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: 'Utilizador não encontrado!' });
+        return res.status(404).send({
+          message: 'Utilizador não encontrado!'
+        });
       }
 
       let passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
@@ -126,15 +173,13 @@ exports.login = (req, res) => {
         });
       }
 
-      const token = jwt.sign(
-        {
+      const token = jwt.sign({
           id: user._id,
           userType: user.userType,
           username: user.username,
           isOwner: user.isOwner,
         },
-        secret,
-        {
+        secret, {
           expiresIn: 86400, // expires in 24 hours
         }
       );
@@ -142,6 +187,7 @@ exports.login = (req, res) => {
       res.status(200).send({
         id: user._id,
         userInfo: {
+          id: user._id,
           username: user.username,
           email: user.email,
           userType: user.userType,
@@ -162,7 +208,9 @@ exports.login = (req, res) => {
         }); */
     })
     .catch((err) => {
-      res.status(500).send({ message: err.message });
+      res.status(500).send({
+        message: err.message
+      });
     });
 };
 
@@ -224,7 +272,6 @@ exports.getUserById = async (req, res) => {
 // Editar um utilizador específico por id (requer autenticação web token) só proprio utilizador (username, email, password)
 exports.editUserById = async (req, res) => {
   try {
-
     let photo = '';
     if (req.loggedUserId !== req.params.id)
       return res.status(403).json({
@@ -232,10 +279,15 @@ exports.editUserById = async (req, res) => {
         msg: 'Não tenho premissão para editar este utilizador.',
       });
 
-    const { username, email, password, confirmPassword } = req.body;
+    const {
+      username,
+      email,
+      password,
+      confirmPassword
+    } = req.body;
 
     const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "usersPhotos",
+      folder: 'usersPhotos',
     });
 
     photo = result.url;
@@ -243,25 +295,33 @@ exports.editUserById = async (req, res) => {
     // Excluir o arquivo temporário
     fs.unlink(req.file.path, (err) => {
       if (err) {
-          console.error("Erro ao excluir o arquivo temporário", err);
+        console.error("Erro ao excluir o arquivo temporário", err);
       } else {
-          console.log("Arquivo temporário excluído com sucesso");
+        console.log("Arquivo temporário excluído com sucesso");
       }
     });
 
     // Verificar se o username já existe
     if (username) {
-      const userExists = await users.findOne({ username });
+      const userExists = await users.findOne({
+        username
+      });
       if (userExists) {
-        return res.status(400).json({ message: 'O username já existe.' });
+        return res.status(400).json({
+          message: 'O username já existe.'
+        });
       }
     }
 
     // Verificar se o email já existe
     if (email) {
-      const emailExists = await users.findOne({ email });
+      const emailExists = await users.findOne({
+        email
+      });
       if (emailExists) {
-        return res.status(400).json({ message: 'O email já existe.' });
+        return res.status(400).json({
+          message: 'O email já existe.'
+        });
       }
     }
 
@@ -272,24 +332,30 @@ exports.editUserById = async (req, res) => {
         if (user.password === password) {
           return res
             .status(400)
-            .json({ message: 'A nova password deve ser diferente da password atual.' });
+            .json({
+              message: 'A nova password deve ser diferente da password atual.'
+            });
         }
       } else {
-        return res.status(400).json({ message: 'As passwords não correspondem.' });
+        return res.status(400).json({
+          message: 'As passwords não correspondem.'
+        });
       }
     } else {
-      return res.status(400).json({ message: 'Por favor, confirme a nova password.' });
+      return res.status(400).json({
+        message: 'Por favor, confirme a nova password.'
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const updatedUser = await users.findByIdAndUpdate(
-      req.params.id,
-      {
+      req.params.id, {
         username,
         email,
         password: hashedPassword,
-      },
-      { new: true }
+      }, {
+        new: true
+      }
     );
 
     if (!updatedUser)
@@ -362,7 +428,9 @@ exports.getAllUsersByCompanyId = async (req, res) => {
         success: false,
         msg: 'Apenas o administrador ou o proprietário da empresa podem aceder a esta funcionalidade!',
       });
-    let usersListCompany = await users.find({ company: req.params.id });
+    let usersListCompany = await users.find({
+      company: req.params.id
+    });
     if (!usersListCompany)
       return res.status(404).json({
         success: false,
@@ -416,15 +484,25 @@ exports.submitSurvey = async (req, res) => {
       }
 
       // Salve a pontuação e o status no modelo do usuário
-      user.surveys.push({ surveyResult: totalScore, surveyStatus: true });
+      user.surveys.push({
+        surveyResult: totalScore,
+        surveyStatus: true
+      });
       await user.save();
 
-      res.json({ message: 'O questionário foi respondido com sucesso.', totalScore });
+      res.json({
+        message: 'O questionário foi respondido com sucesso.',
+        totalScore
+      });
     } else {
-      res.json({ message: 'O questionário já foi respondido.' });
+      res.json({
+        message: 'O questionário já foi respondido.'
+      });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Erro interno do servidor' });
+    res.status(500).json({
+      error: 'Erro interno do servidor'
+    });
   }
 };

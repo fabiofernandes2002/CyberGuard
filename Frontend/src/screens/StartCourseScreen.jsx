@@ -13,15 +13,18 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
 import SetaEsquerda from '../assets/SetaEsquerda.svg';
 import MenuHamburguer from '../components/Menu';
-import Star from '../assets/star.svg';
+import Star from '../assets/StarAvaliacao.svg';
+import Coracao from '../assets/Coração.svg';
+import Play from '../assets/Play.svg';
 import CoursesService from '../services/courses.services';
-import Video from 'react-native-video';
-import VideoPlayer from 'react-native-video-controls';
-import YouTube from 'react-native-youtube';
+import YoutubePlayer from "react-native-youtube-iframe";
 
 const CoursesDetailsScreen = ({route}) => {
   const {courseId} = route.params;
   const [courses, setCourses] = useState([]);
+  const [playing, setPlaying] = useState(false);
+  const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const [viewedVideos, setViewedVideos] = useState([]);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -44,12 +47,25 @@ const CoursesDetailsScreen = ({route}) => {
 
   const navigation = useNavigation();
 
+  const handleButtonStartEvaluationPress = () => {
+    navigation.navigate('EvaluationScreen', {courseId: course._id});
+  };
+
+
   // Função para extrair o ID do vídeo do YouTube a partir da URL
   const extractYouTubeId = url => {
-    console.log('url:', url);
+    if (typeof url !== 'string') return null;
+  
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  const handleVideoPress = (videoId) => {
+    setSelectedVideoId(extractYouTubeId(videoId));
+    if (!viewedVideos.includes(videoId)) {
+      setViewedVideos([...viewedVideos, videoId]);
+    }
   };
 
   return (
@@ -70,11 +86,29 @@ const CoursesDetailsScreen = ({route}) => {
             <Text style={Styles.title}>{course.nameCourse}</Text>
             <View>
               <View style={Styles.card}>
-                <View style={Styles.cardImage}>
-                  <View style={Styles.imageCourse}>
-                    <Image style={Styles.imageCourse} source={{uri: course.imgURL}} />
+              <View style={Styles.cardImage}>
+                  <View style={{ 
+                    flex: 1, 
+                    marginTop: selectedVideoId ? 100 : 30,
+                    justifyContent: 'center', 
+                    alignItems: 'center' 
+                  }}>
+                    {selectedVideoId ? (
+                      <YoutubePlayer
+                        height={266}
+                        width={288}
+                        play={playing}
+                        videoId={selectedVideoId}
+                      />
+                    ) : (
+                      <View>
+                        <Image style={Styles.imageCourse} source={{uri: course.imgURL}} />
+                        <Play width={70} height={78} style={{ position: 'absolute', top: '50%', left: '50%', transform: [{ translateX: -50 }, { translateY: -50 }] }} />
+                      </View>
+                    )}
                   </View>
                 </View>
+
                 <View style={Styles.titleRating}>
                   <Text style={Styles.courseTitle}>Categorias de Malware</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -84,29 +118,48 @@ const CoursesDetailsScreen = ({route}) => {
                 <View>
                   {/* View para flatlist para renderizar os videos do curso */}
                   <View style={Styles.containerVideos}>
-                  <YouTube
-                  videoId="LSUwfF9lvgw" // ID do vídeo do YouTube
-                  play // controla a reprodução do vídeo
-                  fullscreen // controla se o vídeo preenche a tela
-                  loop // controla se o vídeo deve fazer loop
-                  style={Styles.video}
-                  onError={e => console.log(e)} // Callback para erros
-                />
-                <YouTube
-  videoId="LSUwfF9lvgw" // The YouTube video ID
-  play // control playback of video with true/false
-  fullscreen // control whether the video should play in fullscreen or inline
-  loop // control whether the video should loop when ended
-  onReady={e => this.setState({ isReady: true })}
-  onChangeState={e => this.setState({ status: e.state })}
-  onChangeQuality={e => this.setState({ quality: e.quality })}
-  onError={e => this.setState({ error: e.error })}
-  style={{ alignSelf: 'stretch', height: 300 }}
-/>
-
+                  <FlatList
+                    data={course.videos}
+                    nestedScrollEnabled
+                    keyExtractor={(item) => item.videoURL}
+                    renderItem={({ item }) => {
+                      return (
+                        <TouchableOpacity onPress={() => handleVideoPress(item.videoURL)}>
+                          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20, borderBottomWidth: 2, borderBottomColor: '#E70D79' }}>
+                          <View style={{ position: 'relative' }}>
+                            <Image style={Styles.imgVideo} source={{uri: course.imgURL}} />
+                            <Play width={35} height={35} style={{ position: 'absolute', top: '40%', left: '50%', transform: [{ translateX: -17.5 }, { translateY: -17.5 }] }} />
+                          </View>
+                            <View>
+                              <Text style={Styles.videoTitle}>{item.title}</Text>
+                              <Text style={Styles.videoDuration}>{Math.floor(item.duration / 60)}:{item.duration % 60}</Text>
+                            </View>
+                          </View>
+                        </TouchableOpacity>
+                      );
+                    }}
+                  />
+                  </View>
+                  <Text style={Styles.courseRating}>Avaliação do curso</Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginTop: 10,
+                    }}>
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} width={35} height={35} style={{marginRight: 10}} />
+                    ))}
+                    <Coracao width={30} height={30} style={{marginLeft: 40}} />
                   </View>
                   <View style={Styles.button}>
-                    <Text style={Styles.buttonText}>Começar curso</Text>
+                    <TouchableOpacity 
+                      disabled={course.videos.length !== viewedVideos.length} 
+                      style={course.videos.length !== viewedVideos.length ? { opacity: 0.5 } : {}}
+                      onPress={handleButtonStartEvaluationPress}
+                    >
+                      <Text style={[Styles.buttonText, course.videos.length !== viewedVideos.length ? { opacity: 0.5 } : {}]}>Começar Teste</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
@@ -180,7 +233,8 @@ const Styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    marginTop: 10,
+    marginTop: 30,
+    marginBottom: 30,
   },
   textDescription: {
     fontFamily: 'Raleway-Regular',
@@ -190,15 +244,31 @@ const Styles = StyleSheet.create({
   },
   courseTitle: {
     fontFamily: 'Supply-Bold',
-    fontSize: 17,
+    fontSize: 18,
+    color: '#1B1B1E',
+    marginRight: 10,
+  },
+  videoTitle: {
+    fontFamily: 'Supply-Bold',
+    fontSize: 15,
+    color: '#1B1B1E',
+    marginRight: 10,
+    marginTop: -20,
+    marginVertical: 10,
+  },
+  videoDuration: {
+    fontFamily: 'Supply-Regular',
+    fontSize: 15,
     color: '#1B1B1E',
     marginRight: 10,
   },
   courseRating: {
-    fontFamily: 'Supply-Medium',
-    fontSize: 15,
+    fontFamily: 'Supply-Bold',
+    fontSize: 18,
     color: '#1B1B1E',
     marginRight: -10,
+    marginTop: 50,
+    marginBottom: 20,
   },
   card: {
     width: '80%',
@@ -217,6 +287,7 @@ const Styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
+    backgroundColor: '#6E0271',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 7.5,
@@ -225,6 +296,7 @@ const Styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
+    marginTop: 50,
   },
   buttonText: {
     color: '#F7F7F7',
@@ -243,6 +315,13 @@ const Styles = StyleSheet.create({
     alignSelf: 'stretch',
     height: 300,
     marginTop: 20
+  },
+  imgVideo: {
+    width: 100,
+    height: 70,
+    borderRadius: 10,
+    marginRight: 10,
+    marginBottom: 20,
   },
 });
 

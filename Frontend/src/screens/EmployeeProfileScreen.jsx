@@ -22,48 +22,39 @@ const user = AuthService.getUserLogged();
 const EmployeeProfileScreen = () => {
   const navigation = useNavigation();
 
-  const handleCourseDetailsScreen = item => {
-    navigation.navigate('CoursesDetailsScreen', {courseId: item.id});
-  };
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [userType, setUserType] = useState('');
 
-  const courses = [
-    {
-      id: '1',
-      name: 'Direitos Individuais',
-      image: require('../assets/course1.png'),
-      price: '20.99€',
-      rating: 120,
-      description:
-        'Explora os fundamentos dos direitos individuais no nosso curso. Capacita-te na compreensão e defesa dos teus direitos online.',
-    },
-    {
-      id: '2',
-      name: 'Malware',
-      image: require('../assets/course2.png'),
-      price: false,
-      rating: 120,
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae eros quis nisl aliquam aliquet. Sed vitae eros quis nisl aliquam aliquet.',
-    },
-    {
-      id: '3',
-      name: 'Proteção de Dados',
-      image: require('../assets/course3.png'),
-      price: '20.99€',
-      rating: 120,
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae eros quis nisl aliquam aliquet. Sed vitae eros quis nisl aliquam aliquet.',
-    },
-    {
-      id: '4',
-      name: 'Marketing Digital Ético',
-      image: require('../assets/course4.png'),
-      price: '20.99€',
-      rating: 120,
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae eros quis nisl aliquam aliquet. Sed vitae eros quis nisl aliquam aliquet.',
-    },
-  ];
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        setUsername(user._j.userInfo.username);
+        setEmail(user._j.userInfo.email);
+        setPassword(user._j.userInfo.password);
+        setUserType(user._j.userInfo.userType);
+      } catch (error) {
+        console.error('Error retrieving user information:', error.message);
+        throw error;
+      }
+    };
+    getUserInfo();
+
+    const fetchCourses = async () => {
+      try {
+        const coursesData = await CoursesService.getAllCourses();
+        setCourses(coursesData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  const handleCourseDetailsScreen = item => {
+    navigation.navigate('CoursesDetailsScreen', {courseId: item._id});
+  };
 
   return (
     <LinearGradient
@@ -118,7 +109,7 @@ const EmployeeProfileScreen = () => {
             <View style={Styles.inputWrapper}>
               <TextInput
                 style={[Styles.input, {textAlign: 'left'}]}
-                placeholder={user._j.userInfo.username}
+                placeholder={username}
                 underlineColorAndroid="transparent"
                 editable={false}
               />
@@ -131,7 +122,7 @@ const EmployeeProfileScreen = () => {
             <View style={Styles.inputWrapper}>
               <TextInput
                 style={[Styles.input, {textAlign: 'left'}]}
-                placeholder={user._j.userInfo.userType}
+                placeholder={userType}
                 underlineColorAndroid="transparent"
                 editable={false}
               />
@@ -144,7 +135,7 @@ const EmployeeProfileScreen = () => {
             <View style={Styles.inputWrapper}>
               <TextInput
                 style={[Styles.input, {textAlign: 'left'}]}
-                placeholder={user._j.userInfo.email}
+                placeholder={email}
                 underlineColorAndroid="transparent"
                 editable={false}
               />
@@ -161,9 +152,12 @@ const EmployeeProfileScreen = () => {
                     key={index}
                     style={Styles.card}
                     onPress={() => handleCourseDetailsScreen(course)}>
-                    <Card.Cover style={{height: 150}} source={course.image} />
+                    <Card.Cover
+                      style={{height: 150}}
+                      source={{uri: course.imgURL}}
+                    />
                     <Card.Content>
-                      <Text style={Styles.cardTitle}>{course.name}</Text>
+                      <Text style={Styles.cardTitle}>{course.nameCourse}</Text>
                       <View
                         style={{
                           flexDirection: 'row',

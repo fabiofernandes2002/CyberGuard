@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -23,15 +23,12 @@ import {Card} from 'react-native-paper';
 import Star from '../assets/star.svg';
 import AuthService from '../services/auth.service';
 import MenuHamburguer from '../components/Menu';
+import CoursesService from '../services/courses.services';
 
 const user = AuthService.getUserLogged();
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
-
-  const handleCourseDetailsScreen = item => {
-    navigation.navigate('CoursesDetailsScreen', {courseId: item.id});
-  };
 
   const [isEditable, setIsEditable] = useState(false);
 
@@ -43,44 +40,37 @@ const ProfileScreen = () => {
 
   const progress = (currentXP / nextLevelXP) * 100;
 
-  const courses = [
-    {
-      id: '1',
-      name: 'Direitos Individuais',
-      image: require('../assets/course1.png'),
-      price: '20.99€',
-      rating: 120,
-      description:
-        'Explora os fundamentos dos direitos individuais no nosso curso. Capacita-te na compreensão e defesa dos teus direitos online.',
-    },
-    {
-      id: '2',
-      name: 'Malware',
-      image: require('../assets/course2.png'),
-      price: false,
-      rating: 120,
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae eros quis nisl aliquam aliquet. Sed vitae eros quis nisl aliquam aliquet.',
-    },
-    {
-      id: '3',
-      name: 'Proteção de Dados',
-      image: require('../assets/course3.png'),
-      price: '20.99€',
-      rating: 120,
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae eros quis nisl aliquam aliquet. Sed vitae eros quis nisl aliquam aliquet.',
-    },
-    {
-      id: '4',
-      name: 'Marketing Digital Ético',
-      image: require('../assets/course4.png'),
-      price: '20.99€',
-      rating: 120,
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae eros quis nisl aliquam aliquet. Sed vitae eros quis nisl aliquam aliquet.',
-    },
-  ];
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [userType, setUserType] = useState('');
+
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      setUsername(user?._j?.userInfo?.username);
+      setEmail(user?._j?.userInfo?.email);
+      setPassword(user?._j?.userInfo?.password);
+      setUserType(user?._j?.userInfo.userType);
+    };
+    getUserInfo();
+
+    const fetchCourses = async () => {
+      try {
+        const coursesData = await CoursesService.getAllCourses();
+        setCourses(coursesData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  const handleCourseDetailsScreen = item => {
+    navigation.navigate('CoursesDetailsScreen', {courseId: item._id});
+  };
 
   return (
     <LinearGradient
@@ -135,7 +125,7 @@ const ProfileScreen = () => {
             <View style={Styles.inputWrapper}>
               <TextInput
                 style={[Styles.input, {textAlign: 'left'}]}
-                placeholder={user._j.userInfo.username}
+                placeholder={username}
                 underlineColorAndroid="transparent"
                 editable={isEditable}
               />
@@ -153,7 +143,7 @@ const ProfileScreen = () => {
             <View style={Styles.inputWrapper}>
               <TextInput
                 style={[Styles.input, {textAlign: 'left'}]}
-                placeholder={user._j.userInfo.userType}
+                placeholder={userType}
                 underlineColorAndroid="transparent"
                 editable={false}
               />
@@ -166,7 +156,7 @@ const ProfileScreen = () => {
             <View style={Styles.inputWrapper}>
               <TextInput
                 style={[Styles.input, {textAlign: 'left'}]}
-                placeholder={user._j.userInfo.email}
+                placeholder={email}
                 underlineColorAndroid="transparent"
                 editable={isEditable}
               />
@@ -247,13 +237,16 @@ const ProfileScreen = () => {
                     key={index}
                     style={Styles.card}
                     onPress={() => handleCourseDetailsScreen(course)}>
-                    <Card.Cover style={{height: 150}} source={course.image} />
+                    <Card.Cover
+                      style={{height: 150}}
+                      source={{uri: course.imgURL}}
+                    />
                     <Card.Content>
-                      <Text style={Styles.cardTitle}>{course.name}</Text>
+                      <Text style={Styles.cardTitle}>{course.nameCourse}</Text>
                       <Text style={Styles.cardPrice}>
-                        {course.price === false ? 'FREE' : course.price}
+                        {course.price ? course.price : 'FREE'}
                       </Text>
-                      {/* adicionar a imagem svg star */}
+
                       <View
                         style={{
                           flexDirection: 'row',
