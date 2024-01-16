@@ -8,11 +8,11 @@ const { validationResult } = require('express-validator');
 
 const cloudinary = require('cloudinary').v2;
 
-cloudinary.config({ 
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
-  secure: true
+  secure: true,
 });
 
 // Registar um novo utilizador (username, email, password, confirmPassword, userType, isOwner, companyName, company)
@@ -224,7 +224,6 @@ exports.getUserById = async (req, res) => {
 // Editar um utilizador específico por id (requer autenticação web token) só proprio utilizador (username, email, password)
 exports.editUserById = async (req, res) => {
   try {
-
     let photo = '';
     if (req.loggedUserId !== req.params.id)
       return res.status(403).json({
@@ -235,7 +234,7 @@ exports.editUserById = async (req, res) => {
     const { username, email, password, confirmPassword } = req.body;
 
     const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "usersPhotos",
+      folder: 'usersPhotos',
     });
 
     photo = result.url;
@@ -243,9 +242,9 @@ exports.editUserById = async (req, res) => {
     // Excluir o arquivo temporário
     fs.unlink(req.file.path, (err) => {
       if (err) {
-          console.error("Erro ao excluir o arquivo temporário", err);
+        console.error('Erro ao excluir o arquivo temporário', err);
       } else {
-          console.log("Arquivo temporário excluído com sucesso");
+        console.log('Arquivo temporário excluído com sucesso');
       }
     });
 

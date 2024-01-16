@@ -11,7 +11,7 @@ exports.createChat = async function (req, res) {
         msg: 'Você deve estar autenticado para realizar esta solicitação!',
       });
     }
-    
+
     const { content } = req.body;
     const loggedUserId = req.loggedUserId;
 
@@ -24,7 +24,9 @@ exports.createChat = async function (req, res) {
     // Criar um novo chat
     const chat = new chats({
       participants: [loggedUserId],
-      messages: [{ userId: loggedUserId, username: userExists.username, content, time: Date.now() }], 
+      messages: [
+        { userId: loggedUserId, username: userExists.username, content, time: Date.now() },
+      ],
     });
 
     await chat.save();
@@ -81,7 +83,12 @@ exports.addMessageToChat = async function (req, res) {
     const isParticipant = chat.participants.includes(loggedUserId);
 
     // Adicionar a nova mensagem ao chat
-    chat.messages.push({ userId: loggedUserId, username: user.username, content, time: Date.now() });
+    chat.messages.push({
+      userId: loggedUserId,
+      username: user.username,
+      content,
+      time: Date.now(),
+    });
 
     // Adicionar o novo participante ao chat, se ainda não estiver na lista
     if (!isParticipant) {
