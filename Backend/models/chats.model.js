@@ -4,6 +4,7 @@ const schema = new mongoose.Schema(
     messages: [
       {
         content: { type: String, required: true },
+        username: { type: String },
         userId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
         time: { type: Date, default: Date.now },
       },

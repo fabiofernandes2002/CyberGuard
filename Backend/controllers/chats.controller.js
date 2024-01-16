@@ -11,32 +11,29 @@ exports.createChat = async function (req, res) {
         msg: 'Você deve estar autenticado para realizar esta solicitação!',
       });
     }
-    const { userId, content } = req.body;
+
+    const { content } = req.body;
     const loggedUserId = req.loggedUserId;
 
-    // Verificar se o userId existe
-    const userExists = await users.findById(userId);
+    // Verificar se o loggedUserId existe
+    const userExists = await users.findById(loggedUserId);
     if (!userExists) {
-      return res.status(400).json({ message: 'O userId não existe.' });
-    }
-
-    // Verificar se o content é uma string
-    if (typeof content !== 'string') {
-      return res.status(400).json({ message: 'O content não é uma string.' });
+      return res.status(400).json({ message: 'O loggedUserId não existe.' });
     }
 
     // Criar um novo chat
     const chat = new chats({
       participants: [loggedUserId],
-      messages: [{ userId: loggedUserId, content, time: Date.now() }],
+      messages: [
+        { userId: loggedUserId, username: userExists.username, content, time: Date.now() },
+      ],
     });
 
     await chat.save();
 
-    // Adicionar o chatId ao model de utilizadores
-    const user = await users.findById(loggedUserId);
-    user.chatId.push(chat._id);
-    await user.save();
+    // Adicionar o chatId ao modelo de usuários
+    userExists.chatId.push(chat._id);
+    await userExists.save();
 
     res.status(201).json({
       success: true,
@@ -63,6 +60,12 @@ exports.addMessageToChat = async function (req, res) {
     const { chatId, content } = req.body;
     const loggedUserId = req.loggedUserId;
 
+    // Buscar o usuário pelo loggedUserId
+    const user = await users.findById(loggedUserId);
+    if (!user) {
+      return res.status(400).json({ message: 'O usuário não existe.' });
+    }
+
     // Verificar se o chatId foi fornecido
     if (!chatId) {
       return res
@@ -80,7 +83,12 @@ exports.addMessageToChat = async function (req, res) {
     const isParticipant = chat.participants.includes(loggedUserId);
 
     // Adicionar a nova mensagem ao chat
-    chat.messages.push({ userId: loggedUserId, content, time: Date.now() });
+    chat.messages.push({
+      userId: loggedUserId,
+      username: user.username,
+      content,
+      time: Date.now(),
+    });
 
     // Adicionar o novo participante ao chat, se ainda não estiver na lista
     if (!isParticipant) {
@@ -90,7 +98,6 @@ exports.addMessageToChat = async function (req, res) {
     await chat.save();
 
     // Adicionar o chatId ao model de utilizadores se o utilizador não estiver no chat
-    const user = await users.findById(loggedUserId);
     if (!user.chatId.includes(chatId)) {
       user.chatId.push(chatId);
       await user.save();
@@ -100,6 +107,23 @@ exports.addMessageToChat = async function (req, res) {
       success: true,
       msg: 'Mensagem adicionada ao chat com sucesso!',
       chat: chat,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      msg: error.message || 'Algo correu mal, tente novamente mais tarde.',
+    });
+  }
+};
+
+// getAllChats - Obter todos os chats de todo o sistema
+exports.getAllChats = async function (req, res) {
+  try {
+    const chatsList = await chats.find();
+    res.status(200).json({
+      success: true,
+      msg: 'Lista de chats obtida com sucesso!',
+      chats: chatsList,
     });
   } catch (error) {
     res.status(500).json({

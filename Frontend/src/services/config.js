@@ -1,3 +1,3 @@
-const API_URL = 'http://192.168.1.10:8000';
+const API_URL = 'http://172.23.114.245:8000';
 // https://cyberguard.onrender.com
 export default API_URL;

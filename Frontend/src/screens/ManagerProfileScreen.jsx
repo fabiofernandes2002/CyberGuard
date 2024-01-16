@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,139 +6,190 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
 import {Avatar, VStack, NativeBaseProvider} from 'native-base';
 import MenuHamburguer from '../components/Menu';
+import AuthService from '../services/auth.service';
+
+const user = AuthService.getUserLogged();
 
 const ManagerProfileScreen = () => {
   const navigation = useNavigation();
-  const [isEditable, setIsEditable] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
+
+  const data = [
+    {id: 1, name: 'Sofia', difficulty: 'Criptografia'},
+    {id: 2, name: 'Carlos', difficulty: 'Segurança em Nuvem'},
+    {id: 3, name: 'Emilia', difficulty: 'Blockchain'},
+    {id: 4, name: 'Lucas', difficulty: 'Privacidade de dados'},
+    {id: 5, name: 'Ana', difficulty: 'Técnicas de Deteção de Ameaças'},
+  ];
+
+  const handleRemove = id => {
+    const newData = data.filter(item => item.id !== id);
+    setData(newData);
+  };
+
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [userType, setUserType] = useState('');
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      setUsername(user?._j?.userInfo?.username);
+      setEmail(user?._j?.userInfo?.email);
+      setPassword(user?._j?.userInfo?.password);
+      setUserType(user?._j.userInfo?.userType);
+    };
+    getUserInfo();
+  }, []);
+
+  const renderTable = () => (
+    <View style={Styles.table}>
+      <View style={[Styles.row, Styles.headerRow]}>
+        <Text style={Styles.headerCell}>Name</Text>
+        <Text style={Styles.headerCell}>Difficulty</Text>
+        <Text style={[Styles.headerCell, Styles.actionHeaderCell]}>Action</Text>
+      </View>
+      {data.map(item => (
+        <View key={item.id} style={Styles.row}>
+          <Text style={Styles.cell}>{item.name}</Text>
+          <Text style={Styles.cell}>{item.difficulty}</Text>
+          <TouchableOpacity
+            style={Styles.actionButton}
+            onPress={() => handleRemove(item.id)}>
+            <Text style={Styles.actionButtonText}>Remove</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
+    </View>
+  );
 
   return (
     <LinearGradient
       colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']}
       style={Styles.container}>
-      <View style={Styles.Menu}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Image
-            source={require('../assets/logo_semfundo.png')}
-            style={Styles.logo}
-            resizeMode="contain"
-          />
-          <View>
-            <Text style={Styles.textC}>Cyber</Text>
-            <Text style={Styles.textG}>Guard</Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={Styles.Menu}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image
+              source={require('../assets/logo_semfundo.png')}
+              style={Styles.logo}
+              resizeMode="contain"
+            />
+            <View>
+              <Text style={Styles.textC}>Cyber</Text>
+              <Text style={Styles.textG}>Guard</Text>
+            </View>
+          </TouchableOpacity>
+          <NativeBaseProvider>
+            <MenuHamburguer />
+          </NativeBaseProvider>
+        </View>
+        <View style={Styles.container2}>
+          <Text style={Styles.title}>Perfil</Text>
+          <View style={Styles.profileDetails}>
+            <VStack
+              space={2}
+              alignItems={{
+                base: 'center',
+                md: 'flex-start',
+              }}>
+              <Avatar
+                bg="pink.600"
+                alignSelf="center"
+                size="2xl"
+                source={{
+                  uri: 'https://images.unsplash.com/photo-1601233749202-95d04d5b3c00?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2876&q=80',
+                }}></Avatar>
+            </VStack>
           </View>
-        </TouchableOpacity>
-        <NativeBaseProvider>
-          <MenuHamburguer />
-        </NativeBaseProvider>
-      </View>
-
-      <View style={Styles.container2}>
-        <Text style={Styles.title}>Perfil</Text>
-        <View style={Styles.profileDetails}>
-          <VStack
-            space={2}
-            alignItems={{
-              base: 'center',
-              md: 'flex-start',
-            }}>
-            <Avatar
-              bg="pink.600"
-              alignSelf="center"
-              size="2xl"
-              source={{
-                uri: 'https://images.unsplash.com/photo-1601233749202-95d04d5b3c00?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2876&q=80',
-              }}></Avatar>
-          </VStack>
         </View>
-      </View>
-
-      <View style={Styles.inputContainer}>
-        <Text>Nome</Text>
-        <View style={Styles.inputWrapper}>
-          <TextInput
-            style={[Styles.input, {textAlign: 'left'}]}
-            placeholder="John Doe"
-            underlineColorAndroid="transparent"
-            editable={isEditable}
-          />
+        <View style={Styles.inputContainer}>
+          <Text>Nome</Text>
+          <View style={Styles.inputWrapper}>
+            <TextInput
+              style={[Styles.input, {textAlign: 'left'}]}
+              placeholder={username}
+              underlineColorAndroid="transparent"
+              editable={isEditable}
+            />
+            <TouchableOpacity
+              style={Styles.editButton}
+              onPress={() => setIsEditable(!isEditable)}>
+              <Text>{isEditable ? '' : 'Editar'}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={Styles.underline}></View>
+        </View>
+        <View style={Styles.inputContainer}>
+          <Text>Tipo de Utilizador</Text>
+          <View style={Styles.inputWrapper}>
+            <TextInput
+              style={[Styles.input, {textAlign: 'left'}]}
+              placeholder={userType}
+              underlineColorAndroid="transparent"
+              editable={false}
+            />
+          </View>
+          <View style={Styles.underline}></View>
+        </View>
+        <View style={Styles.inputContainer}>
+          <Text>Email</Text>
+          <View style={Styles.inputWrapper}>
+            <TextInput
+              style={[Styles.input, {textAlign: 'left'}]}
+              placeholder={email}
+              underlineColorAndroid="transparent"
+              editable={isEditable}
+            />
+            <TouchableOpacity
+              style={Styles.editButton}
+              onPress={() => setIsEditable(!isEditable)}>
+              <Text>{isEditable ? '' : 'Editar'}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={Styles.underline}></View>
+        </View>
+        <View style={Styles.inputContainer}>
+          <Text>Password</Text>
+          <View style={Styles.inputWrapper}>
+            <TextInput
+              style={[Styles.input, {textAlign: 'left'}]}
+              placeholder="* * * * * * * *"
+              underlineColorAndroid="transparent"
+              secureTextEntry={true}
+              editable={isEditable}
+            />
+            <TouchableOpacity
+              style={Styles.editButton}
+              onPress={() => setIsEditable(!isEditable)}>
+              <Text>{isEditable ? '' : 'Editar'}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={Styles.underline}></View>
+        </View>
+        <View>
           <TouchableOpacity
-            style={Styles.editButton}
-            onPress={() => setIsEditable(!isEditable)}>
-            <Text>{isEditable ? '' : 'Editar'}</Text>
+            style={[
+              Styles.button,
+              {
+                backgroundColor: isEditable ? '#6E0271' : '#D9D9D9',
+              },
+            ]}
+            onPress={() => setIsEditable(!isEditable)}
+            disabled={!isEditable}>
+            <Text style={Styles.buttonText}>Salvar</Text>
           </TouchableOpacity>
         </View>
-        <View style={Styles.underline}></View>
-      </View>
-
-      <View style={Styles.inputContainer}>
-        <Text>Tipo de Utilizador</Text>
-        <View style={Styles.inputWrapper}>
-          <TextInput
-            style={[Styles.input, {textAlign: 'left'}]}
-            placeholder="Normal"
-            underlineColorAndroid="transparent"
-            editable={false}
-          />
-        </View>
-        <View style={Styles.underline}></View>
-      </View>
-
-      <View style={Styles.inputContainer}>
-        <Text>Email</Text>
-        <View style={Styles.inputWrapper}>
-          <TextInput
-            style={[Styles.input, {textAlign: 'left'}]}
-            placeholder="john@doe.com"
-            underlineColorAndroid="transparent"
-            editable={isEditable}
-          />
-          <TouchableOpacity
-            style={Styles.editButton}
-            onPress={() => setIsEditable(!isEditable)}>
-            <Text>{isEditable ? '' : 'Editar'}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={Styles.underline}></View>
-      </View>
-
-      <View style={Styles.inputContainer}>
-        <Text>Password</Text>
-        <View style={Styles.inputWrapper}>
-          <TextInput
-            style={[Styles.input, {textAlign: 'left'}]}
-            placeholder="* * * * * * * *"
-            underlineColorAndroid="transparent"
-            secureTextEntry={true}
-            editable={isEditable}
-          />
-          <TouchableOpacity
-            style={Styles.editButton}
-            onPress={() => setIsEditable(!isEditable)}>
-            <Text>{isEditable ? '' : 'Editar'}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={Styles.underline}></View>
-      </View>
-      <View>
-        <TouchableOpacity
-          style={[
-            Styles.button,
-            {
-              backgroundColor: isEditable ? '#6E0271' : '#D9D9D9',
-            },
-          ]}
-          onPress={() => setIsEditable(!isEditable)}
-          disabled={!isEditable}>
-          <Text style={Styles.buttonText}>Salvar</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={Styles.container}>{renderTable()}</View>
+      </ScrollView>
     </LinearGradient>
   );
 };
@@ -232,6 +283,65 @@ const Styles = StyleSheet.create({
     color: '#F7F7F7',
     fontSize: 17,
     fontFamily: 'Supply-Bold',
+    textAlign: 'center',
+  },
+  table: {
+    margin: 40,
+    borderWidth: 2,
+    borderColor: '#487281',
+    width: '110%',
+    borderRadius: 15,
+    backgroundColor: '#D8DBE2',
+  },
+  row: {
+    flexDirection: 'row',
+    borderBottomWidth: 0,
+  },
+  headerRow: {
+    backgroundColor: '#487281',
+    borderRadius: 10,
+    borderBottomWidth: 0,
+  },
+  cell: {
+    flex: 1,
+    padding: 10,
+    fontFamily: 'Raleway-Light',
+    fontSize: 10,
+    color: '#1B1B1E',
+    textAlign: 'center',
+  },
+  headerCell: {
+    flex: 1,
+    padding: 10,
+    fontFamily: 'Supply-Medium',
+    fontSize: 13,
+    color: '#F7F7F7',
+    textAlign: 'center',
+  },
+  actionHeaderCell: {
+    flex: 1,
+    textAlign: 'center',
+    fontFamily: 'Supply-Medium',
+    fontSize: 13,
+    color: '#F7F7F7',
+  },
+  actionButton: {
+    flex: 1,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+  },
+  actionButtonText: {
+    color: 'white',
+    fontFamily: 'Supply-Regular',
+    borderRadius: 20,
+    fontSize: 10,
+    backgroundColor: '#DC1F2B',
+    borderColor: '#710F20',
+    borderWidth: 3,
+    paddingTop: 4,
+    paddingHorizontal: 20,
     textAlign: 'center',
   },
 });

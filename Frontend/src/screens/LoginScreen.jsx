@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import LoginComponent from '../components/Login';
 import SetaEsquerda from '../assets/SetaEsquerda.svg';
 import AuthService from '../services/auth.service';
@@ -67,6 +67,11 @@ const LoginScreen = () => {
     }
   };
 
+  const handleButtonFAQPress = () => {
+    navigation.navigate('FaqsScreen');
+  };
+
+
   return (
     <LinearGradient
       colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']}
@@ -118,7 +123,7 @@ const LoginScreen = () => {
           </View>
           {/* TextFooter */}
           <View>
-            <Text style={Styles.textFooter}>
+            <Text style={Styles.textFooter} onPress={handleButtonFAQPress}>
               Precisas de ajuda? Visita as nossas FAQ`s
             </Text>
           </View>

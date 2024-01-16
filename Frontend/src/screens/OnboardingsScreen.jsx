@@ -17,6 +17,10 @@ const OnboardingsScreen = () => {
     navigation.navigate('RegistoScreen');
   };
 
+  const handleButtonFAQPress = () => {
+    navigation.navigate('FaqsScreen');
+  };
+
   return (
     <LinearGradient
       colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']}
@@ -56,8 +60,8 @@ const OnboardingsScreen = () => {
                 <Text style={styles.buttonText1}>Registo</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={() => {}}>
-              <Text style={styles.buttonText2}>FAQ´s</Text>
+            <TouchableOpacity onPress={handleButtonFAQPress}>
+              <Text style={styles.buttonText2}>FAQ's</Text>
             </TouchableOpacity>
           </View>
         </View>

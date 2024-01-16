@@ -61,7 +61,10 @@ const CoursesDetailsScreen = ({route}) => {
             <Text style={Styles.title}>{course.name}</Text>
             <View>
               <View style={Styles.card}>
-                <Image style={Styles.imageCourse} source={{uri: course.imgURL}} />
+                <Image
+                  style={Styles.imageCourse}
+                  source={{uri: course.imgURL}}
+                />
                 <View style={Styles.titleRating}>
                   <Text style={Styles.courseTitle}>
                     {course.nameCourse.replace(' ', '\n')}
@@ -85,18 +88,28 @@ const CoursesDetailsScreen = ({route}) => {
                   if (course.price && course.price !== 'FREE') {
                     navigation.navigate('PaymentScreen');
                   } else {
-                    navigation.navigate('StartCourseScreen', {courseId: course._id});
+                    navigation.navigate('StartCourseScreen', {
+                      courseId: course._id,
+                    });
                   }
-                }}
-                >
+                }}>
                 <View
                   style={[
                     Styles.button,
-                    {backgroundColor: course.price && course.price !== 'FREE' ? '#00428A' : '#6E0271'},
-                  ]}
-                  >
+                    {
+                      backgroundColor:
+                        course.price && course.price !== 'FREE'
+                          ? '#00428A'
+                          : '#6E0271',
+                    },
+                  ]}>
                   <Text style={Styles.buttonText}>
-                    {course.price && course.price !== 'FREE' ? 'Comprar curso' : 'Começar curso'}
+                    {course.price && course.price !== 'FREE'
+                      ? 'Comprar curso'
+                      : 'Começar curso'}
+                    {course.price && course.price !== 'FREE'
+                      ? 'Comprar curso'
+                      : 'Começar curso'}
                   </Text>
                 </View>
               </TouchableOpacity>

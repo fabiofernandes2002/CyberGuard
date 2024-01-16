@@ -32,13 +32,16 @@ const Flashcard = ({imgURL, backText, handleCardBackPress}) => {
           borderWidth: 1,
         }}>
         <TouchableOpacity onPress={handleCardBackPress}>
-          <Text style={{
-            fontSize: 13,
-            fontFamily: 'Supply-Medium',
-            textAlign: 'center',
-            padding: 2,
-            margin: 2,
-            }}>{backText}</Text>
+          <Text
+            style={{
+              fontSize: 13,
+              fontFamily: 'Supply-Medium',
+              textAlign: 'center',
+              padding: 2,
+              margin: 2,
+            }}>
+            {backText}
+          </Text>
         </TouchableOpacity>
       </View>
     </FlipCard>
