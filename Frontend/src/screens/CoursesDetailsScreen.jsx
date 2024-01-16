@@ -107,9 +107,6 @@ const CoursesDetailsScreen = ({route}) => {
                     {course.price && course.price !== 'FREE'
                       ? 'Comprar curso'
                       : 'Começar curso'}
-                    {course.price && course.price !== 'FREE'
-                      ? 'Comprar curso'
-                      : 'Começar curso'}
                   </Text>
                 </View>
               </TouchableOpacity>

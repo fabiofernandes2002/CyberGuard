@@ -21,7 +21,6 @@ import SurveyDetailsScreen from './src/screens/SurveyDetailsScreen';
 import ChatScreen from './src/screens/ChatScreen';
 import PaymentScreen from './src/screens/PaymentScreen';
 import StartCourseScreen from './src/screens/StartCourseScreen';
-import ChatScreen from './src/screens/ChatScreen';
 import EvaluationScreen from './src/screens/EvaluationScreen';
 import ResultEvaluationScreen from './src/screens/ResultEvaluationScreen';
 
@@ -107,9 +106,6 @@ const App = () => {
             component={StartCourseScreen}
             options={{headerShown: false}}
           />
-          <Stack.Screen name="FaqsScreen" component={FaqsScreen} options={{ headerShown: false }} /><Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="EvaluationScreen" component={EvaluationScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="ResultEvaluationScreen" component={ResultEvaluationScreen} options={{ headerShown: false }} />
           <Stack.Screen
             name="FaqsScreen"
             component={FaqsScreen}
@@ -118,6 +114,16 @@ const App = () => {
           <Stack.Screen
             name="ChatScreen"
             component={ChatScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="EvaluationScreen"
+            component={EvaluationScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ResultEvaluationScreen"
+            component={ResultEvaluationScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
