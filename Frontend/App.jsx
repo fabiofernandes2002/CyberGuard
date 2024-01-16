@@ -18,7 +18,6 @@ import ManagerProfileScreen from './src/screens/ManagerProfileScreen';
 import EmployeeProfileScreen from './src/screens/EmployeeProfileScreen';
 import SurveyResultScreen from './src/screens/SurveyResultScreen';
 import SurveyDetailsScreen from './src/screens/SurveyDetailsScreen';
-import ChatScreen from './src/screens/ChatScreen';
 import PaymentScreen from './src/screens/PaymentScreen';
 import StartCourseScreen from './src/screens/StartCourseScreen';
 
@@ -108,11 +107,6 @@ const App = () => {
             name="FaqsScreen" 
             component={FaqsScreen} 
             options={{ headerShown: false }} 
-          />
-          <Stack.Screen 
-            name="ChatScreen" 
-            component={ChatScreen} 
-            options={{ headerShown: false }}
           />
           <Stack.Screen 
             name="PaymentScreen" 
