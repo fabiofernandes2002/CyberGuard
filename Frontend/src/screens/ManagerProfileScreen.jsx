@@ -40,15 +40,10 @@ const ManagerProfileScreen = () => {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      try {
-        setUsername(user._j.userInfo.username);
-        setEmail(user._j.userInfo.email);
-        setPassword(user._j.userInfo.password);
-        setUserType(user._j.userInfo.userType);
-      } catch (error) {
-        console.error('Error retrieving user information:', error.message);
-        throw error;
-      }
+      setUsername(user?._j?.userInfo?.username);
+      setEmail(user?._j?.userInfo?.email);
+      setPassword(user?._j?.userInfo?.password);
+      setUserType(user?._j.userInfo?.userType);
     };
     getUserInfo();
   }, []);
