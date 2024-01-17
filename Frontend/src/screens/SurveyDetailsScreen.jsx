@@ -198,6 +198,7 @@ const Styles = StyleSheet.create({
     fontFamily: 'Supply-Bold',
     color: '#1B1B1E',
     marginBottom: 10,
+    marginLeft: 25,
   },
   button: {
     paddingVertical: 10,

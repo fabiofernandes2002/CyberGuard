@@ -198,14 +198,6 @@ exports.login = (req, res) => {
         accessToken: token,
         message: 'Login feito com sucesso!',
       });
-
-      /* utilities.generateToken({ id: user._id, email: user.email}, (token) => {
-          res.status(200).send({
-            id: user._id,
-            accessToken: token,
-            message: "Login feito com sucesso!"
-          });
-        }); */
     })
     .catch((err) => {
       res.status(500).send({

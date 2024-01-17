@@ -637,13 +637,14 @@ exports.getCourseQuestions = async (req, res) => {
 // Finalizar um curso específico por id (requer autenticação web token) - responder a um questionário de avaliação
 exports.finishCourseById = async (req, res) => {
   try {
+    console.log("Respostas recebidas:", req.body.userAnswers);
     const userId = req.loggedUserId; // Certifique-se de que o middleware de autenticação define req.loggedUserId corretamente
 
     // Verifique se o usuário está autenticado
     if (!userId) {
       return res.status(403).json({
         success: false,
-        msg: 'Você deve estar autenticado para realizar esta solicitação!',
+        msg: "Você deve estar autenticado para realizar esta solicitação!",
       });
     }
 
@@ -652,7 +653,7 @@ exports.finishCourseById = async (req, res) => {
     if (!course) {
       return res.status(404).json({
         success: false,
-        msg: 'Curso não encontrado',
+        msg: "Curso não encontrado",
       });
     }
 
@@ -660,57 +661,78 @@ exports.finishCourseById = async (req, res) => {
     const user = await users.findById(userId);
 
     // Verifique se o curso já foi finalizado pelo usuário
-    if (user.courses.some((course) => course.courseId.equals(req.params.id) && course.finished)) {
+    if (
+      user.courses.some(
+        (course) => course.courseId.equals(req.params.id) && course.finished
+      )
+    ) {
       return res.status(400).json({
         success: false,
-        msg: 'Curso já finalizado!',
+        msg: "Curso já finalizado!",
       });
     }
 
-    // Realize o questionário de avaliação associado ao curso
-    const courseQuestions = course.evaluations[0].questions; // Supondo que há apenas um conjunto de perguntas de avaliação por curso
+    const courseQuestions = course.evaluations.flatMap(
+      (evaluation) => evaluation.questions
+    );
 
-    // Suponha que as respostas do usuário sejam enviadas no corpo da solicitação
     const userAnswers = req.body.userAnswers;
 
-    // Calcule a pontuação do usuário com base nas respostas corretas
     let userScore = 0;
-    for (let i = 0; i < courseQuestions.length; i++) {
-      const correctAnswerIndex = courseQuestions[i].correctAnswerIndex;
 
-      // Verifique se o índice da resposta do usuário coincide com o índice da resposta correta
-      if (userAnswers[i] === correctAnswerIndex) {
-        userScore += 1;
+    courseQuestions.forEach((question, index) => {
+      const userAnswer = userAnswers.find(
+        (answer) => answer.questionIndex === index
+      );
+      if (userAnswer && userAnswer.answer !== -1) {
+        const userAnswerIndex = parseInt(userAnswer.answer) - 1;
+        if (userAnswerIndex === question.correctAnswerIndex) {
+          userScore += 1;
+        }
       }
-    }
+    });
 
     // Atualize as propriedades do usuário
     user.totalCoursesCompleted += 1;
     user.pontuationMediaEvaluation =
-      (user.pontuationMediaEvaluation * (user.totalCoursesCompleted - 1) + userScore) /
+      (user.pontuationMediaEvaluation * (user.totalCoursesCompleted - 1) +
+        userScore) /
       user.totalCoursesCompleted;
 
-    // Finalize o curso para o usuário
-    user.courses.push({
-      courseId: req.params.id,
-      finished: true,
-      finishedDate: Date.now(),
-      evaluationScore: userScore,
-    });
+    // Encontre o índice do curso no array de cursos do usuário
+    let courseIndex = user.courses.findIndex((courseItem) =>
+      courseItem.courseId.equals(req.params.id)
+    );
+
+    // Verifique se o curso foi encontrado
+    if (courseIndex !== -1) {
+      // Atualize os campos desejados do curso
+      user.courses[courseIndex].finished = true;
+      user.courses[courseIndex].finishedDate = Date.now();
+      user.courses[courseIndex].evaluationScore = userScore;
+    } else {
+      // Se o curso não foi encontrado, adicione-o ao array de cursos do usuário
+      user.courses.push({
+        courseId: req.params.id,
+        finished: true,
+        finishedDate: Date.now(),
+        evaluationScore: userScore,
+      });
+    }
 
     // Salve as alterações no usuário
     await user.save();
 
     res.status(200).json({
       success: true,
-      msg: 'Curso finalizado com sucesso!',
+      msg: "Curso finalizado com sucesso!",
       evaluationScore: userScore,
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({
       success: false,
-      msg: err.message || 'Algo correu mal, tente novamente mais tarde.',
+      msg: err.message || "Algo correu mal, tente novamente mais tarde.",
     });
   }
 };

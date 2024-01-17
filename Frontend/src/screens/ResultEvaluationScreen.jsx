@@ -4,8 +4,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
 import SucessIcon from '../assets/SucessIcon.svg';
 
-const SurveyResultScreen = ({route}) => {
+const ResultEvaluationScreen = ({route}) => {
   const {score} = route.params;
+  console.log('Score:', score);
   const navigation = useNavigation();
 
   setTimeout(() => {
@@ -28,7 +29,7 @@ const SurveyResultScreen = ({route}) => {
             style={Styles.logo}
             resizeMode="contain"
           />
-          <Text style={Styles.pontuacaoText}>Curso de Malware concluído!: {score}</Text>
+          <Text style={Styles.pontuacaoText}>Curso de Malware concluído!</Text>
         </View>
         {/* coolIcon */}
         <View style={Styles.coolIcon}>
@@ -36,7 +37,7 @@ const SurveyResultScreen = ({route}) => {
         </View>
         {/* Pontuação */}
         <View style={Styles.pontuacaoText}>
-          <Text style={Styles.text}>Pontuação: {score} / pontos</Text>
+          <Text style={Styles.textP}>Pontuação: {score} / pontos</Text>
         </View>
         {/* Text results */}
         <View style={Styles.text}>
@@ -85,6 +86,13 @@ const Styles = StyleSheet.create({
     fontFamily: 'Raleway-Medium',
     textAlign: 'center',
   },
+  textP: {
+    color: '#6E0271',
+    fontSize: 24,
+    fontFamily: 'Supply-Bold',
+    textAlign: 'center',
+    marginTop:30
+  },
   linkText: {
     color: '#6E0271',
     fontSize: 17,
@@ -99,4 +107,4 @@ const Styles = StyleSheet.create({
     marginTop: 20,
   },
 });
-export default SurveyResultScreen;
+export default ResultEvaluationScreen;

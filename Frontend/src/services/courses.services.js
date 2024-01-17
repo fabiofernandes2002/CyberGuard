@@ -42,6 +42,38 @@ const CoursesService = {
             throw Error(response.msg);
         }
     },
+    finishCourseById: async (courseId, userAnswers) => {
+        try {
+          const user = JSON.parse(await AsyncStorage.getItem('user'));
+          const token = user.accessToken;
+          const response = await fetch(`${API_URL}/courses/finishCourseById/${courseId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              userAnswers
+            }),
+          });
+      
+          if (!response.ok) {
+            const responseBody = await response.json();
+            console.error('Response status:', response.status);
+            console.error('Response body:', responseBody);
+            throw new Error('Response not OK');
+          }
+      
+          const data = await response.json();
+          console.log('Course finished successfully:', data);
+          return data;
+        } catch (error) {
+          console.error('Error finishing course:', error);
+          throw error; // ou retorne um valor padrão, dependendo de como você deseja lidar com erros
+        }
+    },
+      
+
 };
 
 export default CoursesService;

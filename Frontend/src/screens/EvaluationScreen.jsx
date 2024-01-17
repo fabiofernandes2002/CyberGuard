@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  FlatList
+  FlatList,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
@@ -17,94 +17,128 @@ import {Center, Box, Progress} from 'native-base';
 import Seta from '../assets/setaButton.svg';
 import MenuHamburguer from '../components/Menu';
 import CoursesService from '../services/courses.services';
-import UsersService from '../services/users.services';
 
 const EvaluationScreen = ({route}) => {
   const {courseId} = route.params;
   const [courses, setCourses] = useState([]);
   const [currentCourse, setCurrentCourse] = useState(null);
-  const [currentEvaluation, setCurrentEvaluation] = useState(0);
-
-  const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
   const [score, setScore] = useState(0);
-  const [answers, setAnswers] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [answers, setAnswers] = useState(new Array(totalQuestions).fill(-1));
   const navigation = useNavigation();
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const coursesData = await CoursesService.getAllCourses();
-        console.log('Courses:', coursesData);
         setCourses(coursesData);
-
         const courseData = coursesData.find(course => course._id === courseId);
         setCurrentCourse(courseData);
+  
+        // Inicializa 'answers' com base no número de perguntas do curso
+        if (courseData) {
+          const totalQuestions = courseData.evaluations
+            .flatMap(evaluation => evaluation.questions)
+            .length;
+          setAnswers(new Array(totalQuestions).fill(-1));
+        }
       } catch (error) {
         console.error(error);
       }
     };
-
-    fetchCourses();
-  }, []);
-
   
-
+    fetchCourses();
+  }, [courseId]); // Adiciona 'courseId' como dependência para reagir às mudanças
+  
   useEffect(() => {
-    if (currentCourse && currentQuestionNumber > currentCourse.evaluations[currentEvaluation].questions.length) {
-      setCurrentQuestionNumber(1);
-      if (currentEvaluation >= currentCourse.evaluations.length - 1) {
-        setCurrentEvaluation(0);
-      } else {
-        setCurrentEvaluation(currentEvaluation + 1);
-      }
+    // Verificar se allQuestions está definido e não está vazio
+    if (allQuestions && allQuestions.length > 0) {
+      // Calcular a pontuação com base nas respostas
+      const newScore = answers.reduce((total, answerIndex, questionIndex) => {
+        const question = allQuestions[questionIndex];
+        if (question) {
+          // Verificar se a resposta do usuário é a mesma que a resposta correta
+          return total + (answerIndex === question.correctAnswerIndex ? 1 : 0);
+        } else {
+          return total;
+        }
+      }, 0);
+  
+      setScore(newScore);
     }
-  }, [currentQuestionNumber, currentEvaluation, currentCourse]);
+  }, [answers, allQuestions]);
 
   if (!currentCourse) {
     return null;
   }
 
-  const totalQuestions = currentCourse.evaluations.length;
+  const allQuestions = currentCourse.evaluations.flatMap(
+    evaluation => evaluation.questions,
+  );
+  const totalQuestions = allQuestions.length;
   const progress = (currentQuestionNumber / totalQuestions) * 100;
-  const survey = currentCourse.evaluations[currentEvaluation].questions[currentQuestionNumber - 1];
+  const survey = allQuestions[currentQuestionNumber - 1];
 
   if (!survey) {
     console.error('Question does not exist');
     return null;
   }
 
-  const responses = [
-    ...survey.answers.map((answer, index) => ({
-      id: `${index + 1}`,
-      text: answer,
-    })),
-  ];
+  const responses = survey.answers.map((answer, index) => ({
+    id: `${index + 1}`,
+    text: answer,
+  }));
 
-  // Quando o usuário selecionar uma resposta, verifique se a resposta está correta e atualize a pontuação
   const handleOptionChange = value => {
     setSelectedOption(value);
-    if (responses[value - 1].text === survey.correctAnswer) {
+    const questionIndex = currentQuestionNumber - 1;
+    const answerIndex = parseInt(value) - 1; // Ajuste para que '1' seja '0', '2' seja '1', etc.
+  
+    // Atualizar o array de respostas
+    let updatedAnswers = [...answers];
+    if (updatedAnswers.length <= questionIndex) {
+      updatedAnswers = [...updatedAnswers, ...new Array(questionIndex - updatedAnswers.length + 1).fill(-1)];
+    }
+    updatedAnswers[questionIndex] = answerIndex;
+    setAnswers(updatedAnswers);
+  
+    // Obter a pergunta atual e a resposta correta
+    const currentQuestion = allQuestions[questionIndex];
+    const correctAnswerIndex = currentQuestion.correctAnswerIndex;
+  
+    // Verificar se a resposta do usuário é a correta
+    if (answerIndex === correctAnswerIndex) {
       setScore(score + 1);
     }
-    setAnswers([...answers, { questionIndex: currentQuestionNumber - 1, answer: value }]);
   };
+  
+  
 
   const handleButtonTerminarPress = async () => {
-    if (selectedOption !== null) {
-      await UsersService.submitSurvey({ answers, score });
-      navigation.navigate('SurveyResultScreen', {score});
-    } else {
-      alert('Por favor, selecione uma opção antes de terminar a pesquisa.');
+    if (currentQuestionNumber === totalQuestions) {
+      try {
+        console.log('Enviando respostas:', answers);
+        const result = await CoursesService.finishCourseById(courseId, answers);
+        console.log('Curso finalizado com sucesso:', result);
+        console.log('Score:', result.evaluationScore);
+        navigation.navigate('ResultEvaluationScreen', {
+          score: result.evaluationScore,
+        });
+      } catch (error) {
+        console.error('Erro ao finalizar o curso:', error);
+      }
     }
-  };
-
-
-  const course = courses.find(course => course._id === courseId);
-  if (!course) {
-    return null;
   }
 
+  const handleNextQuestion = () => {
+    if (currentQuestionNumber < totalQuestions) {
+      setCurrentQuestionNumber(currentQuestionNumber + 1);
+      setSelectedOption(null);
+    } else {
+      handleButtonTerminarPress();
+    }
+  };
 
   return (
     <LinearGradient
@@ -112,121 +146,115 @@ const EvaluationScreen = ({route}) => {
       style={Styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView>
-            <View style={Styles.Menu}>
-                {/* Back button */}
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                <SetaEsquerda width={30} height={30} style={Styles.icon} />
-                </TouchableOpacity>
-                {/* Menu hamburguer */}
-                <MenuHamburguer />
-            </View>
-            <View style={Styles.container2}>
-                <Text style={Styles.title}>{course.nameCourse}</Text>
-            </View>
-            <View style={Styles.card}>
-                <Image style={Styles.imageCourse} source={{uri: course.imgURL}} />
-            </View>
-            <View style={Styles.container2}>
-                <View style={Styles.content}>
-                    {/* Número da questão */}
-                    <Text style={Styles.questionNumber}>
-                        {currentQuestionNumber}/{totalQuestions}
-                    </Text>
-                    <View style={Styles.progressBar}>
-                    <Center w="100%">
-                        <Box w="100%" maxW="400">
-                        <Progress
-                            value={progress}
-                            size="lg"
-                            mx="4"
-                            colorScheme="cyan"
-                            bg="#D8DBE2"
-                        />
-                        </Box>
-                    </Center>
-                </View>
-                {/* Titulo da pergunta */}
-                <View style={Styles.questionTitle}>
+          <View style={Styles.Menu}>
+            {/* Back button */}
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <SetaEsquerda width={30} height={30} style={Styles.icon} />
+            </TouchableOpacity>
+            {/* Menu hamburguer */}
+            <MenuHamburguer />
+          </View>
+          <View style={Styles.container2}>
+            <Text style={Styles.title}>{currentCourse.nameCourse}</Text>
+          </View>
+          <View style={Styles.card}>
+            <Image
+              style={Styles.imageCourse}
+              source={{uri: currentCourse.imgURL}}
+            />
+          </View>
+          <View style={Styles.container2}>
+            <View style={Styles.content}>
+              {/* Número da questão */}
+              <Text style={Styles.questionNumber}>
+                {currentQuestionNumber}/{totalQuestions}
+              </Text>
+              <View style={Styles.progressBar}>
+                <Center w="100%">
+                  <Box w="100%" maxW="400">
+                    <Progress
+                      value={progress}
+                      size="lg"
+                      mx="4"
+                      colorScheme="cyan"
+                      bg="#D8DBE2"
+                    />
+                  </Box>
+                </Center>
+              </View>
+              {/* Titulo da pergunta */}
+              <View style={Styles.questionTitle}>
                 <Text style={Styles.questionTitle}>{survey.question}</Text>
-                </View>
-                <Radio.Group
+              </View>
+              <Radio.Group
                 key={currentQuestionNumber}
                 name="exampleGroup"
                 colorScheme="success"
                 accessibilityLabel="pick an option"
                 onChange={handleOptionChange}>
                 <FlatList
-                    data={responses}
-                    keyExtractor={item => item.id}
-                    renderItem={({item}) => (
+                  data={responses}
+                  keyExtractor={item => item.id}
+                  renderItem={({item}) => (
                     <View style={Styles.radioContainer}>
-                        <Radio colorScheme="success" value={item.id} my={1}>
+                      <Radio colorScheme="success" value={item.id} my={1}>
                         <View
-                            style={[
+                          style={[
                             Styles.flatlistContiner,
                             {
-                                backgroundColor:
-                                selectedOption === item.id ? '#487281' : '#D9D9D9',
-                                borderColor:
-                                selectedOption === item.id ? '#D9D9D9' : '#487281',
+                              backgroundColor:
+                                selectedOption === item.id
+                                  ? '#487281'
+                                  : '#D9D9D9',
+                              borderColor:
+                                selectedOption === item.id
+                                  ? '#D9D9D9'
+                                  : '#487281',
                             },
-                            ]}>
-                            <Text
+                          ]}>
+                          <Text
                             style={{
-                                color:
-                                selectedOption === item.id ? '#f7f7f7' : '#1B1B1E',
+                              color:
+                                selectedOption === item.id
+                                  ? '#f7f7f7'
+                                  : '#1B1B1E',
                             }}>
                             {item.text}
-                            </Text>
+                          </Text>
                         </View>
-                        </Radio>
+                      </Radio>
                     </View>
-                    )}
+                  )}
                 />
-                </Radio.Group>
-                <TouchableOpacity
-                onPress={() => {
-                    if (selectedOption !== null) {
-                      setCurrentQuestionNumber(prevQuestionNumber => {
-                        if (prevQuestionNumber < totalQuestions) {
-                          setSelectedOption(null);
-                          return prevQuestionNumber + 1;
-                        } else {
-                          handleButtonTerminarPress();
-                          return prevQuestionNumber;
-                        }
-                      });
-                    } else {
-                      alert('Por favor, selecione uma opção antes de prosseguir.');
-                    }
-                  }}>
+              </Radio.Group>
+              <TouchableOpacity onPress={handleNextQuestion}>
                 <View
-                    style={[
+                  style={[
                     Styles.button,
                     {
-                        backgroundColor:
+                      backgroundColor:
                         currentQuestionNumber < totalQuestions
-                            ? '#00428A'
-                            : '#6E0271',
+                          ? '#00428A'
+                          : '#6E0271',
                     },
-                    ]}>
-                    <View
+                  ]}>
+                  <View
                     style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}>
                     <Text style={Styles.buttonText}>
-                        {currentQuestionNumber < totalQuestions
+                      {currentQuestionNumber < totalQuestions
                         ? 'Próximo'
                         : 'Terminar'}
                     </Text>
                     <Seta width={20} height={20} style={{marginLeft: 10}} />
-                    </View>
+                  </View>
                 </View>
-                </TouchableOpacity>
-                </View>
+              </TouchableOpacity>
             </View>
+          </View>
         </SafeAreaView>
       </ScrollView>
     </LinearGradient>
@@ -350,6 +378,7 @@ const Styles = StyleSheet.create({
     fontFamily: 'Supply-Bold',
     color: '#1B1B1E',
     marginBottom: 10,
+    marginLeft: 25,
   },
 });
 

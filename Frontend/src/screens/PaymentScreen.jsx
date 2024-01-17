@@ -23,20 +23,39 @@ const PaymentScreen = () => {
     const [expiryDate, setExpiryDate] = useState('');
     const [cvv, setCvv] = useState('');
     const [saveCard, setSaveCard] = useState(false);
-    
-    
-    const handleCardBackPress = () => {
-        navigation.navigate('CoursesScreen');
-    };
+
 
     const handlePayment = () => {
-        console.log('Payment method:', paymentMethod);
-        console.log('Card number:', cardNumber);
-        console.log('Card holder:', cardHolder);
-        console.log('Expiry date:', expiryDate);
-        console.log('CVV:', cvv);
-        console.log('Save card:', saveCard);
+        if (!cardNumber || !cardHolder || !expiryDate || !cvv) {
+            alert('Por favor, preencha todos os campos do cartão de crédito.');
+            return;
+        }
+    
+        const cardDetails = {
+            cardNumber,
+            cardHolder,
+            expiryDate,
+            cvv,
+            saveCard,
+        };
+    
+        console.log('Detalhes do cartão:', cardDetails);
+    
+        // Simular um atraso de rede
+        setTimeout(() => {
+            // Simular um pagamento bem sucedido
+            alert('Pagamento bem sucedido!');
+            navigation.navigate('CoursesScreen');
+        }, 2000);
     };
+
+    const handleCheckboxChange = (value) => {
+        setSaveCard(value);
+        if (value) {
+            alert('Dados guardados com sucesso');
+        }
+    };
+    
     
     return (
         <LinearGradient
@@ -138,7 +157,7 @@ const PaymentScreen = () => {
                             </HStack>
                             <Checkbox
                                 value={saveCard}
-                                onChange={isChecked => setSaveCard(isChecked)}
+                                onValueChange={handleCheckboxChange}
                                 style={{backgroundColor: '#D8DBE2', borderColor: '#487281', borderRadius: 7.5, borderWidth: 3, height: 25, width: 25}}
                             >
                                 <Text style={Styles.textLabel}>Guardar dados do cartão</Text>
@@ -149,7 +168,7 @@ const PaymentScreen = () => {
                                 <Text style={Styles.textLabel}>Detalhes finais</Text>
                                 <View style={Styles.detalhesPagamento}>
                                     <Text style={Styles.textDetalhes}>Total(Euro)</Text>
-                                    <Text style={Styles.textDetalhes}>€10</Text>
+                                    <Text style={Styles.textDetalhes}>20.99€</Text>
                                 </View>
                             </View>
                             <View style={Styles.button}>

@@ -63,7 +63,7 @@ exports.addMessageToChat = async function (req, res) {
     // Buscar o usuário pelo loggedUserId
     const user = await users.findById(loggedUserId);
     if (!user) {
-      return res.status(400).json({ message: 'O usuário não existe.' });
+      return res.status(400).json({ message: 'O utilizador não existe.' });
     }
 
     // Verificar se o chatId foi fornecido

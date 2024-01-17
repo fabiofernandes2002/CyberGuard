@@ -9,7 +9,7 @@ const options = {
       version: '1.0.0',
     },
   },
-  apis: ['./routes/*.js'], // Caminho para os arquivos que contêm as rotas
+  apis: ['./routes/*.js'],
 };
 
 const specs = swaggerJsdoc(options);
