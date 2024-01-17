@@ -42,7 +42,8 @@ const ResultEvaluationScreen = ({route}) => {
         {/* Text results */}
         <View style={Styles.text}>
           <Text style={Styles.text}>
-            Serás redirecionado para a tua página de perfil em 5 segundos, para veres a tua evolução...
+            Serás redirecionado para a tua página de perfil em 5 segundos, para
+            veres a tua evolução...
           </Text>
           <Text style={[Styles.text, Styles.spacing]}>
             Clica{' '}

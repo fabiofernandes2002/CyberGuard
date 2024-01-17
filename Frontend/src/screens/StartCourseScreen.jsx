@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  FlatList
+  FlatList,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
@@ -17,7 +17,7 @@ import Star from '../assets/StarAvaliacao.svg';
 import Coracao from '../assets/Coração.svg';
 import Play from '../assets/Play.svg';
 import CoursesService from '../services/courses.services';
-import YoutubePlayer from "react-native-youtube-iframe";
+import YoutubePlayer from 'react-native-youtube-iframe';
 
 const CoursesDetailsScreen = ({route}) => {
   const {courseId} = route.params;
@@ -51,17 +51,17 @@ const CoursesDetailsScreen = ({route}) => {
     navigation.navigate('EvaluationScreen', {courseId: course._id});
   };
 
-
   // Função para extrair o ID do vídeo do YouTube a partir da URL
   const extractYouTubeId = url => {
     if (typeof url !== 'string') return null;
-  
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
+    return match && match[2].length === 11 ? match[2] : null;
   };
 
-  const handleVideoPress = (videoId) => {
+  const handleVideoPress = videoId => {
     setSelectedVideoId(extractYouTubeId(videoId));
     if (!viewedVideos.includes(videoId)) {
       setViewedVideos([...viewedVideos, videoId]);
@@ -86,13 +86,14 @@ const CoursesDetailsScreen = ({route}) => {
             <Text style={Styles.title}>{course.nameCourse}</Text>
             <View>
               <View style={Styles.card}>
-              <View style={Styles.cardImage}>
-                  <View style={{ 
-                    flex: 1, 
-                    marginTop: selectedVideoId ? 100 : 30,
-                    justifyContent: 'center', 
-                    alignItems: 'center' 
-                  }}>
+                <View style={Styles.cardImage}>
+                  <View
+                    style={{
+                      flex: 1,
+                      marginTop: selectedVideoId ? 100 : 30,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
                     {selectedVideoId ? (
                       <YoutubePlayer
                         height={266}
@@ -102,8 +103,20 @@ const CoursesDetailsScreen = ({route}) => {
                       />
                     ) : (
                       <View>
-                        <Image style={Styles.imageCourse} source={{uri: course.imgURL}} />
-                        <Play width={70} height={78} style={{ position: 'absolute', top: '50%', left: '50%', transform: [{ translateX: -50 }, { translateY: -50 }] }} />
+                        <Image
+                          style={Styles.imageCourse}
+                          source={{uri: course.imgURL}}
+                        />
+                        <Play
+                          width={70}
+                          height={78}
+                          style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: [{translateX: -50}, {translateY: -50}],
+                          }}
+                        />
                       </View>
                     )}
                   </View>
@@ -118,27 +131,55 @@ const CoursesDetailsScreen = ({route}) => {
                 <View>
                   {/* View para flatlist para renderizar os videos do curso */}
                   <View style={Styles.containerVideos}>
-                  <FlatList
-                    data={course.videos}
-                    nestedScrollEnabled
-                    keyExtractor={(item) => item.videoURL}
-                    renderItem={({ item }) => {
-                      return (
-                        <TouchableOpacity onPress={() => handleVideoPress(item.videoURL)}>
-                          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20, borderBottomWidth: 2, borderBottomColor: '#E70D79' }}>
-                          <View style={{ position: 'relative' }}>
-                            <Image style={Styles.imgVideo} source={{uri: course.imgURL}} />
-                            <Play width={35} height={35} style={{ position: 'absolute', top: '40%', left: '50%', transform: [{ translateX: -17.5 }, { translateY: -17.5 }] }} />
-                          </View>
-                            <View>
-                              <Text style={Styles.videoTitle}>{item.title}</Text>
-                              <Text style={Styles.videoDuration}>{Math.floor(item.duration / 60)}:{item.duration % 60}</Text>
+                    <FlatList
+                      data={course.videos}
+                      nestedScrollEnabled
+                      keyExtractor={item => item.videoURL}
+                      renderItem={({item}) => {
+                        return (
+                          <TouchableOpacity
+                            onPress={() => handleVideoPress(item.videoURL)}>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginBottom: 20,
+                                borderBottomWidth: 2,
+                                borderBottomColor: '#E70D79',
+                              }}>
+                              <View style={{position: 'relative'}}>
+                                <Image
+                                  style={Styles.imgVideo}
+                                  source={{uri: course.imgURL}}
+                                />
+                                <Play
+                                  width={35}
+                                  height={35}
+                                  style={{
+                                    position: 'absolute',
+                                    top: '40%',
+                                    left: '50%',
+                                    transform: [
+                                      {translateX: -17.5},
+                                      {translateY: -17.5},
+                                    ],
+                                  }}
+                                />
+                              </View>
+                              <View>
+                                <Text style={Styles.videoTitle}>
+                                  {item.title}
+                                </Text>
+                                <Text style={Styles.videoDuration}>
+                                  {Math.floor(item.duration / 60)}:
+                                  {item.duration % 60}
+                                </Text>
+                              </View>
                             </View>
-                          </View>
-                        </TouchableOpacity>
-                      );
-                    }}
-                  />
+                          </TouchableOpacity>
+                        );
+                      }}
+                    />
                   </View>
                   <Text style={Styles.courseRating}>Avaliação do curso</Text>
                   <View
@@ -148,17 +189,33 @@ const CoursesDetailsScreen = ({route}) => {
                       marginTop: 10,
                     }}>
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} width={35} height={35} style={{marginRight: 10}} />
+                      <Star
+                        key={i}
+                        width={35}
+                        height={35}
+                        style={{marginRight: 10}}
+                      />
                     ))}
                     <Coracao width={30} height={30} style={{marginLeft: 40}} />
                   </View>
                   <View style={Styles.button}>
-                    <TouchableOpacity 
-                      disabled={course.videos.length !== viewedVideos.length} 
-                      style={course.videos.length !== viewedVideos.length ? { opacity: 0.5 } : {}}
-                      onPress={handleButtonStartEvaluationPress}
-                    >
-                      <Text style={[Styles.buttonText, course.videos.length !== viewedVideos.length ? { opacity: 0.5 } : {}]}>Começar Teste</Text>
+                    <TouchableOpacity
+                      disabled={course.videos.length !== viewedVideos.length}
+                      style={
+                        course.videos.length !== viewedVideos.length
+                          ? {opacity: 0.5}
+                          : {}
+                      }
+                      onPress={handleButtonStartEvaluationPress}>
+                      <Text
+                        style={[
+                          Styles.buttonText,
+                          course.videos.length !== viewedVideos.length
+                            ? {opacity: 0.5}
+                            : {},
+                        ]}>
+                        Começar Teste
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -309,12 +366,12 @@ const Styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#1B1B1E',
     width: 315,
-    height: 288
+    height: 288,
   },
   video: {
     alignSelf: 'stretch',
     height: 300,
-    marginTop: 20
+    marginTop: 20,
   },
   imgVideo: {
     width: 100,
