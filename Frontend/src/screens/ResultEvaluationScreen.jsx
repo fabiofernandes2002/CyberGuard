@@ -28,7 +28,9 @@ const SurveyResultScreen = ({route}) => {
             style={Styles.logo}
             resizeMode="contain"
           />
-          <Text style={Styles.pontuacaoText}>Curso de Malware concluído!: {score}</Text>
+          <Text style={Styles.pontuacaoText}>
+            Curso de Malware concluído!: {score}
+          </Text>
         </View>
         {/* coolIcon */}
         <View style={Styles.coolIcon}>
@@ -41,7 +43,8 @@ const SurveyResultScreen = ({route}) => {
         {/* Text results */}
         <View style={Styles.text}>
           <Text style={Styles.text}>
-            Serás redirecionado para a tua página de perfil em 5 segundos, para veres a tua evolução...
+            Serás redirecionado para a tua página de perfil em 5 segundos, para
+            veres a tua evolução...
           </Text>
           <Text style={[Styles.text, Styles.spacing]}>
             Clica{' '}

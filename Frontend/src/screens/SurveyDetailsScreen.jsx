@@ -41,13 +41,16 @@ const SurveyDetailsScreen = () => {
     if (responses[value - 1].text === survey.correctAnswer) {
       setScore(score + 1);
     }
-    setAnswers([...answers, { questionIndex: currentQuestionNumber - 1, answer: value }]);
+    setAnswers([
+      ...answers,
+      {questionIndex: currentQuestionNumber - 1, answer: value},
+    ]);
   };
 
   const navigation = useNavigation();
   const handleButtonTerminarPress = async () => {
     if (currentQuestionNumber === totalQuestions) {
-      await UsersService.submitSurvey({ answers, score });
+      await UsersService.submitSurvey({answers, score});
     }
     navigation.navigate('SurveyResultScreen', {score});
   };
