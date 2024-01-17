@@ -27,61 +27,129 @@ const PaymentScreen = () => {
   const navigation = useNavigation();
   const [paymentMethod, setPaymentMethod] = useState('creditCard');
 
-    const [cardNumber, setCardNumber] = useState('');
-    const [cardHolder, setCardHolder] = useState('');
-    const [expiryDate, setExpiryDate] = useState('');
-    const [cvv, setCvv] = useState('');
-    const [saveCard, setSaveCard] = useState(false);
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardHolder, setCardHolder] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
+  const [cvv, setCvv] = useState('');
+  const [saveCard, setSaveCard] = useState(false);
 
+  const handlePayment = () => {
+    if (!cardNumber || !cardHolder || !expiryDate || !cvv) {
+      alert('Por favor, preencha todos os campos do cartão de crédito.');
+      return;
+    }
 
-    const handlePayment = () => {
-        if (!cardNumber || !cardHolder || !expiryDate || !cvv) {
-            alert('Por favor, preencha todos os campos do cartão de crédito.');
-            return;
-        }
-    
-        const cardDetails = {
-            cardNumber,
-            cardHolder,
-            expiryDate,
-            cvv,
-            saveCard,
-        };
-    
-        console.log('Detalhes do cartão:', cardDetails);
-    
-        // Simular um atraso de rede
-        setTimeout(() => {
-            // Simular um pagamento bem sucedido
-            alert('Pagamento bem sucedido!');
-            navigation.navigate('CoursesScreen');
-        }, 2000);
+    const cardDetails = {
+      cardNumber,
+      cardHolder,
+      expiryDate,
+      cvv,
+      saveCard,
     };
 
-    const handleCheckboxChange = (value) => {
-        setSaveCard(value);
-        if (value) {
-            alert('Dados guardados com sucesso');
-        }
-    };
-    
-    
-    return (
-        <LinearGradient
-        colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']}
-        style={Styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <SafeAreaView>
-                <View style={Styles.Menu}>
-                    {/* Back button */}
-                    <TouchableOpacity
-                    onPress={() => navigation.goBack()}
-                    style={{flexDirection: 'row', alignItems: 'center'}}>
-                    {/* Logo pequeno e Cyber e Guard todo separado em baixo do outro */}
-                    <Image
-                        source={require('../assets/logo_semfundo.png')}
-                        style={Styles.logo}
-                        resizeMode="contain"
+    console.log('Detalhes do cartão:', cardDetails);
+
+    // Simular um atraso de rede
+    setTimeout(() => {
+      // Simular um pagamento bem sucedido
+      alert('Pagamento bem sucedido!');
+      navigation.navigate('CoursesScreen');
+    }, 2000);
+  };
+
+  const handleCheckboxChange = value => {
+    setSaveCard(value);
+    if (value) {
+      alert('Dados guardados com sucesso');
+    }
+  };
+
+  return (
+    <LinearGradient
+      colors={['#D8DBE2', '#A9BCD0', '#A9BCD0']}
+      style={Styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <SafeAreaView>
+          <View style={Styles.Menu}>
+            {/* Back button */}
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{flexDirection: 'row', alignItems: 'center'}}>
+              {/* Logo pequeno e Cyber e Guard todo separado em baixo do outro */}
+              <Image
+                source={require('../assets/logo_semfundo.png')}
+                style={Styles.logo}
+                resizeMode="contain"
+              />
+              <View>
+                <Text style={Styles.textC}>Cyber</Text>
+                <Text style={Styles.textG}>Guard</Text>
+              </View>
+            </TouchableOpacity>
+            {/* Hamburger menu */}
+            <NativeBaseProvider>
+              <MenuHamburguer />
+            </NativeBaseProvider>
+          </View>
+
+          {/* Texto de apresentação */}
+          <View
+            style={[
+              Styles.text,
+              {borderBottomWidth: 2, borderBottomColor: '#E70D79'},
+            ]}>
+            <Text style={Styles.textTitulo}>Confirmar Pagamento</Text>
+          </View>
+          {/* Texto: Pagar com e uma dropdown com três opções Cartão de Credito, paypal, MBWAY */}
+          <View style={Styles.paymentMethod}>
+            <Text style={Styles.textDescricao}>Pagar com</Text>
+            <Center mt={4}>
+              <Box maxW="300" borderRadius="10">
+                <Select
+                  selectedValue={paymentMethod}
+                  minWidth="200"
+                  accessibilityLabel="Escolha o método de pagamento"
+                  placeholder="Escolha o método de pagamento"
+                  mt={1}
+                  onValueChange={itemValue => setPaymentMethod(itemValue)}
+                  bg="#00428A"
+                  color="#f7f7f7"
+                  fontSize="17"
+                  borderRadius="10"
+                  _selectedItem={{
+                    bg: 'teal.600',
+                    endIcon: <CheckIcon size="5" />,
+                  }}>
+                  <Select.Item label="Cartão de Crédito" value="creditCard" />
+                  <Select.Item label="PayPal" value="paypal" />
+                  <Select.Item label="MBWAY" value="mbway" />
+                </Select>
+              </Box>
+            </Center>
+          </View>
+          {/* Texto: Detalhes do cartão */}
+          <View style={Styles.text}>
+            <VStack
+              space={4}
+              alignItems="stretch"
+              w="100%"
+              maxW="400px"
+              mx="auto">
+              <View>
+                {paymentMethod === 'creditCard' ? (
+                  <VStack
+                    space={4}
+                    alignItems="stretch"
+                    w="100%"
+                    maxW="400px"
+                    mx="auto">
+                    <Text style={Styles.textLabel}>Número de Cartão</Text>
+                    <Input
+                      variant="unstyled"
+                      style={Styles.input}
+                      size="md"
+                      value={cardNumber}
+                      onChangeText={setCardNumber}
                     />
                     <Text style={Styles.textLabel}>Nome do titular</Text>
                     <Input
@@ -109,7 +177,7 @@ const PaymentScreen = () => {
                     </HStack>
                     <Checkbox
                       value={saveCard}
-                      onChange={isChecked => setSaveCard(isChecked)}
+                      onValueChange={handleCheckboxChange}
                       style={{
                         backgroundColor: '#D8DBE2',
                         borderColor: '#487281',
@@ -124,101 +192,12 @@ const PaymentScreen = () => {
                     </Checkbox>
                     {/* Detalhes finais */}
 
-                {/* Texto de apresentação */}
-                <View style={[Styles.text, { borderBottomWidth: 2, borderBottomColor: '#E70D79' }]}>
-                    <Text style={Styles.textTitulo}>Confirmar Pagamento</Text>
-                </View>
-                {/* Texto: Pagar com e uma dropdown com três opções Cartão de Credito, paypal, MBWAY */}
-                <View style={Styles.paymentMethod}>
-                    <Text style={Styles.textDescricao}>Pagar com</Text>
-                    <Center mt={4}>
-                        <Box maxW="300" borderRadius="10">
-                            <Select
-                                selectedValue={paymentMethod}
-                                minWidth="200"
-                                accessibilityLabel="Escolha o método de pagamento"
-                                placeholder="Escolha o método de pagamento"
-                                mt={1}
-                                onValueChange={itemValue => setPaymentMethod(itemValue)}
-                                bg="#00428A"
-                                color="#f7f7f7"
-                                fontSize="17"
-                                borderRadius="10"
-                                _selectedItem={{
-                                bg: "teal.600",
-                                endIcon: <CheckIcon size="5" />
-                                }}
-                            >
-                                <Select.Item label="Cartão de Crédito" value="creditCard" />
-                                <Select.Item label="PayPal" value="paypal" />
-                                <Select.Item label="MBWAY" value="mbway" />
-                            </Select>
-                        </Box>
-                    </Center>
-                </View>
-                {/* Texto: Detalhes do cartão */}
-                <View style={Styles.text}>
-                    <VStack space={4} alignItems="stretch" w="100%" maxW="400px" mx="auto">
-                    <View>
-                        {paymentMethod === 'creditCard' ? (
-                            <VStack space={4} alignItems="stretch" w="100%" maxW="400px" mx="auto">
-                            <Text style={Styles.textLabel}>Número de Cartão</Text>
-                            <Input
-                                variant="unstyled"
-                                style={Styles.input}
-                                size="md"
-                                value={cardNumber}
-                                onChangeText={setCardNumber}
-                            />
-                            <Text style={Styles.textLabel}>Nome do titular</Text>
-                            <Input
-                                variant="unstyled"
-                                style={Styles.input}
-                                value={cardHolder}
-                                onChangeText={setCardHolder}
-                            />
-                            <Text style={Styles.textLabel}>Data de validade e CVV</Text>
-                            <HStack space={4}>
-                                <Input
-                                variant="unstyled"
-                                style={Styles.input}
-                                value={expiryDate}
-                                onChangeText={setExpiryDate}
-                                flex={1}
-                                />
-                                <Input
-                                variant="unstyled"
-                                style={Styles.input}
-                                value={cvv}
-                                onChangeText={setCvv}
-                                flex={1}
-                                />
-                            </HStack>
-                            <Checkbox
-                                value={saveCard}
-                                onValueChange={handleCheckboxChange}
-                                style={{backgroundColor: '#D8DBE2', borderColor: '#487281', borderRadius: 7.5, borderWidth: 3, height: 25, width: 25}}
-                            >
-                                <Text style={Styles.textLabel}>Guardar dados do cartão</Text>
-                            </Checkbox>
-                            {/* Detalhes finais */}
-
-                            <View style={Styles.detalhesFinais}>
-                                <Text style={Styles.textLabel}>Detalhes finais</Text>
-                                <View style={Styles.detalhesPagamento}>
-                                    <Text style={Styles.textDetalhes}>Total(Euro)</Text>
-                                    <Text style={Styles.textDetalhes}>20.99€</Text>
-                                </View>
-                            </View>
-                            <View style={Styles.button}>
-                                <Text style={Styles.buttonText} onPress={handlePayment}>Finalizar compra</Text>
-                            </View>
-                            </VStack>
-                        ) : (
-                            <View style={Styles.centeredMessage}>
-                                <Text style={Styles.textLabel}>Método de pagamento não disponível no momento.</Text>
-                            </View>
-                        )}
+                    <View style={Styles.detalhesFinais}>
+                      <Text style={Styles.textLabel}>Detalhes finais</Text>
+                      <View style={Styles.detalhesPagamento}>
+                        <Text style={Styles.textDetalhes}>Total(Euro)</Text>
+                        <Text style={Styles.textDetalhes}>20.99€</Text>
+                      </View>
                     </View>
                     <View style={Styles.button}>
                       <Text style={Styles.buttonText} onPress={handlePayment}>
