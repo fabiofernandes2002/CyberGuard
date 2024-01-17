@@ -13,7 +13,7 @@ const upload = multer({ dest: 'uploads/' });
  * /courses/createDiscoverCourse:
  *   post:
  *     summary: Cria um novo curso descobrível
- *     tags: [Courses]
+ *     tags: [Discovers Courses]
  *     security:
  *       - bearerAuth: []
  *     consumes:
@@ -41,7 +41,7 @@ router
  * /courses/getAllDiscoverCourses:
  *   get:
  *     summary: Obtém todos os cursos descobríveis
- *     tags: [Courses]
+ *     tags: [Discovers Courses]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -59,21 +59,22 @@ router
 // getDiscoverCourseById
 /**
  * @swagger
- * /courses/finishCourseById/{id}:
- *   post:
- *     summary: Finaliza um curso, incluindo a avaliação do mesmo
- *     tags: [Courses]
+ * /courses/getDiscoverCourseById/{id}:
+ *   get:
+ *     summary: Obtém um Discover pelo ID
+ *     tags: [Discovers Courses]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         type: string
- *         description: ID do curso a ser finalizado
+ *         schema:
+ *           type: string
+ *         description: ID do Discover a ser obtido
  *     responses:
  *       200:
- *         description: Curso finalizado com sucesso
+ *         description: Discover obtido com sucesso
  *       401:
  *         description: Token de autenticação inválido
  *       500:
@@ -86,10 +87,9 @@ router
 // deleteDiscoverCourseById
 /**
  * @swagger
- * /deleteDiscoverCourseById/{id}:
+ * /courses/deleteDiscoverCourseById/{id}:
  *   delete:
- *     tags:
- *       - Discover Course
+ *     tags: [Discovers Courses]
  *     description: Deletes a single course
  *     produces:
  *       - application/json
@@ -112,10 +112,10 @@ router
 // createCourse
 /**
  * @swagger
- * /createCourse:
+ * /courses/createCourse:
  *   post:
  *     tags:
- *       - Course
+ *       - Courses
  *     description: Creates a new course
  *     produces:
  *       - application/json
@@ -144,10 +144,10 @@ router
 // getAllCourses
 /**
  * @swagger
- * /getAllCourses:
+ * /courses/getAllCourses:
  *   get:
  *     tags:
- *       - Course
+ *       - Courses
  *     description: Returns all courses
  *     produces:
  *       - application/json
@@ -166,10 +166,10 @@ router.route('/getAllCourses').get(utilities.validateToken, Controller.getAllCou
 // getCourseById
 /**
  * @swagger
- * /getCourseById/{id}:
+ * /courses/getCourseById/{id}:
  *   get:
  *     tags:
- *       - Course
+ *       - Courses
  *     description: Returns a single course
  *     produces:
  *       - application/json
@@ -192,10 +192,10 @@ router.route('/getCourseById/:id').get(utilities.validateToken, Controller.getCo
 // deleteCourseById
 /**
  * @swagger
- * /deleteCourseById/{id}:
+ * /courses/deleteCourseById/{id}:
  *   delete:
  *     tags:
- *       - Course
+ *       - Courses
  *     description: Deletes a single course
  *     produces:
  *       - application/json
@@ -216,10 +216,10 @@ router.route('/deleteCourseById/:id').delete(utilities.validateToken, Controller
 // startFreeCourseById
 /**
  * @swagger
- * /startFreeCourseById/{id}:
+ * /courses/startFreeCourseById/{id}:
  *   put:
  *     tags:
- *       - Course
+ *       - Courses
  *     description: Starts a free course
  *     produces:
  *       - application/json
@@ -242,10 +242,10 @@ router
 // startPaidCourseById
 /**
  * @swagger
- * /startPaidCourseById/{id}:
+ * /courses/startPaidCourseById/{id}:
  *   put:
  *     tags:
- *       - Course
+ *       - Courses
  *     description: Starts a paid course
  *     produces:
  *       - application/json
@@ -268,10 +268,10 @@ router
 //course/questions/:id
 /**
  * @swagger
- * /getCourseQuestions/{id}:
+ * /courses/getCourseQuestions/{id}:
  *   get:
  *     tags:
- *       - Course
+ *       - Courses
  *     description: Returns all questions for a specific course
  *     produces:
  *       - application/json
@@ -296,10 +296,10 @@ router.route('/getCourseQuestions/:id').get(utilities.validateToken, Controller.
 // Rota para finalizar um curso, incluindo a avaliação do mesmo - finishCourseById
 /**
  * @swagger
- * /finishCourseById/{id}:
+ * /courses/finishCourseById/{id}:
  *   post:
  *     tags:
- *       - Course
+ *       - Courses
  *     description: Finishes a course
  *     produces:
  *       - application/json
@@ -320,10 +320,10 @@ router.route('/finishCourseById/:id').post(utilities.validateToken, Controller.f
 // Rota para avaliar um curso - evaluateCourseById
 /**
  * @swagger
- * /evaluateCourseById/{id}:
+ * /courses/evaluateCourseById/{id}:
  *   post:
  *     tags:
- *       - Course
+ *       - Courses
  *     description: Evaluates a course
  *     produces:
  *       - application/json

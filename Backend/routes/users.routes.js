@@ -11,14 +11,14 @@ const upload = multer({ dest: 'uploads/' });
  * @swagger
  * tags:
  *   name: Users
- *   description: Operações de usuários
+ *   description: Operações de utilizadores
  */
 
 /**
  * @swagger
  * /users/register:
  *   post:
- *     summary: Registra um novo usuário
+ *     summary: Registra um novo utilizador
  *     tags: [Users]
  *     requestBody:
  *       required: true
@@ -58,10 +58,10 @@ const upload = multer({ dest: 'uploads/' });
  *         description: Utilizador registrado com sucesso
  *       400:
  *         description: Erro na requisição ou loggedUserId não existe
- *      403:
- *        description: Acesso negado ao utilizador
- *    500:
- *     description: Algo correu mal, tente novamente mais tarde.
+ *       403:
+ *         description: Acesso negado ao utilizador
+ *       500:
+ *         description: Algo correu mal, tente novamente mais tarde.
  */
 router.post(
   '/register',
@@ -148,7 +148,7 @@ router.post(
  * @swagger
  * /users/getAllUsers:
  *   get:
- *     summary: Obtém todos os utilizadores (admin)
+ *     summary: Obtém todos os utilizadores rota do administrador
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -157,8 +157,8 @@ router.post(
  *         description: Lista de todos os utilizadores
  *       403:
  *         description: Acesso negado ao utilizador
- *      500:
- *      description: Algo correu mal, tente novamente mais tarde.
+ *       500:
+ *         description: Algo correu mal, tente novamente mais tarde.
  */
 router.get('/getAllUsers', utilities.validateToken, Controller.getAllUsers);
 
@@ -220,7 +220,7 @@ router.put('/editUserById/:id', utilities.validateToken, upload.single('image'),
  * @swagger
  * /users/deleteUserById/{id}:
  *   delete:
- *     summary: Eliminar um utilzador específico pelo ID
+ *     summary: Apaga um utilizador (admin)
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -230,16 +230,14 @@ router.put('/editUserById/:id', utilities.validateToken, upload.single('image'),
  *         required: true
  *         schema:
  *           type: string
- *         description: ID do utilizador a ser eliminado
+ *         description: ID do utilizador
  *     responses:
  *       200:
- *         description: Utilizador eliminado com sucesso
- *       400:
- *         description: Erro na requisição ou loggedUserId não existe
+ *         description: Utilizador apagado com sucesso
  *       403:
  *         description: Acesso negado ao utilizador
- *     500:
- *    description: Algo correu mal, tente novamente mais tarde.
+ *       500:
+ *         description: Algo correu mal, tente novamente mais tarde.
  */
 router.delete('/deleteUserById/:id', utilities.validateToken, Controller.deleteUserById);
 
@@ -265,8 +263,8 @@ router.delete('/deleteUserById/:id', utilities.validateToken, Controller.deleteU
  *         description: Erro na requisição ou loggedUserId não existe
  *       403:
  *         description: Acesso negado ao utilizador
- *    500:
- *    description: Algo correu mal, tente novamente mais tarde.
+ *       500:
+ *        description: Algo correu mal, tente novamente mais tarde.
  */
 router.get('/getAllUsersByCompanyId/:id', utilities.validateToken, Controller.getAllUsersByCompanyId);
 
@@ -293,20 +291,20 @@ router.get('/getAllUsersByCompanyId/:id', utilities.validateToken, Controller.ge
  *                   properties:
  *                     questionIndex:
  *                       type: integer
- *                      description: Índice da pergunta a ser respondida
- *                   answer:
- *                    type: string
- *                   description: Respostas fornecida pelo utilizador
-  *     responses:
-  *      200:
-  *       description: Respostas do questionário submetidas com sucesso
-  *     400:
-  *      description: Erro na requisição ou loggedUserId não existe
-  *    403:
-  *    description: Acesso negado ao utilizador
-  *  500:
-  *  description: Algo correu mal, tente novamente mais tarde.
-  */
+ *                       description: Índice da pergunta a ser respondida
+ *                     answer:
+ *                       type: string
+ *                       description: Respostas fornecida pelo utilizador
+ *     responses:
+ *       200:
+ *         description: Respostas do questionário submetidas com sucesso
+ *       400:
+ *         description: Erro na requisição ou loggedUserId não existe
+ *       403:
+ *         description: Acesso negado ao utilizador
+ *       500:
+ *         description: Algo correu mal, tente novamente mais tarde.
+ */
 router.post('/submitSurvey', utilities.validateToken, Controller.submitSurvey);
 
 router.all('*', function (req, res) {

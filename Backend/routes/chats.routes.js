@@ -35,10 +35,10 @@ const utilities = require('../utilities/utilities.js');
  *         description: Erro na requisição ou loggedUserId não existe
  *       403:
  *         description: Acesso negado ao utilizador
- *     500:
- *      description: Algo correu mal, tente novamente mais tarde.
+ *       500:
+ *         description: Algo correu mal, tente novamente mais tarde.
  */
-router.route('/createChat').post(utilities.validateToken, Controller.createChat);
+router.post('/createChat', utilities.validateToken, Controller.createChat);
 
 /**
  * @swagger
@@ -72,10 +72,10 @@ router.route('/createChat').post(utilities.validateToken, Controller.createChat)
  *         description: Erro na requisição ou loggedUserId não existe
  *       403:
  *         description: Acesso negado ao utilizador
- *      500:
- *       description: Algo correu mal, tente novamente mais tarde.
+ *       500:
+ *         description: Algo correu mal, tente novamente mais tarde.
  */
-router.route('/addMessageToChat/:id').put(utilities.validateToken, Controller.addMessageToChat);
+router.put('/addMessageToChat/:id', utilities.validateToken, Controller.addMessageToChat);
 
 /**
  * @swagger
@@ -91,8 +91,9 @@ router.route('/addMessageToChat/:id').put(utilities.validateToken, Controller.ad
  *       500:
  *         description: Algo correu mal, tente novamente mais tarde.
  */
-router.route('/getAllChats').get(utilities.validateToken, Controller.getAllChats);
+router.get('/getAllChats', utilities.validateToken, Controller.getAllChats);
 
+// Rota para lidar com todos os outros caminhos não especificados
 router.all('*', function (req, res) {
   res.status(404).json({ message: 'CHATS: what???' });
 });
