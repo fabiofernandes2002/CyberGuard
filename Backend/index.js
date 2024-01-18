@@ -19,10 +19,10 @@ app.use('/chats', chats);
 // Conexão com o Banco de Dados MongoDB
 mongoose.connect(
   `mongodb+srv://${process.env.DATA_BASE_USER}:${process.env.DATA_BASE_PASSWORD}@cluster0.7xyeeqp.mongodb.net/${process.env.DATA_BASE_NAME}?retryWrites=true&w=majority`,
-  {
+  /* {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-  }
+  } */
 );
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
